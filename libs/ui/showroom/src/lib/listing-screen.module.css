@@ -146,8 +146,37 @@
   border-color:var(--gold-3);
 }
 .galleryActions{display:flex;gap:8px}
-.gallery{position:absolute;inset:74px 0 0;display:flex;align-items:center;gap:24px;padding:0 44px 42px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.gallery{
+  position:absolute;
+  inset:74px 0 0;
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:0 44px 42px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  cursor:grab;
+  touch-action:pan-x;
+  overscroll-behavior-x:contain;
+}
 .gallery::-webkit-scrollbar{display:none}
+.galleryDragging{
+  cursor:grabbing;
+  user-select:none;
+  scroll-snap-type:none;
+  scroll-behavior:auto;
+}
+.galleryDragging a{
+  pointer-events:none;
+}
+.gallery a,
+.gallery img{
+  -webkit-user-drag:none;
+  user-select:none;
+}
 .productCard{
   position:relative;
   flex:0 0 clamp(320px,29vw,430px);
