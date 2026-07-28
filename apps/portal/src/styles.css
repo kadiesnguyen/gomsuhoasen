@@ -78,6 +78,14 @@ body {
   gap: 4px;
 }
 
+.ghs-nav-group-title {
+  margin: 14px 12px 6px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ghs-sidebar-text-muted);
+}
+
 .ghs-nav-link {
   display: grid;
   grid-template-columns: 18px 1fr;
@@ -155,6 +163,15 @@ body {
   gap: 10px;
   color: var(--ghs-text-muted);
   font-size: 13px;
+}
+
+.ghs-menu-btn {
+  display: none;
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--ghs-border);
+  border-radius: 8px;
+  background: #fff;
 }
 
 .ghs-role-badge {
@@ -344,12 +361,35 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .ghs-sidebar {
-    display: none;
-  }
-
   .ghs-content {
     padding: 14px;
+  }
+
+  .ghs-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ghs-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(288px, 88vw);
+    z-index: 40;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+    display: flex;
+  }
+
+  .ghs-sidebar.open {
+    transform: none;
+  }
+
+  .ghs-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 30;
   }
 }
 
