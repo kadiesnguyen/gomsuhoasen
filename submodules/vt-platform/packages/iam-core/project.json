@@ -1,0 +1,7 @@
+{
+  "name": "@vt/iam-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

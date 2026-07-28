@@ -1,0 +1,138 @@
+# gomsuhoasen — build & push images to GHCR for Dokploy
+# Images: ghcr.io/kadiesnguyen/gomsuhoasen/{api,web}
+# Dokploy: REGISTRY_IMAGE=ghcr.io/kadiesnguyen/gomsuhoasen  IMAGE_TAG=latest|<sha>
+
+name: Docker GHCR
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ghcr.io/${{ github.repository }}
+
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta (api)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}/api
+          tags: |
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=ref,event=tag
+
+      - name: Build and push api
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  build-web:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta (web)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_PREFIX }}/web
+          tags: |
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=ref,event=tag
+
+      - name: Build and push web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.web
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    name: Deploy Dokploy
+    needs: [build-api, build-web]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Dokploy compose.deploy
+        env:
+          DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
+          DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
+          DOKPLOY_COMPOSE_ID: ${{ secrets.DOKPLOY_COMPOSE_ID }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DOKPLOY_URL:-}" ] || [ -z "${DOKPLOY_API_KEY:-}" ] || [ -z "${DOKPLOY_COMPOSE_ID:-}" ]; then
+            echo "::warning::Missing DOKPLOY_URL / DOKPLOY_API_KEY / DOKPLOY_COMPOSE_ID — skip auto-deploy"
+            exit 0
+          fi
+          python3 <<'PY'
+          import json, os, sys, urllib.error, urllib.request
+          base = os.environ["DOKPLOY_URL"].rstrip("/")
+          url = f"{base}/api/compose.deploy"
+          body = json.dumps({"composeId": os.environ["DOKPLOY_COMPOSE_ID"]}).encode()
+          req = urllib.request.Request(
+              url,
+              data=body,
+              headers={
+                  "x-api-key": os.environ["DOKPLOY_API_KEY"],
+                  "Content-Type": "application/json",
+              },
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=60) as resp:
+                  raw = resp.read().decode()
+                  code = resp.status
+          except urllib.error.HTTPError as e:
+              raw = e.read().decode() if e.fp else str(e)
+              code = e.code
+              print(f"HTTP {code}\n{raw}", file=sys.stderr)
+              sys.exit(1)
+          print(f"HTTP {code}\n{raw}")
+          try:
+              data = json.loads(raw)
+          except json.JSONDecodeError:
+              print("::error::Dokploy response is not JSON", file=sys.stderr)
+              sys.exit(1)
+          if not data.get("success"):
+              print("::error::Dokploy deploy not successful", file=sys.stderr)
+              sys.exit(1)
+          print("Dokploy deployment queued OK")
+          PY

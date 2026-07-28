@@ -1,0 +1,26 @@
+{
+  "name": "@vt/platform-app-api-key",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "ipaddr.js": "^2.4.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./ports": {
+      "types": "./src/ports.ts",
+      "default": "./src/ports.ts"
+    }
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

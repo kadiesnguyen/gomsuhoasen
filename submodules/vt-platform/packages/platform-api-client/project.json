@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-api-client",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

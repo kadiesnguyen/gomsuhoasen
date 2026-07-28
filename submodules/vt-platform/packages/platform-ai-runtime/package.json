@@ -1,0 +1,19 @@
+{
+  "name": "@vt/platform-ai-runtime",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./node": "./src/node.ts"
+  },
+  "dependencies": {
+    "@vt/platform-api-contract": "*"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

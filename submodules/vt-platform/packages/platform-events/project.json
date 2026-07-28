@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-events",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@vt/nest-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@vt/common-utils": "0.1.0",
+    "@vt/platform-error": "0.1.0",
+    "mongoose": "^8.0.0",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "@vt/common-utils": "file:../vt-common-utils",
+    "@vt/platform-error": "file:../vt-platform/packages/platform-error",
+    "typescript": "5.4.5"
+  }
+}

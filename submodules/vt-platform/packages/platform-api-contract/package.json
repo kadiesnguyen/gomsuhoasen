@@ -1,0 +1,31 @@
+{
+  "name": "@vt/platform-api-contract",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./browser": {
+      "types": "./src/browser.ts",
+      "default": "./src/browser.ts"
+    },
+    "./standard-http-error-payload": {
+      "types": "./src/standard-http-error-payload.ts",
+      "default": "./src/standard-http-error-payload.ts"
+    }
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "rxjs": "^7.0.0"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

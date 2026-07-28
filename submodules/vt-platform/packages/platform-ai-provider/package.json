@@ -1,0 +1,15 @@
+{
+  "name": "@vt/platform-ai-provider",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "dependencies": {
+    "@vt/platform-error": "*"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

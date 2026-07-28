@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-catalog-contracts",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

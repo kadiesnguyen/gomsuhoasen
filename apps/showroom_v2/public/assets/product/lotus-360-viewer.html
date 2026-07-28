@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Trải nghiệm 360° — Gốm Hoa Sen</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #111114;
+        --panel: #1c1a18;
+        --text: #f5f0e8;
+        --muted: #b8afa3;
+        --accent: #c9a96e;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 35% 30%, rgba(201,169,110,0.24), transparent 30%),
+          radial-gradient(circle at 70% 70%, rgba(95,85,76,0.28), transparent 36%),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        overflow: hidden;
+      }
+      main {
+        width: min(840px, 92vw);
+        aspect-ratio: 16 / 9;
+        position: relative;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 28px;
+        background: linear-gradient(135deg, rgba(28,26,24,0.96), rgba(17,17,20,0.94));
+        box-shadow: 0 32px 100px rgba(0,0,0,0.45);
+      }
+      .plate {
+        width: min(46vmin, 360px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        position: relative;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle, #f6ead2 0 18%, #d7b873 19% 22%, #28426d 23% 28%, #f6ead2 29% 62%, #28426d 63% 70%, #c9a96e 71% 74%, #f6ead2 75%);
+        box-shadow: inset 0 0 42px rgba(17,17,20,0.22), 0 28px 70px rgba(0,0,0,0.35);
+        animation: spin 22s linear infinite;
+      }
+      .plate::before,
+      .plate::after {
+        content: "";
+        position: absolute;
+        inset: 19%;
+        border-radius: 50%;
+        border: 2px solid rgba(40,66,109,0.45);
+      }
+      .plate::after {
+        inset: 34%;
+        border-style: dashed;
+      }
+      .lotus {
+        width: 42%;
+        aspect-ratio: 1;
+        border-radius: 50% 50% 44% 44%;
+        background: conic-gradient(from 45deg, #c9a96e, #f6ead2, #28426d, #c9a96e);
+        opacity: 0.88;
+      }
+      .copy {
+        position: absolute;
+        left: clamp(20px, 4vw, 48px);
+        bottom: clamp(20px, 4vw, 44px);
+        max-width: 360px;
+      }
+      .eyebrow {
+        color: var(--accent);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        margin-bottom: 8px;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(1.35rem, 4vw, 2.6rem);
+        line-height: 1.05;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: clamp(0.82rem, 1.7vw, 0.98rem);
+      }
+      .hint {
+        position: absolute;
+        right: clamp(18px, 4vw, 40px);
+        top: clamp(18px, 4vw, 40px);
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) {
+        .plate { animation: none; }
+      }
+      @media (max-width: 600px) {
+        main {
+          width: min(92vw, 380px);
+          min-height: 70vh;
+          aspect-ratio: auto;
+          align-content: center;
+          padding: 28px 20px;
+        }
+        .plate {
+          width: min(56vw, 220px);
+          margin-bottom: 132px;
+        }
+        .copy {
+          left: 20px;
+          right: 20px;
+          bottom: 24px;
+          max-width: none;
+        }
+        .hint {
+          top: 16px;
+          right: 16px;
+          font-size: 0.72rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main aria-label="Trải nghiệm 360 độ sản phẩm gốm">
+      <div class="hint">Không tự phát • Tải sau khi mở</div>
+      <div class="plate" aria-hidden="true"><div class="lotus"></div></div>
+      <section class="copy">
+        <div class="eyebrow">Trải nghiệm 360°</div>
+        <h1>Quan sát chất men và dáng gốm</h1>
+        <p>Xoay chậm để quan sát đường men lam, nhịp cọ và viền lòng tô. Nội dung chỉ tải khi khách chủ động mở, không tự phát trước khi tương tác.</p>
+      </section>
+    </main>
+  </body>
+</html>

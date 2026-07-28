@@ -1,0 +1,41 @@
+{
+  "workspaceRootEnv": "CROSS_PROJECT_ROOT",
+  "projects": [
+    {
+      "name": "fitzalominiapp-v2",
+      "rootEnv": ["CROSS_PROJECT_FITZ_ROOT", "CROSS_PROJECT_ZALOMINIAPP_ROOT"],
+      "candidateRoots": ["fitzalominiapp", "zalominiapp"],
+      "packageJson": "v2/package.json",
+      "scanRoot": "v2",
+      "sharedSubmodulesBase": "v2/submodules"
+    },
+    {
+      "name": "vita",
+      "rootEnv": ["CROSS_PROJECT_VITA_ROOT"],
+      "candidateRoots": ["vita"],
+      "packageJson": "package.json",
+      "scanRoot": ".",
+      "sharedSubmodulesBase": "submodules"
+    },
+    {
+      "name": "gomhoasen",
+      "rootEnv": ["CROSS_PROJECT_GOMHOASEN_ROOT", "CROSS_PROJECT_3D_VITUAL_ROOT"],
+      "candidateRoots": ["gomhoasen", "3d_vitual"],
+      "packageJson": "package.json",
+      "scanRoot": ".",
+      "sharedSubmodulesBase": "submodules"
+    },
+    {
+      "name": "vt-platform",
+      "rootEnv": ["CROSS_PROJECT_VT_PLATFORM_ROOT"],
+      "candidateRoots": [
+        "fitzalominiapp/v2/submodules/vt-platform",
+        "vita/submodules/vt-platform",
+        "gomhoasen/submodules/vt-platform",
+        "vt-platform"
+      ],
+      "packageJson": "package.json",
+      "scanRoot": "."
+    }
+  ]
+}

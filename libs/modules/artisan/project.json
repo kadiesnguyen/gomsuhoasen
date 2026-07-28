@@ -1,0 +1,28 @@
+{
+  "name": "artisan",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/artisan/src",
+  "projectType": "library",
+  "tags": [
+    "type:lib",
+    "scope:artisan",
+    "layer:backend"
+  ],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "vitest run --config vite.config.mts libs/modules/artisan/src"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/run-tsc.cjs -p libs/modules/artisan/tsconfig.spec.json --noEmit"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# Gốm Hoa Sen API — build on CI, pull on Dokploy
+FROM node:20-bookworm-slim AS deps
+WORKDIR /app
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+COPY package.json package-lock.json ./
+RUN npm ci --prefer-offline --no-audit --progress=false
+
+FROM deps AS builder
+WORKDIR /app
+COPY . .
+RUN npx nx build api --skip-nx-cache
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends chromium ca-certificates fonts-liberation \
+  && rm -rf /var/lib/apt/lists/*
+
+ENV NODE_ENV=production \
+    APP_ENV=production \
+    PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
+    API_HOST=0.0.0.0 \
+    API_PORT=4000 \
+    UPLOAD_DIR=/data/uploads \
+    GHS_APPLICATION_SCOPE_ID=gomhoasen
+
+COPY package.json package-lock.json ./
+RUN PUPPETEER_SKIP_DOWNLOAD=true npm ci --omit=dev --prefer-offline --no-audit --progress=false \
+  && npm cache clean --force
+
+COPY --from=builder /app/dist/apps/api ./dist/apps/api
+RUN mkdir -p /data/uploads
+
+EXPOSE 4000
+CMD ["node", "dist/apps/api/main.js"]

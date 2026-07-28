@@ -1,0 +1,7 @@
+{
+  "name": "@vt/ecommerce-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

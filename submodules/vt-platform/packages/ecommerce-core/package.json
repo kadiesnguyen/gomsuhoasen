@@ -1,0 +1,35 @@
+{
+  "name": "@vt/ecommerce-core",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./order-status": {
+      "types": "./src/order-status.ts",
+      "default": "./src/order-status.ts"
+    },
+    "./money": {
+      "types": "./src/money.ts",
+      "default": "./src/money.ts"
+    },
+    "./pricing": {
+      "types": "./src/pricing.ts",
+      "default": "./src/pricing.ts"
+    },
+    "./order-lifecycle": {
+      "types": "./src/order-lifecycle.ts",
+      "default": "./src/order-lifecycle.ts"
+    }
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

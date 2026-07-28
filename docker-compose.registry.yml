@@ -1,0 +1,96 @@
+# Dokploy — pull pre-built images from GHCR (no build on VPS)
+# Dokploy env:
+#   REGISTRY_IMAGE=ghcr.io/kadiesnguyen/gomsuhoasen
+#   IMAGE_TAG=latest
+#   JWT_SECRET=... (min 32 bytes)
+#   CORS_ORIGIN=https://your-domain
+#   ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD (first seed only)
+# Registry: GitHub PAT read:packages (username = kadiesnguyen)
+#
+# Paste this file into Dokploy → Compose → Raw / Git path.
+
+name: gomsuhoasen
+
+x-limits-mongo: &limits-mongo
+  cpus: "1.0"
+  mem_limit: 1024m
+x-limits-api: &limits-api
+  cpus: "1.0"
+  mem_limit: 1024m
+x-limits-web: &limits-web
+  cpus: "0.5"
+  mem_limit: 256m
+
+services:
+  mongo:
+    <<: *limits-mongo
+    image: mongo:7.0
+    restart: unless-stopped
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet --eval \"try { quit(rs.status().ok ? 0 : 1) } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}); quit(0) }\"",
+        ]
+      interval: 5s
+      timeout: 15s
+      retries: 18
+      start_period: 25s
+
+  api:
+    <<: *limits-api
+    image: ${REGISTRY_IMAGE:-ghcr.io/kadiesnguyen/gomsuhoasen}/api:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      APP_ENV: production
+      API_HOST: 0.0.0.0
+      API_PORT: "4000"
+      GHS_APPLICATION_SCOPE_ID: gomhoasen
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo:27017/ghs_production?replicaSet=rs0}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+      JWT_EXPIRY: ${JWT_EXPIRY:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://gomhoasen.vn,https://www.gomhoasen.vn}
+      UPLOAD_DIR: /data/uploads
+      UPLOAD_MAX_IMAGE_SIZE: ${UPLOAD_MAX_IMAGE_SIZE:-5242880}
+      UPLOAD_MAX_MODEL_SIZE: ${UPLOAD_MAX_MODEL_SIZE:-20971520}
+      ADMIN_SEED_EMAIL: ${ADMIN_SEED_EMAIL:-admin@gomhoasen.vn}
+      ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-}
+      ADMIN_SEED_NAME: ${ADMIN_SEED_NAME:-Gom Hoa Sen Admin}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Gom Hoa Sen <no-reply@gomhoasen.vn>}
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium
+      NEXT_PUBLIC_API_URL: /api
+      VITE_API_URL: /api
+    volumes:
+      - uploads:/data/uploads
+    expose:
+      - "4000"
+
+  web:
+    <<: *limits-web
+    image: ${REGISTRY_IMAGE:-ghcr.io/kadiesnguyen/gomsuhoasen}/web:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    depends_on:
+      - api
+    volumes:
+      - uploads:/var/www/uploads:ro
+    ports:
+      - "${WEB_PUBLISH_PORT:-8088}:80"
+
+volumes:
+  mongo_data:
+  uploads:

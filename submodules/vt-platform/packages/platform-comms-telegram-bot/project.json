@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-telegram-bot",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/voucher-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

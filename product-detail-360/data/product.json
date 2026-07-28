@@ -1,0 +1,193 @@
+{
+  "product": {
+    "id": "binh-hoa-sen-vang",
+    "name": "BÌNH HOA SEN VÀNG",
+    "tagline": "Hoa Sen • Men Cobalt • Sứ xương cao cấp",
+    "collection": "BST Hoa Sen",
+    "year": "2024",
+    "model": "assets/product/brass_vase_textured.glb",
+    "heroImage": "assets/product/hero.png",
+    "poster": "assets/product/hero.png"
+  },
+  "viewSections": [
+    {
+      "id": "overview",
+      "name": "Tổng quan",
+      "icon": "🏠",
+      "camera": { "orbit": "30deg 75deg 0.43m", "target": "0m 0.101m 0m" },
+      "description": "Tác phẩm kết hợp tinh hoa gốm sứ truyền thống Việt Nam với thiết kế đương đại. Mỗi bình được hoàn thiện thủ công, giữ lại độ riêng của nét cọ và sắc men.",
+      "hotspots": [
+        {
+          "id": "hs-rim",
+          "position": "0m 0.191m 0m",
+          "normal": "0 1 0",
+          "label": "Vành trang trí",
+          "panel": {
+            "title": "Vành điểm ánh kim",
+            "content": "Vành miệng bình được xử lý bằng đường ánh kim mảnh, vừa đủ để bắt sáng mà không làm nặng dáng bình.\n\nChi tiết này đóng vai trò như một nhịp nhấn tinh tế, giúp phần miệng bình có độ hoàn thiện và chiều sâu khi quan sát gần.",
+            "image": "assets/product/detail-glaze.png",
+            "cta": "Nhận báo giá"
+          }
+        },
+        {
+          "id": "hs-body",
+          "position": "0.025m 0.101m 0.017m",
+          "normal": "1 0 0",
+          "label": "Hoa văn Hoa Sen",
+          "panel": {
+            "title": "Hoa Sen — Biểu Tượng Thanh Cao",
+            "content": "Hoạ tiết hoa sen được vẽ tay với nhịp cọ chậm, giữ khoảng thở giữa từng cánh để bề mặt không bị dày đặc.\n\nCác lớp sắc cobalt được xử lý vừa phải, tạo chiều sâu và chuyển sắc tự nhiên cho từng cánh hoa.",
+            "image": "assets/product/detail-pattern.png",
+            "cta": "Tìm hiểu thêm"
+          }
+        },
+        {
+          "id": "hs-glaze",
+          "position": "-0.017m 0.061m 0.025m",
+          "normal": "-1 0 1",
+          "label": "Men Cobalt",
+          "panel": {
+            "title": "Men Cobalt — Dòng Men Cao Cấp",
+            "content": "Men Cobalt được phủ và kiểm tra theo từng mẻ để giữ sắc xanh sâu, bề mặt bóng mịn và độ phản sáng vừa phải.\n\nCác lớp men được hoàn thiện thủ công, tạo chiều sâu màu sắc khi nhìn từ những góc ánh sáng khác nhau.",
+            "image": "assets/product/detail-glaze.png",
+            "cta": "Xem quy trình"
+          }
+        }
+      ]
+    },
+    {
+      "id": "glaze",
+      "name": "Chất men",
+      "icon": "✨",
+      "camera": { "orbit": "20deg 80deg 0.30m", "target": "0m 0.101m 0m" },
+      "description": "Men Cobalt được xử lý để tạo lớp men sâu màu, bóng mịn và phản chiếu ánh sáng tinh tế.",
+      "hotspots": [
+        {
+          "id": "hs-surface",
+          "position": "0.02m 0.12m 0.02m",
+          "normal": "1 0 1",
+          "label": "Bề mặt men",
+          "panel": {
+            "title": "Kỹ Thuật Tráng Men 3 Lớp",
+            "content": "Bề mặt men Cobalt được hoàn thiện qua nhiều lượt xử lý:\n\n• Lớp nền: Giúp bề mặt sạch và đều\n• Lớp màu: Tạo sắc xanh cobalt đặc trưng\n• Lớp hoàn thiện: Tăng độ bóng và cảm giác chiều sâu\n\nTừng mẻ được kiểm tra lại bằng mắt và tay trước khi chuyển sang công đoạn tiếp theo.",
+            "image": "assets/product/detail-glaze.png",
+            "cta": "Nhận báo giá"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pattern",
+      "name": "Hoa văn",
+      "icon": "🎨",
+      "camera": { "orbit": "-30deg 78deg 0.34m", "target": "0m 0.101m 0m" },
+      "description": "Hoạ tiết hoa sen vẽ tay — mỗi nét cọ là một câu chuyện về văn hoá và tâm linh Việt Nam.",
+      "hotspots": [
+        {
+          "id": "hs-lotus",
+          "position": "0.015m 0.09m -0.025m",
+          "normal": "0 0 -1",
+          "label": "Hoạ tiết chính",
+          "panel": {
+            "title": "Hoa Sen & Cá Chép — Biểu Tượng Á Đông",
+            "content": "Bộ hoạ tiết kết hợp hoa sen và cá chép — biểu tượng của sự thành đạt và thanh cao trong văn hoá Á Đông.\n\nHoa sen tượng trưng cho sự giác ngộ, vươn lên từ bùn lầy. Cá chép vượt vũ môn hoá rồng — biểu tượng của thành công.\n\nMỗi bình có bộ hoạ tiết riêng, không bình nào giống bình nào — vì mỗi nét cọ là duy nhất.",
+            "image": "assets/product/detail-pattern.png",
+            "cta": "Xem bộ sưu tập"
+          }
+        }
+      ]
+    },
+    {
+      "id": "function",
+      "name": "Công năng",
+      "icon": "🏛️",
+      "camera": { "orbit": "120deg 60deg 0.47m", "target": "0m 0.101m 0m" },
+      "description": "Thiết kế vừa là tác phẩm nghệ thuật trang trí, vừa có công năng sử dụng thực tế — phù hợp cắm hoa tươi, hoa lụa, hoặc trưng bày độc lập.",
+      "hotspots": [
+        {
+          "id": "hs-base",
+          "position": "0m 0.011m 0m",
+          "normal": "0 -1 0",
+          "label": "Đế bình",
+          "panel": {
+            "title": "Thiết Kế Công Năng Cao Cấp",
+            "content": "Đế bình được thiết kế với lớp đệm chống trượt, đảm bảo an toàn khi đặt trên mọi bề mặt — kể cả mặt kính hoặc đá marble.\n\nMiệng bình rộng 8cm — phù hợp cắm 5-7 cành hoa tươi hoặc hoa lụa cao cấp.\n\nTrọng tâm thấp, phân bổ đều — bình ổn định tuyệt đối, không dễ đổ ngay cả khi đặt trên mặt không bằng phẳng.",
+            "image": "assets/product/hero.png",
+            "cta": "Nhận báo giá"
+          }
+        }
+      ]
+    },
+    {
+      "id": "story",
+      "name": "Câu chuyện",
+      "icon": "📖",
+      "camera": { "orbit": "60deg 70deg 0.39m", "target": "0m 0.101m 0m" },
+      "description": "Mỗi tác phẩm là kết tinh của hàng trăm năm truyền thống gốm sứ Bình Dương — từ bàn tay nghệ nhân đến tâm hồn văn hoá Việt.",
+      "hotspots": []
+    },
+    {
+      "id": "specs",
+      "name": "Thông số",
+      "icon": "📋",
+      "camera": { "orbit": "0deg 75deg 0.43m", "target": "0m 0.101m 0m" },
+      "description": "Thông số kỹ thuật chi tiết — mỗi sản phẩm được kiểm định chất lượng nghiêm ngặt trước khi đến tay khách hàng.",
+      "hotspots": []
+    }
+  ],
+  "variants": [
+    {
+      "id": "cobalt",
+      "name": "Men Cobalt",
+      "swatch": "#1a3a6b",
+      "image": "assets/product/hero.png",
+      "description": "Xanh cobalt cao cấp — sắc xanh sâu thẳm, bóng mịn, phản chiếu ánh sáng",
+      "active": true
+    },
+    {
+      "id": "celadon",
+      "name": "Men Celadon",
+      "swatch": "#8fbc8f",
+      "image": "assets/product/variant-celadon.png",
+      "description": "Xanh ngọc celadon — men rạn truyền thống, trong trẻo như ngọc bích"
+    },
+    {
+      "id": "ivory",
+      "name": "Trắng Ngà",
+      "swatch": "#f5f0e0",
+      "image": "assets/product/variant-ivory.png",
+      "description": "Trắng ngà tinh khôi — sứ xương nguyên bản, viền ánh kim tiết chế"
+    }
+  ],
+  "specs": {
+    "Bộ sưu tập": "Hoa Sen",
+    "Chất liệu": "Sứ xương cao cấp",
+    "Dòng men": "Men Cobalt",
+    "Kích thước": "Cao 20cm × ĐK 8.3cm",
+    "Trọng lượng": "1.2 kg",
+    "Kỹ thuật": "Tạo hình thủ công, phủ men và vẽ họa tiết",
+    "Quy trình": "Hoàn thiện theo từng mẻ nhỏ",
+    "Phiên bản": "Sản xuất theo lô giới hạn",
+    "Nghệ nhân": "Nguyễn Văn A",
+    "Xuất xứ": "Bình Dương, VN",
+    "Kiểm định": "Kiểm tra thủ công trước khi bàn giao",
+    "Bảo quản": "Lau khô bằng khăn mềm, tránh va đập mạnh"
+  },
+  "story": {
+    "title": "Nghệ Nhân Nguyễn Văn A",
+    "subtitle": "Giữ nhịp cọ chậm trong từng dáng sen và lớp men",
+    "content": "Sinh ra và làm nghề tại Bình Dương, người thợ gốm theo đuổi tinh thần thủ công bằng nhịp làm việc chậm, kỹ và tôn trọng chất liệu.\n\nBộ sưu tập Hoa Sen lấy cảm hứng từ hình ảnh sen Việt, sóng nước và những đường nét trang trí truyền thống. Thay vì phô diễn quá nhiều chi tiết, tác phẩm giữ khoảng thở để dáng bình, sắc men và nét cọ cùng hiện lên cân bằng.\n\nMỗi bình được tạo hình, phủ men, vẽ họa tiết và kiểm tra thủ công trước khi bàn giao. Những khác biệt nhỏ trên bề mặt men được giữ lại như dấu vết tự nhiên của đất, lửa và bàn tay người thợ.",
+    "image": "assets/stories/artisan.png"
+  },
+  "cta": {
+    "label": "Tư vấn & Đặt hàng",
+    "zalo": "https://zalo.me/0901234567",
+    "hotline": "1900 1234 56",
+    "email": "info@gomhoasen.vn"
+  },
+  "relatedProducts": [
+    { "id": "to-canh-rong", "name": "Tô Cánh Rồng", "price": "12.500.000₫" },
+    { "id": "chen-tra-mai", "name": "Chén Trà Mai", "price": "3.800.000₫" },
+    { "id": "binh-hoa-cuc", "name": "Bình Hoa Cúc", "price": "18.000.000₫" }
+  ]
+}

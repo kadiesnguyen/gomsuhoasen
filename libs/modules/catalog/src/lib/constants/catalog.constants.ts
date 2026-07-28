@@ -1,0 +1,11 @@
+/**
+ * Catalog Error Constants
+ *
+ * Zalo ref: libs/catalog/src/lib/constants/catalog.constants.ts
+ */
+export const CATALOG_ERRORS = {
+  CAT_NOT_FOUND: 'CAT_NOT_FOUND',
+  CAT_SLUG_DUPLICATE: 'CAT_SLUG_DUPLICATE',
+  CAT_SLUG_IMMUTABLE: 'CAT_SLUG_IMMUTABLE',
+  PROVENANCE_NOT_FOUND: 'PROVENANCE_NOT_FOUND',
+} as const;

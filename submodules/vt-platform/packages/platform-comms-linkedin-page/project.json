@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-linkedin-page",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

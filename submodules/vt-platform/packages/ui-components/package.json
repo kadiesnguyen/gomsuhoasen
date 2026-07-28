@@ -1,0 +1,19 @@
+{
+  "name": "@vt/ui-components",
+  "version": "0.1.0",
+  "description": "Shared React UI components for VT portal applications. Framework-agnostic (Tailwind-styled).",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "lucide-react": ">=0.300.0"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-shipping-ghtk",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

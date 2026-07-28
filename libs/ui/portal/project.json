@@ -1,0 +1,7 @@
+{
+  "name": "ui-portal",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/portal/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:portal", "layer:ui"]
+}

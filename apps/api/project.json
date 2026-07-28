@@ -1,0 +1,63 @@
+{
+  "name": "api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:api"],
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api",
+        "main": "apps/api/src/main.ts",
+        "tsConfig": "apps/api/tsconfig.app.json",
+        "webpackConfig": "apps/api/webpack.config.js"
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "api:build",
+        "inspect": false,
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "api:build"
+        },
+        "production": {
+          "buildTarget": "api:build"
+        }
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/run-tsc.cjs -p apps/api/tsconfig.app.json --noEmit"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/run-tsc.cjs -p apps/api/tsconfig.app.json --noEmit"
+      }
+    },
+    "e2e-smoke": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config vite.config.mts apps/api/test/e2e/smoke --pool=forks --fileParallelism=false"
+      }
+    },
+    "e2e-full": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vitest run --config vite.config.mts apps/api/test/e2e/full --pool=forks --fileParallelism=false"
+      }
+    }
+  }
+}

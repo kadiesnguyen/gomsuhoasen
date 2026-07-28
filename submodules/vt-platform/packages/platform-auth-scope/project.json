@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-auth-scope",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-shipping-jt-express",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

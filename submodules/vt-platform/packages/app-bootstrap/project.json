@@ -1,0 +1,7 @@
+{
+  "name": "@vt/app-bootstrap",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-iam-contracts",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

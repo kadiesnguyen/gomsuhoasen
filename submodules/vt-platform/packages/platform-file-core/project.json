@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-file-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

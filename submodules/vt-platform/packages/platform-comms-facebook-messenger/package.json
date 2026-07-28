@@ -1,0 +1,18 @@
+{
+  "name": "@vt/platform-comms-facebook-messenger",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "dependencies": {
+    "@vt/platform-api-contract": "*"
+  },
+  "x-commonization": {
+    "justification": "External provider adapter specifically maintained for Zalomini integration. Inherently SINGLE_PROJECT at present but RETAIN_PROVIDER_READY."
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

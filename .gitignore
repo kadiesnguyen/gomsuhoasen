@@ -1,0 +1,36 @@
+# Dependencies & build
+node_modules/
+dist/
+.nx/
+.tmp/
+*.tsbuildinfo
+
+# Env & secrets (never commit)
+.env
+.env.*
+!.env.production.example
+info.md
+**/info*.md
+*.pem
+*.key
+id_rsa*
+
+# Uploads & local data
+apps/api/uploads/**
+!apps/api/uploads/.gitkeep
+uploads/
+backups/
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+
+# E2E (not required for Dokploy deploy)
+apps/portal-e2e/

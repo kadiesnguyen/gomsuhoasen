@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-ai-runtime",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

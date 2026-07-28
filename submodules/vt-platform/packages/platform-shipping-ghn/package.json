@@ -1,0 +1,24 @@
+{
+  "name": "@vt/platform-shipping-ghn",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "peerDependencies": {
+    "@nestjs/axios": "^4.0.0",
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@vt/platform-shipping-core": "0.1.0",
+    "axios": "^1.0.0",
+    "rxjs": "^7.0.0"
+  },
+  "x-commonization": {
+    "justification": "External provider adapter specifically maintained for Zalomini integration. Inherently SINGLE_PROJECT at present but RETAIN_PROVIDER_READY."
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

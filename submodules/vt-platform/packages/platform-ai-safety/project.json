@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-ai-safety",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

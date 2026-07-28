@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-file-storage-s3",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

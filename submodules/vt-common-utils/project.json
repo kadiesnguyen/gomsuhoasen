@@ -1,0 +1,16 @@
+{
+  "name": "@vt/common-utils",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "submodules/vt-common-utils/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "cwd": "submodules/vt-common-utils",
+        "command": "npm run build"
+      }
+    }
+  }
+}

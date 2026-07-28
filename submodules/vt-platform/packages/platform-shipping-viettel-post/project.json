@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-shipping-viettel-post",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

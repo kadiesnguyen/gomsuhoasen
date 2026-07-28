@@ -1,0 +1,32 @@
+{
+  "name": "portal",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/portal/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:portal"],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/portal",
+        "configFile": "apps/portal/vite.config.ts",
+        "tsConfig": "apps/portal/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "options": {
+        "buildTarget": "portal:build",
+        "configFile": "apps/portal/vite.config.ts",
+        "port": 4311
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/run-tsc.cjs -p apps/portal/tsconfig.app.json --noEmit"
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@vt/platform-error",
+  "version": "0.1.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./domain-exception": {
+      "types": "./src/domain-exception.ts",
+      "default": "./src/domain-exception.ts"
+    }
+  },
+  "peerDependencies": {
+    "@nestjs/common": ">=10"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

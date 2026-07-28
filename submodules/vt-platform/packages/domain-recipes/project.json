@@ -1,0 +1,7 @@
+{
+  "name": "@vt/domain-recipes",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

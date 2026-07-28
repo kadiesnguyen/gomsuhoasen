@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-audit-log",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

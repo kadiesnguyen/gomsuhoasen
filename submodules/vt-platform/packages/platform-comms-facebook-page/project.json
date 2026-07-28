@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-facebook-page",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-job-runner-mongo",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

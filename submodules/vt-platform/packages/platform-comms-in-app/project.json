@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-in-app",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

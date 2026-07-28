@@ -1,0 +1,28 @@
+{
+  "name": "@vt/platform-events",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./idempotency": {
+      "types": "./src/idempotency.ts",
+      "default": "./src/idempotency.ts"
+    }
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@nestjs/event-emitter": "^3.0.0",
+    "@nestjs/mongoose": "^10.0.0 || ^11.0.0",
+    "mongoose": "^8.0.0 || ^9.0.0"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

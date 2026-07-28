@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-engine",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

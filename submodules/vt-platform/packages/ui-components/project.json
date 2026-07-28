@@ -1,0 +1,7 @@
+{
+  "name": "@vt/ui-components",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

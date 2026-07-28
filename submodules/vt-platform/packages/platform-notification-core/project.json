@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-notification-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

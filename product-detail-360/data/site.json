@@ -1,0 +1,201 @@
+{
+  "brand": {
+    "name": "GỐM HOA SEN",
+    "tagline": "Gốm sứ nghệ thuật cho không gian sống hiện đại",
+    "subtitle": "Tinh hoa men Việt — Chế tác thủ công — Kể chuyện qua từng đường nét",
+    "founded": "1984",
+    "location": "Bình Dương, Việt Nam",
+    "phone": "1900 1234 56",
+    "email": "info@gomhoasen.vn",
+    "zalo": "https://zalo.me/0901234567"
+  },
+  "collections": [
+    { "id": "hoa-sen", "name": "Hoa Sen", "desc": "Tinh hoa nghi lễ — Men cobalt, ánh kim tiết chế, dáng bình trang trọng", "image": "assets/product/hero.png", "count": 3 },
+    { "id": "sen-viet", "name": "Sen Việt", "desc": "Hồn Việt trong từng nét cọ — Hoa sen, sóng nước, cánh chim", "image": "assets/collections/decor.png", "count": 2 },
+    { "id": "men-lam", "name": "Men Lam Di Sản", "desc": "Sắc xanh lam Việt — Gợi nhịp men truyền thống trong không gian đương đại", "image": "assets/product/detail-glaze.png", "count": 2 },
+    { "id": "thien-moc", "name": "Thiền Mộc", "desc": "Tĩnh lặng như thiền — Men ngọc, đất mộc, thiết kế tối giản", "image": "assets/product/variant-celadon.png", "count": 3 },
+    { "id": "phu-quy", "name": "Phú Quý", "desc": "Biểu tượng thịnh vượng — Tượng linh thú, bình hút lộc, ánh kim điểm nhấn", "image": "assets/collections/gift.png", "count": 2 },
+    { "id": "tra-dao", "name": "Trà Đạo", "desc": "Nghệ thuật thưởng trà — Bộ trà, chén, khay, phụ kiện trà đạo", "image": "assets/collections/tea.png", "count": 3 }
+  ],
+  "products": [
+    {
+      "id": "binh-hoa-sen-vang", "name": "Bình Hoa Sen Vàng",
+      "collection": "Hoa Sen", "collectionId": "hoa-sen",
+      "glaze": "Men Cobalt", "glazeId": "cobalt",
+      "type": "Bình hoa", "typeId": "binh-hoa",
+      "size": "Cao 30cm × ĐK 15cm", "price": 15800000, "priceLabel": "15.800.000₫",
+      "image": "assets/product/hero.png",
+      "tags": ["360", "limited"],
+      "has360": true, "isNew": false, "isLimited": true, "isBestSeller": true,
+      "swatches": ["#1a3a6b", "#8fbc8f", "#f5f0e0"],
+      "desc": "Tác phẩm nghệ thuật Men Cobalt — vẽ tay hoa sen vàng — sứ xương cao cấp"
+    },
+    {
+      "id": "binh-thien-moc", "name": "Bình Thiền Mộc",
+      "collection": "Thiền Mộc", "collectionId": "thien-moc",
+      "glaze": "Men Celadon", "glazeId": "celadon",
+      "type": "Bình hoa", "typeId": "binh-hoa",
+      "size": "Cao 25cm × ĐK 12cm", "price": 4200000, "priceLabel": "4.200.000₫",
+      "image": "assets/product/variant-celadon.png",
+      "tags": ["new"],
+      "has360": false, "isNew": true, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#8fbc8f"],
+      "desc": "Bình hoa tối giản — Men celadon rạn cổ — Phong cách thiền"
+    },
+    {
+      "id": "bo-tra-dao-tien", "name": "Bộ Trà Đào Tiên",
+      "collection": "Trà Đạo", "collectionId": "tra-dao",
+      "glaze": "Trắng Ngà", "glazeId": "ivory",
+      "type": "Bộ trà", "typeId": "bo-tra",
+      "size": "Ấm 12cm + 4 chén 6cm", "price": 3600000, "priceLabel": "3.600.000₫",
+      "image": "assets/collections/tea.png",
+      "tags": ["bestSeller"],
+      "has360": false, "isNew": false, "isLimited": false, "isBestSeller": true,
+      "swatches": ["#f5f0e0", "#8fbc8f"],
+      "desc": "Bộ trà 5 món — Trắng ngà tinh khôi — Viền ánh kim tiết chế"
+    },
+    {
+      "id": "dia-sen-lam", "name": "Đĩa Sen Lam",
+      "collection": "Sen Việt", "collectionId": "sen-viet",
+      "glaze": "Men Lam", "glazeId": "lam",
+      "type": "Decor", "typeId": "decor",
+      "size": "ĐK 28cm", "price": 1250000, "priceLabel": "1.250.000₫",
+      "image": "assets/product/detail-glaze.png",
+      "tags": [],
+      "has360": false, "isNew": false, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#2563a1"],
+      "desc": "Đĩa trang trí hoa sen — Men lam truyền thống Bình Dương"
+    },
+    {
+      "id": "tuong-bao-ma", "name": "Tượng Bảo Mã",
+      "collection": "Phú Quý", "collectionId": "phu-quy",
+      "glaze": "Men Ngọc", "glazeId": "ngoc",
+      "type": "Decor", "typeId": "decor",
+      "size": "Cao 22cm × Dài 18cm", "price": 6300000, "priceLabel": "6.300.000₫",
+      "image": "assets/collections/decor.png",
+      "tags": ["new"],
+      "has360": false, "isNew": true, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#7ca982"],
+      "desc": "Tượng ngựa phong thủy — Men ngọc bích — Biểu tượng thành công"
+    },
+    {
+      "id": "loc-binh-van-rong", "name": "Lộc Bình Vân Rồng",
+      "collection": "Hoa Sen", "collectionId": "hoa-sen",
+      "glaze": "Men Rạn", "glazeId": "ran",
+      "type": "Bình hoa", "typeId": "binh-hoa",
+      "size": "Cao 60cm × ĐK 25cm", "price": 22000000, "priceLabel": "22.000.000₫",
+      "image": "assets/collections/decor.png",
+      "tags": ["limited"],
+      "has360": false, "isNew": false, "isLimited": true, "isBestSeller": false,
+      "swatches": ["#1a3a6b", "#c4a35a"],
+      "desc": "Lộc bình dáng trang trọng — Vân rồng ánh kim — Men rạn cổ truyền"
+    },
+    {
+      "id": "bo-ban-an-an-nhien", "name": "Bộ Bàn Ăn An Nhiên",
+      "collection": "Thiền Mộc", "collectionId": "thien-moc",
+      "glaze": "Trắng Ngà", "glazeId": "ivory",
+      "type": "Bộ bàn ăn", "typeId": "bo-ban-an",
+      "size": "12 món cho 4 người", "price": 8900000, "priceLabel": "8.900.000₫",
+      "image": "assets/product/variant-ivory.png",
+      "tags": ["bestSeller"],
+      "has360": false, "isNew": false, "isLimited": false, "isBestSeller": true,
+      "swatches": ["#f5f0e0"],
+      "desc": "Bộ bàn ăn 12 món — Trắng ngà tối giản — Thiết kế Nhật - Việt"
+    },
+    {
+      "id": "chen-tra-ngoc-suong", "name": "Chén Trà Ngọc Sương",
+      "collection": "Trà Đạo", "collectionId": "tra-dao",
+      "glaze": "Men Celadon", "glazeId": "celadon",
+      "type": "Bộ trà", "typeId": "bo-tra",
+      "size": "ĐK 7cm × Cao 5cm", "price": 690000, "priceLabel": "690.000₫",
+      "image": "assets/product/variant-celadon.png",
+      "tags": [],
+      "has360": false, "isNew": false, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#8fbc8f", "#1a3a6b"],
+      "desc": "Chén trà đơn — Men celadon ngọc bích — Thanh thoát"
+    },
+    {
+      "id": "binh-hut-loc-kim-lien", "name": "Bình Hút Lộc Kim Liên",
+      "collection": "Phú Quý", "collectionId": "phu-quy",
+      "glaze": "Vẽ Vàng", "glazeId": "ve-vang",
+      "type": "Bình hoa", "typeId": "binh-hoa",
+      "size": "Cao 40cm × ĐK 20cm", "price": 12500000, "priceLabel": "12.500.000₫",
+      "image": "assets/collections/gift.png",
+      "tags": ["limited", "bestSeller"],
+      "has360": false, "isNew": false, "isLimited": true, "isBestSeller": true,
+      "swatches": ["#c4a35a", "#1a3a6b"],
+      "desc": "Bình hút lộc phong thủy — Hoa sen điểm ánh kim — Quà tặng cao cấp"
+    },
+    {
+      "id": "lo-hoa-zen", "name": "Lọ Hoa Zen",
+      "collection": "Thiền Mộc", "collectionId": "thien-moc",
+      "glaze": "Men Ngọc", "glazeId": "ngoc",
+      "type": "Bình hoa", "typeId": "binh-hoa",
+      "size": "Cao 18cm × ĐK 10cm", "price": 2400000, "priceLabel": "2.400.000₫",
+      "image": "assets/product/variant-celadon.png",
+      "tags": ["new"],
+      "has360": false, "isNew": true, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#7ca982"],
+      "desc": "Lọ hoa tối giản — Men ngọc mát — Phong cách Wabi-Sabi"
+    },
+    {
+      "id": "khay-tra-son-ha", "name": "Khay Trà Sơn Hà",
+      "collection": "Trà Đạo", "collectionId": "tra-dao",
+      "glaze": "Men Lam", "glazeId": "lam",
+      "type": "Bộ trà", "typeId": "bo-tra",
+      "size": "30cm × 18cm × 3cm", "price": 1800000, "priceLabel": "1.800.000₫",
+      "image": "assets/product/detail-glaze.png",
+      "tags": [],
+      "has360": false, "isNew": false, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#2563a1"],
+      "desc": "Khay trà sơn hà — Men lam truyền thống — Hoa văn sơn thủy"
+    },
+    {
+      "id": "tuong-lien-hoa", "name": "Tượng Liên Hoa",
+      "collection": "Sen Việt", "collectionId": "sen-viet",
+      "glaze": "Trắng Ngà", "glazeId": "ivory",
+      "type": "Decor", "typeId": "decor",
+      "size": "Cao 15cm × ĐK 12cm", "price": 5600000, "priceLabel": "5.600.000₫",
+      "image": "assets/product/variant-ivory.png",
+      "tags": ["new"],
+      "has360": false, "isNew": true, "isLimited": false, "isBestSeller": false,
+      "swatches": ["#f5f0e0"],
+      "desc": "Tượng hoa sen nở — Trắng ngà nguyên bản — Nghệ thuật điêu khắc sứ"
+    }
+  ],
+  "occasions": [
+    { "id": "phong-khach", "name": "Phòng khách", "icon": "🏠", "desc": "Tạo điểm nhấn trung tâm cho không gian tiếp khách." },
+    { "id": "qua-tang", "name": "Quà tặng", "icon": "🎁", "desc": "Lựa chọn ý nghĩa, sang trọng dành tặng đối tác, tân gia." },
+    { "id": "ban-tra", "name": "Bàn trà", "icon": "🍵", "desc": "Bộ ấm chén thủ công giúp tôn lên hương vị trà ngon." },
+    { "id": "phong-tho", "name": "Không gian thờ", "icon": "🙏", "desc": "Sản phẩm tĩnh lặng, trang nghiêm từ men ngọc, men rạn." },
+    { "id": "tan-gia", "name": "Tân gia", "icon": "🏡", "desc": "Bộ bàn ăn cao cấp, món quà mang đến khởi đầu tốt đẹp." }
+  ],
+  "journal": [
+    { "id": "j1", "title": "Ý nghĩa hoa sen trong gốm Việt", "excerpt": "Từ biểu tượng tâm linh đến nghệ thuật trang trí — hoa sen đã trở thành linh hồn của gốm sứ Việt Nam suốt hàng trăm năm.", "image": "assets/product/detail-pattern.png" },
+    { "id": "j2", "title": "Men Cobalt là gì?", "excerpt": "Khám phá cách sắc xanh cobalt được xử lý qua nhiều lớp men để tạo bề mặt sâu màu, bóng mịn và có độ chuyển tự nhiên dưới ánh sáng.", "image": "assets/product/detail-glaze.png" },
+    { "id": "j3", "title": "Cách chọn bình gốm cho phòng khách", "excerpt": "Hướng dẫn chọn kích thước, dòng men và phong cách phù hợp với không gian sống của bạn — từ tối giản đến cổ điển.", "image": "assets/editorial/hero.png" }
+  ],
+  "filters": {
+    "types": [
+      { "id": "binh-hoa", "name": "Bình hoa", "count": 5 },
+      { "id": "bo-tra", "name": "Bộ trà", "count": 3 },
+      { "id": "decor", "name": "Decor", "count": 3 },
+      { "id": "bo-ban-an", "name": "Bộ bàn ăn", "count": 1 }
+    ],
+    "glazes": [
+      { "id": "cobalt", "name": "Men Cobalt", "swatch": "#1a3a6b" },
+      { "id": "celadon", "name": "Men Celadon", "swatch": "#8fbc8f" },
+      { "id": "ivory", "name": "Trắng Ngà", "swatch": "#f5f0e0" },
+      { "id": "lam", "name": "Men Lam", "swatch": "#2563a1" },
+      { "id": "ngoc", "name": "Men Ngọc", "swatch": "#7ca982" },
+      { "id": "ran", "name": "Men Rạn", "swatch": "#c4a35a" },
+      { "id": "ve-vang", "name": "Vẽ Vàng", "swatch": "#d4af37" }
+    ],
+    "priceRanges": [
+      { "id": "under-1m", "name": "Dưới 1 triệu", "min": 0, "max": 1000000 },
+      { "id": "1m-3m", "name": "1–3 triệu", "min": 1000000, "max": 3000000 },
+      { "id": "3m-10m", "name": "3–10 triệu", "min": 3000000, "max": 10000000 },
+      { "id": "over-10m", "name": "Trên 10 triệu", "min": 10000000, "max": 999999999 }
+    ]
+  }
+}

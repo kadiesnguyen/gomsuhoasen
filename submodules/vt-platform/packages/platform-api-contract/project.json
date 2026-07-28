@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-api-contract",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

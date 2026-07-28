@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "status": "ready_for_business_review",
+  "source": [
+    "OLD_CODE/apiv2_8721/src/modules/ecommerce/order/queue/onCommisionRunTurn2.ts",
+    "OLD_CODE/apiv2_8721/src/modules/ecommerce/order/queue/onCommisionRun.ts",
+    "OLD_CODE/apiv2_8721/src/modules/transaction/transaction/queue/onCreateTransSuccessP.ts"
+  ],
+  "runtimeRates": {
+    "DIRECT": 0.1,
+    "INDIRECT": 0.07
+  },
+  "legacyTitleRatesReference": {
+    "LEADER1": 0.03,
+    "LEADER2": 0.01,
+    "HIGH_LEADER_POOL": 0.03,
+    "OUTSTANDING_MEMBER": 0.01,
+    "AMBASSADOR_POOL": 0.05
+  },
+  "fixtures": [
+    {
+      "id": "affiliate-direct-indirect-basic",
+      "input": {
+        "orderId": "order-001",
+        "buyerId": "buyer-a",
+        "targetId": "tenant-a",
+        "totalPayment": 1000000,
+        "upline": [
+          { "memberId": "direct-a", "depth": 1 },
+          { "memberId": "indirect-a", "depth": 2 }
+        ]
+      },
+      "expectedLedger": [
+        {
+          "idempotencyKey": "commission:order-001:direct-a:DIRECT",
+          "memberId": "direct-a",
+          "type": "DIRECT",
+          "amount": 100000
+        },
+        {
+          "idempotencyKey": "commission:order-001:indirect-a:INDIRECT",
+          "memberId": "indirect-a",
+          "type": "INDIRECT",
+          "amount": 70000
+        }
+      ],
+      "expectedMetricIncrements": [
+        { "memberId": "direct-a", "type": "AFF_PERSONAL_MONTHLY_DIRECT_COMMISSION", "amount": 100000 },
+        { "memberId": "direct-a", "type": "AFF_PERSONAL_ACCUMULATED_DIRECT_COMMISSION", "amount": 100000 },
+        { "memberId": "direct-a", "type": "AFF_PERSONAL_MONTHLY_DIRECT_REVENUE", "amount": 1000000 },
+        { "memberId": "direct-a", "type": "AFF_PERSONAL_ACCUMULATED_DIRECT_REVENUE", "amount": 1000000 },
+        { "memberId": "indirect-a", "type": "AFF_PERSONAL_MONTHLY_INDIRECT_COMMISSION", "amount": 70000 },
+        { "memberId": "indirect-a", "type": "AFF_PERSONAL_ACCUMULATED_INDIRECT_COMMISSION", "amount": 70000 },
+        { "memberId": "indirect-a", "type": "AFF_PERSONAL_MONTHLY_INDIRECT_REVENUE", "amount": 1000000 },
+        { "memberId": "indirect-a", "type": "AFF_PERSONAL_ACCUMULATED_INDIRECT_REVENUE", "amount": 1000000 }
+      ]
+    },
+    {
+      "id": "affiliate-replay-idempotency",
+      "input": {
+        "eventKey": "order.completed:order-001",
+        "replayCount": 2,
+        "expectedIdempotencyKey": "commission:order-001:direct-a:DIRECT"
+      },
+      "expected": {
+        "ledgerRowsAfterReplay": 1,
+        "metricIncrementAppliedTimes": 1
+      }
+    }
+  ],
+  "legacyTitleFixturesDeferred": [
+    {
+      "id": "affiliate-leader-threshold-capped-by-order",
+      "decision": "deferred_title_module",
+      "input": {
+        "orderId": "order-002",
+        "buyerId": "buyer-a",
+        "targetId": "tenant-a",
+        "totalPayment": 1000000,
+        "leadershipMatches": [
+          { "memberId": "leader-1", "depth": 1, "accumulatedTeamRevenueAfterOrder": 300500000 },
+          { "memberId": "leader-2", "depth": 2, "accumulatedTeamRevenueAfterOrder": 302000000 }
+        ]
+      },
+      "expectedLedger": [
+        {
+          "idempotencyKey": "commission:order-002:leader-1:LEADER1",
+          "memberId": "leader-1",
+          "type": "LEADER1",
+          "eligibleRevenue": 500000,
+          "amount": 15000
+        },
+        {
+          "idempotencyKey": "commission:order-002:leader-2:LEADER2",
+          "memberId": "leader-2",
+          "type": "LEADER2",
+          "eligibleRevenue": 1000000,
+          "amount": 10000
+        }
+      ],
+      "notes": "Historical OLD_CODE reference only. Not part of modern membership-rank runtime."
+    },
+    {
+      "id": "affiliate-high-leader-pool-split",
+      "decision": "deferred_title_module",
+      "input": {
+        "orderId": "order-003",
+        "buyerId": "buyer-a",
+        "targetId": "tenant-a",
+        "totalPayment": 2000000,
+        "highLeaders": ["high-1", "high-2"]
+      },
+      "expectedLedger": [
+        {
+          "idempotencyKey": "commission:order-003:high-1:HIGH_LEADER",
+          "memberId": "high-1",
+          "type": "HIGH_LEADER",
+          "amount": 30000
+        },
+        {
+          "idempotencyKey": "commission:order-003:high-2:HIGH_LEADER",
+          "memberId": "high-2",
+          "type": "HIGH_LEADER",
+          "amount": 30000
+        }
+      ],
+      "notes": "Historical OLD_CODE reference only. 2,000,000 * 0.03 / 2."
+    },
+    {
+      "id": "affiliate-ambassador-pool-split",
+      "decision": "deferred_title_module",
+      "input": {
+        "orderId": "order-004",
+        "buyerId": "buyer-a",
+        "targetId": "tenant-a",
+        "totalPayment": 3000000,
+        "ambassadors": ["amb-1", "amb-2", "amb-3"]
+      },
+      "expectedLedger": [
+        {
+          "idempotencyKey": "commission:order-004:amb-1:AMBASSADOR",
+          "memberId": "amb-1",
+          "type": "AMBASSADOR",
+          "amount": 50000
+        },
+        {
+          "idempotencyKey": "commission:order-004:amb-2:AMBASSADOR",
+          "memberId": "amb-2",
+          "type": "AMBASSADOR",
+          "amount": 50000
+        },
+        {
+          "idempotencyKey": "commission:order-004:amb-3:AMBASSADOR",
+          "memberId": "amb-3",
+          "type": "AMBASSADOR",
+          "amount": 50000
+        }
+      ],
+      "notes": "Historical OLD_CODE reference only. 3,000,000 * 0.05 / 3."
+    }
+  ]
+}

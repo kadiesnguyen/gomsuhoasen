@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-zalo-cs",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@vt/platform-file-storage-s3",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "dependencies": {
+    "@vt/platform-file-core": "*"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-s3": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-s3": {
+      "optional": true
+    }
+  },
+  "x-commonization": {
+    "justification": "External provider adapter specifically maintained for AWS S3 integration. Currently UNADOPTED but RETAIN_PROVIDER_READY."
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

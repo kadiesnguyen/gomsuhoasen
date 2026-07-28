@@ -1,0 +1,18 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "types": [
+      "vitest/globals",
+      "jest",
+      "node",
+      "multer"
+    ],
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}

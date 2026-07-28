@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "status": "ready_for_business_review",
+  "source": [
+    "OLD_CODE/apiv2_8721/src/tinhLaiPoint.ts",
+    "OLD_CODE/apiv2_8721/src/tinhLaiInvited.ts",
+    "OLD_CODE/apiv2_8721/src/tinhLai_ORDER_COUNT.ts",
+    "OLD_CODE/apiv2_8721/src/tinhLai_ITEM_PURCHASED.ts",
+    "OLD_CODE/apiv2_8721/src/tinhLai_CONSUMER_TOTAL.ts",
+    "OLD_CODE/apiv2_8721/src/modules/transaction/transaction/queue/onCreateTransSuccessP.ts"
+  ],
+  "fixtures": [
+    {
+      "id": "membership-point-total-basic",
+      "conditionType": "POINT_TOTAL",
+      "input": {
+        "memberId": "member-a",
+        "targetId": "tenant-a",
+        "transactions": [
+          { "type": "presenter", "status": "Completed", "value": 100 },
+          { "type": "presentee", "status": "Completed", "value": 50 },
+          { "type": "from_purchases", "status": "Completed", "value": 200 },
+          { "type": "deduction", "status": "Completed", "value": -20 }
+        ]
+      },
+      "expectedMetric": 350,
+      "notes": "OLD_CODE tinhLaiPoint includes presenter, presentee, from_purchases and excludes deduction for lifetime point total."
+    },
+    {
+      "id": "membership-invited-total-basic",
+      "conditionType": "INVITED_TOTAL",
+      "input": {
+        "memberId": "parent-a",
+        "targetId": "tenant-a",
+        "references": [
+          { "parentId": "parent-a", "childId": "child-1" },
+          { "parentId": "parent-a", "childId": "child-2" },
+          { "parentId": "parent-b", "childId": "child-3" }
+        ]
+      },
+      "expectedMetric": 2,
+      "notes": "Group reference rows by parentId + targetId."
+    },
+    {
+      "id": "membership-order-count-completed-only",
+      "conditionType": "ORDER_COUNT",
+      "input": {
+        "memberId": "buyer-a",
+        "targetId": "tenant-a",
+        "orders": [
+          { "buyerId": "buyer-a", "status": "COMPLETED" },
+          { "buyerId": "buyer-a", "status": "COMPLETED" },
+          { "buyerId": "buyer-a", "status": "CANCELLED" },
+          { "buyerId": "buyer-b", "status": "COMPLETED" }
+        ]
+      },
+      "expectedMetric": 2,
+      "notes": "OLD_CODE counts only status COMPLETED."
+    },
+    {
+      "id": "membership-item-purchased-quantity",
+      "conditionType": "ITEM_PURCHASED",
+      "input": {
+        "memberId": "buyer-a",
+        "targetId": "tenant-a",
+        "itemId": "item-x",
+        "orders": [
+          {
+            "buyerId": "buyer-a",
+            "status": "COMPLETED",
+            "cart": [
+              { "itemId": "item-x", "qty": 2 },
+              { "itemId": "item-y", "qty": 1 }
+            ]
+          },
+          {
+            "buyerId": "buyer-a",
+            "status": "COMPLETED",
+            "cart": [
+              { "itemId": "item-x", "qty": 3 }
+            ]
+          },
+          {
+            "buyerId": "buyer-a",
+            "status": "PENDING",
+            "cart": [
+              { "itemId": "item-x", "qty": 9 }
+            ]
+          }
+        ]
+      },
+      "expectedMetric": 5,
+      "notes": "Unwind completed order cart and sum qty per itemId."
+    },
+    {
+      "id": "membership-consumer-total-completed-cash-from-member-order",
+      "conditionType": "CONSUMER_TOTAL",
+      "input": {
+        "memberId": "member-a",
+        "targetId": "tenant-a",
+        "transactions": [
+          { "type": "cash_from_member_order", "status": "Completed", "value": 100000 },
+          { "type": "cash_from_member_order", "status": "Pending", "value": 250000 },
+          { "type": "cash_for_order", "status": "Completed", "value": -20000 }
+        ]
+      },
+      "expectedMetric": 100000,
+      "notes": "OLD_CODE consumer total includes completed cash_from_member_order only."
+    },
+    {
+      "id": "membership-condition-evaluator-and-group",
+      "conditions": [
+        { "type": "POINT_TOTAL", "group": "AND", "threshold": 300 },
+        { "type": "ORDER_COUNT", "group": "AND", "threshold": 2 }
+      ],
+      "snapshot": {
+        "memberId": "member-a",
+        "metrics": {
+          "POINT_TOTAL": 350,
+          "ORDER_COUNT": 2
+        }
+      },
+      "expected": {
+        "passed": true,
+        "passedConditions": ["POINT_TOTAL", "ORDER_COUNT"],
+        "failedConditions": []
+      }
+    },
+    {
+      "id": "membership-condition-evaluator-or-group",
+      "conditions": [
+        { "type": "POINT_TOTAL", "group": "OR", "threshold": 1000 },
+        { "type": "INVITED_TOTAL", "group": "OR", "threshold": 2 }
+      ],
+      "snapshot": {
+        "memberId": "member-a",
+        "metrics": {
+          "POINT_TOTAL": 350,
+          "INVITED_TOTAL": 2
+        }
+      },
+      "expected": {
+        "passed": true,
+        "passedConditions": ["INVITED_TOTAL"],
+        "failedConditions": ["POINT_TOTAL"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-auth-guard",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

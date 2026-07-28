@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-state-machine",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

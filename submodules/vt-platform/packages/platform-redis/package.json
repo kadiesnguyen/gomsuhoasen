@@ -1,0 +1,16 @@
+{
+  "name": "@vt/platform-redis",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "ioredis": "^5.0.0"
+  },
+  "dependencies": {},
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

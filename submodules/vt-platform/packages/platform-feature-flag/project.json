@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-feature-flag",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

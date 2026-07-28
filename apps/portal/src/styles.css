@@ -1,0 +1,213 @@
+html,
+body,
+#root {
+  min-height: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--ghs-bg);
+  color: var(--ghs-text);
+}
+
+:root {
+  --ghs-bg: #f4efe4;
+  --ghs-surface: #ffffff;
+  --ghs-surface-muted: #faf7f0;
+  --ghs-text: #191714;
+  --ghs-text-muted: #6c6459;
+  --ghs-border: #ece3d2;
+  --ghs-primary: #9a7520;
+  --ghs-primary-hover: #7f5f19;
+  --ghs-primary-soft: rgba(154, 117, 32, 0.12);
+  --ghs-sidebar-bg: #0f1012;
+  --ghs-sidebar-border: #222428;
+  --ghs-sidebar-text: #d3d4d8;
+  --ghs-sidebar-text-muted: #8b8f97;
+  --ghs-sidebar-active-bg: rgba(255, 255, 255, 0.08);
+  --ghs-sidebar-active-text: #ffffff;
+}
+
+.ghs-shell {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--ghs-bg);
+}
+
+.ghs-sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--ghs-sidebar-bg);
+  border-right: 1px solid var(--ghs-sidebar-border);
+  min-height: 100vh;
+}
+
+.ghs-brand {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.ghs-brand-main {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #f2e7cd;
+  text-transform: uppercase;
+}
+
+.ghs-brand-sub {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--ghs-sidebar-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ghs-nav {
+  padding: 10px 10px 14px;
+  display: grid;
+  gap: 4px;
+}
+
+.ghs-nav-link {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: center;
+  gap: 10px;
+  border-radius: 10px;
+  color: var(--ghs-sidebar-text);
+  text-decoration: none;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ghs-nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ghs-sidebar-active-text);
+}
+
+.ghs-nav-link.active {
+  background: var(--ghs-sidebar-active-bg);
+  color: var(--ghs-sidebar-active-text);
+}
+
+.ghs-sidebar-footer {
+  margin-top: auto;
+  padding: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ghs-sidebar-user {
+  font-size: 12px;
+  color: var(--ghs-sidebar-text);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.ghs-logout-btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--ghs-sidebar-text);
+  background: transparent;
+  border-radius: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ghs-logout-btn:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.ghs-main {
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ghs-header {
+  border-bottom: 1px solid var(--ghs-border);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+}
+
+.ghs-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ghs-text-muted);
+  font-size: 13px;
+}
+
+.ghs-role-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--ghs-primary);
+  background: var(--ghs-primary-soft);
+  border-radius: 999px;
+  padding: 5px 10px;
+}
+
+.ghs-content {
+  overflow: auto;
+  min-height: 0;
+  padding: 20px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ghs-content-frame {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+@media (max-width: 992px) {
+  .ghs-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .ghs-sidebar {
+    display: none;
+  }
+
+  .ghs-content {
+    padding: 14px;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.vt-empty-state-action {
+  padding: 8px 20px !important;
+  background: linear-gradient(135deg, #9A7520, #C4A550) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}

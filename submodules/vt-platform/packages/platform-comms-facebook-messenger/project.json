@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-comms-facebook-messenger",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

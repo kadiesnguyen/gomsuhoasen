@@ -1,0 +1,7 @@
+{
+  "name": "@vt/balance-core",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

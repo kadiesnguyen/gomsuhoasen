@@ -1,0 +1,20 @@
+{
+  "name": "@vt/app-bootstrap",
+  "version": "0.1.0",
+  "description": "Shared NestJS application bootstrap helpers — Mongo connection, global plugins, CORS, and healthcheck setup.",
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "@nestjs/common": ">=9.0.0",
+    "@nestjs/config": ">=2.0.0",
+    "@nestjs/core": ">=9.0.0",
+    "@nestjs/event-emitter": ">=1.0.0",
+    "@nestjs/mongoose": ">=9.0.0",
+    "mongoose": ">=7.0.0"
+  },
+  "nx": {
+    "tags": [
+      "type:shared",
+      "scope:vt-platform"
+    ]
+  }
+}

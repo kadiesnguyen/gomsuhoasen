@@ -1,0 +1,154 @@
+import React, { useEffect, useState } from 'react';
+import { ProductDetailViewer } from '@gomhoasen/ui-showroom';
+import { getProduct } from '../data/catalog-api';
+import { useShowroomData } from '../data/ShowroomContext';
+import { updatePageMetadata } from '../data/page-metadata';
+import Link from '../mocks/next/link';
+
+const STATUS_STYLE: React.CSSProperties = {
+  minHeight: '60vh',
+  display: 'grid',
+  placeItems: 'center',
+  padding: '64px 24px',
+  textAlign: 'center',
+  color: '#e6d8c4',
+  background: '#080704',
+};
+
+const STATUS_INNER_STYLE: React.CSSProperties = {
+  maxWidth: '480px',
+  display: 'grid',
+  gap: '12px',
+};
+
+const STATUS_ACTION_STYLE: React.CSSProperties = {
+  justifySelf: 'center',
+  marginTop: 8,
+  padding: '10px 18px',
+  border: '1px solid #b8915d',
+  color: '#d5c3ad',
+  background: 'transparent',
+  cursor: 'pointer',
+  textDecoration: 'none',
+};
+
+const STATUS_HEADING_STYLE: React.CSSProperties = {
+  margin: 0,
+  fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
+  fontWeight: 500,
+};
+
+interface ProductDetailPageProps {
+  slug: string;
+}
+
+type ProductDetailData = NonNullable<Awaited<ReturnType<typeof getProduct>>>;
+
+export function ProductDetailPage({ slug }: ProductDetailPageProps) {
+  const { brand, catalogUx, productsLandingInfo } = useShowroomData();
+  const [data, setData] = useState<ProductDetailData | null>(null);
+  const [message, setMessage] = useState('');
+  const [loadError, setLoadError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+    setData(null);
+    setMessage('');
+    setLoadError(false);
+
+    getProduct(slug)
+      .then((resolved) => {
+        if (!mounted) return;
+        if (!resolved) {
+          setMessage(catalogUx.detailNotFoundText);
+          return;
+        }
+        setData(resolved);
+      })
+      .catch(() => {
+        if (mounted) setLoadError(true);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [catalogUx.detailNotFoundText, reloadKey, slug]);
+
+  useEffect(() => {
+    const title = data?.name || message || (loadError ? catalogUx.detailErrorText : catalogUx.detailLoadingText);
+    updatePageMetadata({
+      title: `${title} | ${brand.name}`,
+      description: data?.description ?? productsLandingInfo.desc,
+      path: `/san-pham/${slug}`,
+      image: data?.poster,
+    });
+  }, [
+    brand.name,
+    catalogUx.detailLoadingText,
+    data,
+    loadError,
+    message,
+    productsLandingInfo.desc,
+    slug,
+  ]);
+
+  if (message || loadError) {
+    return (
+      <div style={STATUS_STYLE}>
+        <div style={STATUS_INNER_STYLE}>
+          <strong>{brand.name}</strong>
+          <h1 style={STATUS_HEADING_STYLE}>
+            {loadError ? catalogUx.detailErrorText : message}
+          </h1>
+          {loadError ? (
+            <button
+              type="button"
+              style={STATUS_ACTION_STYLE}
+              onClick={() => setReloadKey((value) => value + 1)}
+            >
+              {catalogUx.listingRetryLabel}
+            </button>
+          ) : (
+            <Link
+              href="/danh-muc-san-pham"
+              style={STATUS_ACTION_STYLE}
+            >
+              {catalogUx.detailBackLabel}
+            </Link>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div style={STATUS_STYLE}>
+        <div style={STATUS_INNER_STYLE}>
+          <strong>{brand.name}</strong>
+          <h1 style={STATUS_HEADING_STYLE}>{catalogUx.detailLoadingText}</h1>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <ProductDetailViewer
+      productId={data.id}
+      productName={data.name}
+      brandName={data.brandName}
+      productSubtitle={data.tagline}
+      modelUrl={data.modelUrl}
+      video360Url={data.video360Url}
+      posterUrl={data.poster}
+      images={data.images}
+      viewSections={data.viewSections}
+      variants={data.variants}
+      specs={data.specs}
+      story={data.story ?? undefined}
+      cta={{ ...data.cta, label: catalogUx.detailCtaLabel }}
+      copy={data.copy}
+    />
+  );
+}

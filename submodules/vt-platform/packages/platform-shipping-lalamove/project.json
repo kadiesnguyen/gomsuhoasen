@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-shipping-lalamove",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}

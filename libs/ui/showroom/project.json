@@ -1,0 +1,7 @@
+{
+  "name": "ui-showroom",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/showroom/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:showroom", "layer:ui"]
+}

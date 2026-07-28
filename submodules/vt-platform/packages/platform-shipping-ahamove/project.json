@@ -1,0 +1,7 @@
+{
+  "name": "@vt/platform-shipping-ahamove",
+  "tags": [
+    "type:shared",
+    "scope:vt-platform"
+  ]
+}
