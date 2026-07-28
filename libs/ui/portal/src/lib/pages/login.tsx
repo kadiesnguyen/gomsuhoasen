@@ -71,7 +71,7 @@ export function LoginPage() {
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="ghs-btn ghs-btn-primary" style={{ width: '100%', opacity: loading ? 0.6 : 1 }}>
+            <button type="submit" disabled={loading} className="ghs-btn ghs-btn-primary" style={{ width: '100%' }}>
               {loading ? 'Đang xử lý...' : 'Đăng nhập'}
             </button>
           </form>

@@ -58,10 +58,6 @@ export function AuditLogPage() {
     load();
   }, [load]);
 
-  const inputStyle = {
-    minWidth: 160,
-  } as const;
-
   return (
     <div>
       <div className="ghs-page-header">
@@ -82,8 +78,7 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            className="ghs-input"
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             placeholder="Hành động"
@@ -92,8 +87,7 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            className="ghs-input"
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             placeholder="Đối tượng"
@@ -102,20 +96,19 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            className="ghs-input"
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             type="date"
             value={draftFilters.date}
             onChange={(event) => setDraftFilters((prev) => ({ ...prev, date: event.target.value }))}
-            className="ghs-input"
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
-          <Button variant="secondary" onClick={() => setFilters({ ...draftFilters })}>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" onClick={() => setFilters({ ...draftFilters })}>
             Lọc
           </Button>
           <Button
+            className="ghs-btn ghs-btn-ghost"
             variant="outline"
             onClick={() => {
               setDraftFilters(EMPTY_FILTERS);

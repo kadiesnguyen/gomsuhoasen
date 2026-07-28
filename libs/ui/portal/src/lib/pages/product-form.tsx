@@ -857,7 +857,7 @@ export function ProductFormPage() {
                 <div style={sectionStyle}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                     <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>Biến thể</h3>
-                    <Button type="button" variant="secondary" size="sm" onClick={() => updateField('variants', [...form.variants, makeVariant(form.variants.length)])}>Thêm biến thể</Button>
+                    <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => updateField('variants', [...form.variants, makeVariant(form.variants.length)])}>Thêm biến thể</Button>
                   </div>
                   <div style={{ display: 'grid', gap: 12 }}>
                     {form.variants.map((variant, index) => (
@@ -889,7 +889,7 @@ export function ProductFormPage() {
                               onChange={(v) => updateVariant(index, { modelUrl: readFirstString(v) })}
                             />
                           </div>
-                          <div style={{ display: 'flex', alignItems: 'end' }}><Button type="button" variant="destructive" size="sm" onClick={() => updateField('variants', form.variants.filter((_, i) => i !== index))}>Xóa</Button></div>
+                          <div style={{ display: 'flex', alignItems: 'end' }}><Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => updateField('variants', form.variants.filter((_, i) => i !== index))}>Xóa</Button></div>
                         </div>
                       </div>
                     ))}
@@ -953,10 +953,10 @@ export function ProductFormPage() {
                                 </div>
                               </div>
                               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                                <Button type="button" variant="secondary" size="sm" onClick={() => setPreviewProvenance(record)}>
+                                <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => setPreviewProvenance(record)}>
                                   Xem trước
                                 </Button>
-                                <Button type="button" variant="destructive" size="sm" onClick={() => requestDeleteProvenance(record.id, record.title)}>Xóa</Button>
+                                <Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => requestDeleteProvenance(record.id, record.title)}>Xóa</Button>
                               </div>
                             </div>
                           ))}
@@ -970,7 +970,7 @@ export function ProductFormPage() {
                   <div style={sectionStyle}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                       <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>3D view sections và hotspots</h3>
-                      <Button type="button" variant="secondary" size="sm" onClick={() => updateField('viewSections', [...form.viewSections, makeSection(form.viewSections.length)])}>Thêm góc nhìn</Button>
+                      <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => updateField('viewSections', [...form.viewSections, makeSection(form.viewSections.length)])}>Thêm góc nhìn</Button>
                     </div>
                     <div style={{ display: 'grid', gap: 14 }}>
                       {form.viewSections.map((section, sectionIndex) => (
@@ -982,8 +982,8 @@ export function ProductFormPage() {
                             <div><label style={labelStyle}>Camera orbit</label><input value={section.cameraOrbit} onChange={(e) => updateSection(sectionIndex, { cameraOrbit: e.target.value })} style={fieldStyle} /></div>
                             <div><label style={labelStyle}>Camera target</label><input value={section.cameraTarget} onChange={(e) => updateSection(sectionIndex, { cameraTarget: e.target.value })} style={fieldStyle} /></div>
                             <div style={{ display: 'flex', alignItems: 'end', gap: 8 }}>
-                              <Button type="button" variant="secondary" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: [...section.hotspots, makeHotspot(section.hotspots.length)] })}>Thêm hotspot</Button>
-                              {form.viewSections.length > 1 && <Button type="button" variant="destructive" size="sm" onClick={() => updateField('viewSections', form.viewSections.filter((_, i) => i !== sectionIndex))}>Xóa góc</Button>}
+                              <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: [...section.hotspots, makeHotspot(section.hotspots.length)] })}>Thêm hotspot</Button>
+                              {form.viewSections.length > 1 && <Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => updateField('viewSections', form.viewSections.filter((_, i) => i !== sectionIndex))}>Xóa góc</Button>}
                             </div>
                           </div>
                           <div style={{ marginTop: 12 }}><label style={labelStyle}>Mô tả góc nhìn</label><input value={section.description} onChange={(e) => updateSection(sectionIndex, { description: e.target.value })} style={fieldStyle} /></div>
@@ -1007,7 +1007,7 @@ export function ProductFormPage() {
                                 </div>
                               </div>
                               <div style={{ marginTop: 10 }}><label style={labelStyle}>Nội dung panel</label><textarea value={hotspot.panelContent} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelContent: e.target.value })} rows={2} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
-                              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}><Button type="button" variant="destructive" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: section.hotspots.filter((_, i) => i !== hotspotIndex) })}>Xóa hotspot</Button></div>
+                              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}><Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: section.hotspots.filter((_, i) => i !== hotspotIndex) })}>Xóa hotspot</Button></div>
                             </div>
                           ))}
                         </div>

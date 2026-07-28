@@ -176,7 +176,7 @@ export function ArtisanFormPage() {
         {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', fontSize: '0.85rem', color: '#b91c1c', marginBottom: 16 }}>⚠️ {error}</div>}
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <Button variant="secondary" type="button" onClick={() => navigate('/admin/artisans')}>Hủy</Button>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" type="button" onClick={() => navigate('/admin/artisans')}>Hủy</Button>
           <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Thêm nghệ nhân'}</Button>
         </div>
       </form>

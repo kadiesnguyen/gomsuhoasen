@@ -232,7 +232,6 @@ export function SiteConfigPage() {
           onClick={handleSave}
           disabled={saving}
           className="ghs-btn ghs-btn-primary"
-          style={{ opacity: saving ? 0.6 : 1 }}
         >
           {saving ? 'Đang lưu...' : 'Lưu cấu hình'}
         </button>

@@ -125,18 +125,6 @@ export function RfqInboxPage() {
 
   return (
     <div>
-      <style>{`
-        @media (max-width: 600px) {
-          .ghs-rfq-inbox-layout {
-            grid-template-columns: minmax(0, 1fr) !important;
-          }
-
-          .ghs-rfq-inbox-detail {
-            position: static !important;
-            min-width: 0;
-          }
-        }
-      `}</style>
       <div className="ghs-page-header"><div><h1>Yêu cầu báo giá</h1></div></div>
 
       {/* Status filter tabs with counts */}
@@ -149,7 +137,7 @@ export function RfqInboxPage() {
         />
       </div>
 
-      <div className="ghs-rfq-inbox-layout" style={{ display: 'grid', gridTemplateColumns: selected ? 'minmax(0, 1fr) 400px' : '1fr', gap: 16, alignItems: 'start' }}>
+      <div className={selected ? 'ghs-rfq-inbox-layout is-detail-open' : 'ghs-rfq-inbox-layout'}>
         {/* List */}
         <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
           {loading ? (
@@ -219,7 +207,7 @@ export function RfqInboxPage() {
 
         {/* Detail panel */}
         {selected && (
-          <div className="ghs-card ghs-rfq-inbox-detail" style={{ position: 'sticky', top: 24 }}>
+          <div className="ghs-card ghs-rfq-inbox-detail">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Chi tiết RFQ</h3>
               <button type="button" aria-label="Đóng chi tiết yêu cầu" onClick={closeSelected} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999' }}>✕</button>

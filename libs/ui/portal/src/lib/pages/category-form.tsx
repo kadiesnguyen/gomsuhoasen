@@ -155,7 +155,7 @@ export function CategoryFormPage() {
         {error && <div role="alert" style={{ color: '#b91c1c', marginBottom: 12 }}>{error}</div>}
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <Button variant="secondary" type="button" onClick={() => navigate('/admin/categories')}>Hủy</Button>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" type="button" onClick={() => navigate('/admin/categories')}>Hủy</Button>
           <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo danh mục'}</Button>
         </div>
       </form>

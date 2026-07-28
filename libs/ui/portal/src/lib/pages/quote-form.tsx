@@ -190,18 +190,9 @@ export function QuoteFormPage() {
 
   return (
     <div>
-      <style>{`
-        @media (max-width: 600px) {
-          .ghs-quote-form-grid,
-          .ghs-quote-line-grid,
-          .ghs-quote-summary-grid {
-            grid-template-columns: minmax(0, 1fr) !important;
-          }
-        }
-      `}</style>
       <div className="ghs-page-header">
         <div><h1>{isEdit ? 'Chỉnh sửa báo giá' : 'Tạo báo giá'}</h1></div>
-        <Button variant="secondary" onClick={() => navigate('/admin/quotes')}>Quay lại</Button>
+        <Button className="ghs-btn ghs-btn-ghost" variant="secondary" onClick={() => navigate('/admin/quotes')}>Quay lại</Button>
       </div>
       {referenceError && (
         <div role="alert" style={{ marginBottom: 16, padding: '10px 14px', borderRadius: 10, background: '#fff7ed', color: '#9a3412', fontSize: '0.84rem' }}>
@@ -224,7 +215,7 @@ export function QuoteFormPage() {
               </div>
             </div>
           )}
-          <div className="ghs-quote-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="ghs-quote-form-grid">
             <div><label style={label}>RFQ</label><select value={selectedRfqId} onChange={(e) => setSelectedRfqId(e.target.value)} required disabled={isEdit} style={field}><option value="">Chọn RFQ</option>{rfqs.map(r => {
               const id = entityId(r);
               return <option key={id} value={id}>{r.customerName} - {r.customerPhone}</option>;
@@ -244,7 +235,7 @@ export function QuoteFormPage() {
         <div className="ghs-card" style={section}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <h3 style={{ margin: 0, color: '#9A7520' }}>Dòng báo giá</h3>
-            <Button type="button" variant="secondary" size="sm" onClick={() => setLines(prev => [...prev, { productId: '', productName: '', glaze: '', size: '', quantity: 1, unitPrice: 0, customization: '' }])}>Thêm dòng</Button>
+            <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => setLines(prev => [...prev, { productId: '', productName: '', glaze: '', size: '', quantity: 1, unitPrice: 0, customization: '' }])}>Thêm dòng</Button>
           </div>
           <div style={{ display: 'grid', gap: 12 }}>
             {lines.length === 0 ? (
@@ -253,13 +244,13 @@ export function QuoteFormPage() {
                 <div style={{ fontSize: '0.84rem', marginBottom: 10 }}>
                   Chọn RFQ để nạp nhanh danh sách sản phẩm, hoặc thêm từng dòng một cũng được.
                 </div>
-                <Button type="button" variant="secondary" size="sm" onClick={() => setLines([{ productId: '', productName: '', glaze: '', size: '', quantity: 1, unitPrice: 0, customization: '' }])}>
+                <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" size="sm" onClick={() => setLines([{ productId: '', productName: '', glaze: '', size: '', quantity: 1, unitPrice: 0, customization: '' }])}>
                   Thêm dòng đầu tiên
                 </Button>
               </div>
             ) : lines.map((line, index) => (
               <div key={index} style={{ border: '1px solid #eee', borderRadius: 10, padding: 12 }}>
-                <div className="ghs-quote-line-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.8fr 0.8fr 0.7fr 1fr auto', gap: 10, alignItems: 'end' }}>
+                <div className="ghs-quote-line-grid">
                   <div><label htmlFor={`quote-line-${index}-product`} style={label}>Sản phẩm</label><select id={`quote-line-${index}-product`} value={line.productId} onChange={(e) => chooseProduct(index, e.target.value)} style={field}><option value="">Chọn sản phẩm</option>{products.map(p => {
                     const id = entityId(p);
                     return <option key={id} value={id}>{p.name}</option>;
@@ -268,7 +259,7 @@ export function QuoteFormPage() {
                   <div><label htmlFor={`quote-line-${index}-size`} style={label}>Size</label><input id={`quote-line-${index}-size`} value={line.size} onChange={(e) => updateLine(index, { size: e.target.value })} style={field} /></div>
                   <div><label htmlFor={`quote-line-${index}-quantity`} style={label}>SL</label><input id={`quote-line-${index}-quantity`} type="number" min={1} value={line.quantity} onChange={(e) => updateLine(index, { quantity: Number(e.target.value) })} style={field} /></div>
                   <div><label htmlFor={`quote-line-${index}-unit-price`} style={label}>Đơn giá</label><input id={`quote-line-${index}-unit-price`} type="number" min={0} value={line.unitPrice} onChange={(e) => updateLine(index, { unitPrice: Number(e.target.value) })} style={field} /></div>
-                  <Button type="button" variant="destructive" size="sm" onClick={() => setLines(prev => prev.filter((_, i) => i !== index))}>Xóa</Button>
+                  <Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => setLines(prev => prev.filter((_, i) => i !== index))}>Xóa</Button>
                 </div>
                 <div style={{ marginTop: 10 }}><label htmlFor={`quote-line-${index}-customization`} style={label}>Tùy chỉnh</label><input id={`quote-line-${index}-customization`} value={line.customization} onChange={(e) => updateLine(index, { customization: e.target.value })} style={field} /></div>
               </div>
@@ -278,7 +269,7 @@ export function QuoteFormPage() {
 
         <div className="ghs-card" style={section}>
           <h3 style={{ marginTop: 0, color: '#9A7520' }}>Tổng tiền</h3>
-          <div className="ghs-quote-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div className="ghs-quote-summary-grid">
             <div><label style={label}>Tạm tính</label><div style={{ fontWeight: 800, fontSize: '1.2rem' }}>{money(subtotal)}</div></div>
             <div><label style={label}>Chiết khấu</label><input type="number" min={0} value={discount} onChange={(e) => setDiscount(Number(e.target.value))} style={field} /></div>
             <div><label style={label}>Tổng cộng</label><div style={{ fontWeight: 800, fontSize: '1.35rem', color: '#9A7520' }}>{money(total)}</div></div>
@@ -287,7 +278,7 @@ export function QuoteFormPage() {
 
         {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-          <Button type="button" variant="secondary" onClick={() => navigate('/admin/quotes')}>Hủy</Button>
+          <Button className="ghs-btn ghs-btn-ghost" type="button" variant="secondary" onClick={() => navigate('/admin/quotes')}>Hủy</Button>
           <Button className="ghs-btn ghs-btn-primary" type="submit" variant="primary" isLoading={saving}>Lưu báo giá</Button>
         </div>
       </form>
