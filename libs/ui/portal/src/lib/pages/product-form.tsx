@@ -239,6 +239,16 @@ const sectionStyle: CSSProperties = {
 const grid2: CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 };
 const grid3: CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 };
 
+type ProductFormTab = 'basic' | 'ceramic' | 'media' | 'spatial' | 'advanced';
+
+const PRODUCT_FORM_TABS: Array<[ProductFormTab, string]> = [
+  ['basic', 'Cơ bản'],
+  ['ceramic', 'Chi tiết gốm'],
+  ['media', 'Media'],
+  ['spatial', '3D / 360'],
+  ['advanced', 'Nâng cao'],
+];
+
 
 
 function asNumber(value: unknown): number | '' {
@@ -360,6 +370,8 @@ export function ProductFormPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewProvenance, setPreviewProvenance] = useState<ProvenanceRecord | null>(null);
+  const [activeTab, setActiveTab] = useState<ProductFormTab>('basic');
+  const hasModel = Boolean(form.modelUrl?.trim());
 
   const loadArtisans = () => {
     setArtisanLoadError('');
@@ -515,8 +527,16 @@ export function ProductFormPage() {
     setSaving(true);
     setError(null);
 
+    if (!hasTrimmedString(form.name)) {
+      setError('Cần nhập tên sản phẩm.');
+      setActiveTab('basic');
+      setSaving(false);
+      return;
+    }
+
     if (form.images.length === 0) {
       setError('Cần ít nhất 1 ảnh tác phẩm.');
+      setActiveTab('media');
       setSaving(false);
       return;
     }
@@ -619,6 +639,10 @@ export function ProductFormPage() {
     return <LoadErrorState message={loadError} onRetry={() => setReloadKey((value) => value + 1)} />;
   }
 
+  const previewCover = readTrimmedString(form.poster) ?? readTrimmedString(form.images[0]);
+  const previewPrice = readTrimmedString(form.priceLabel)
+    ?? (typeof form.referencePrice === 'number' ? `${form.referencePrice.toLocaleString('vi')} VND` : 'Chưa có giá');
+
   return (
     <div>
       <MediaLightboxModal
@@ -634,328 +658,389 @@ export function ProductFormPage() {
             : undefined
         }
       />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>
-          {isEdit ? 'Chỉnh sửa sản phẩm' : 'Tạo sản phẩm mới'}
-        </h1>
-        <button type="button" onClick={() => navigate('/admin/products')} style={{ background: 'none', border: '1px solid #ddd', borderRadius: 8, padding: '6px 16px', cursor: 'pointer', fontSize: '0.85rem', color: '#666' }}>
-          Quay lại
-        </button>
+      <div className="ghs-page-header">
+        <div>
+          <h1>{isEdit ? 'Chỉnh sửa sản phẩm' : 'Tạo sản phẩm mới'}</h1>
+          <p>Ảnh và thông tin gốm trước — model 3D / 360 bổ sung khi sẵn sàng.</p>
+        </div>
+        <button type="button" className="ghs-btn ghs-btn-ghost" onClick={() => navigate('/admin/products')}>Quay lại</button>
       </div>
 
-      <form onSubmit={handleSubmit}>
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Thông tin cơ bản</h3>
-          <div style={grid2}>
-            <div><label style={labelStyle}>Tên sản phẩm *</label><input name="name" value={form.name} onChange={handleChange} required style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Slug</label><input name="slug" value={form.slug} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>SKU</label><input name="sku" value={form.sku} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Trạng thái</label>
-              <select name="status" value={form.status} onChange={handleChange} style={fieldStyle}>
-                {statusOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
+      <form onSubmit={handleSubmit} className="ghs-product-form">
+        <div className="ghs-product-form-grid">
+          <div className="ghs-product-form-main">
+            <div className="ghs-tabs" role="tablist" aria-label="Nhóm thông tin sản phẩm">
+              {PRODUCT_FORM_TABS.map(([tab, label]) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  id={`ghs-product-tab-${tab}`}
+                  aria-selected={activeTab === tab}
+                  aria-controls={`ghs-product-panel-${tab}`}
+                  className={activeTab === tab ? 'ghs-tab active' : 'ghs-tab'}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
-            <div><label style={labelStyle}>Danh mục</label>
-              <select
-                name="collectionId"
-                value={form.collectionId}
-                onChange={(event) => {
-                  const nextId = event.target.value;
-                  const selected = categories.find((item) => item.id === nextId);
-                  setForm((prev) => ({
-                    ...prev,
-                    collectionId: nextId,
-                    collection: selected?.name ?? prev.collection,
-                  }));
-                }}
-                style={fieldStyle}
-              >
-                <option value="">Chưa chọn danh mục</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-              </select>
-              {categoryLoadError && (
-                <div role="alert" style={{ marginTop: 6, color: '#b45309', fontSize: '0.78rem' }}>
-                  {categoryLoadError}.{' '}
-                  <button type="button" onClick={loadCategories} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
-                    Thử lại
-                  </button>
-                </div>
-              )}
-            </div>
-            <div><label style={labelStyle}>Nghệ nhân</label>
-              <select name="artisanId" value={form.artisanId} onChange={handleChange} style={fieldStyle}>
-                <option value="">Chưa gán nghệ nhân</option>
-                {artisans.map(a => <option key={a.id} value={a.id}>{a.name}{a.title ? ` - ${a.title}` : ''}</option>)}
-              </select>
-              {artisanLoadError && (
-                <div role="alert" style={{ marginTop: 6, color: '#b45309', fontSize: '0.78rem' }}>
-                  {artisanLoadError}.{' '}
-                  <button type="button" onClick={loadArtisans} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
-                    Thử lại
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-          <div style={{ marginTop: 16 }}><label style={labelStyle}>Mô tả</label><textarea name="description" value={form.description} onChange={handleChange} rows={3} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
-        </div>
 
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Chi tiết gốm sứ</h3>
-          <div style={grid3}>
-            <div><label style={labelStyle}>Dòng men</label><input name="glaze" value={form.glaze} onChange={handleChange} placeholder="Men Cobalt" style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Loại sản phẩm</label><input name="type" value={form.type} onChange={handleChange} placeholder="Bình hoa" style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Kích thước</label><input name="size" value={form.size} onChange={handleChange} placeholder="Cao 20cm x ĐK 8.3cm" style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Giá tham khảo</label><input name="referencePrice" type="number" value={form.referencePrice} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Nhãn giá</label><input name="priceLabel" value={form.priceLabel} onChange={handleChange} placeholder="15.800.000 VND" style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Trọng lượng (g)</label><input name="weight" type="number" value={form.weight} onChange={handleChange} style={fieldStyle} /></div>
-          </div>
-          <div style={{ marginTop: 16 }}><label style={labelStyle}>Tags</label><input name="tags" value={form.tags} onChange={handleChange} placeholder="hoa-sen, cobalt, cao-cap" style={fieldStyle} /></div>
-        </div>
-
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Media và 3D</h3>
-          <div style={{ display: 'grid', gap: 16 }}>
-            <UploadField
-              label="Ảnh tác phẩm *"
-              value={form.images}
-              accept="image/png,image/jpeg,image/webp"
-              multiple
-              maxFiles={10}
-              maxSizeMb={5}
-              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.IMAGES, entityRef: id }}
-              onChange={(v) => updateField('images', v)}
-            />
-            <UploadField
-              label="Poster"
-              value={form.poster ? [form.poster] : []}
-              accept="image/png,image/jpeg,image/webp"
-              maxSizeMb={5}
-              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.POSTER, entityRef: id }}
-              onChange={(v) => updateField('poster', readFirstString(v))}
-            />
-            <UploadField
-              label="Model 3D (.glb, tùy chọn)"
-              value={form.modelUrl ? [form.modelUrl] : []}
-              accept=".glb,.gltf,model/gltf-binary,model/gltf+json"
-              maxSizeMb={50}
-              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.MODEL_URL, entityRef: id }}
-              onChange={(v) => updateField('modelUrl', readFirstString(v))}
-            />
-            <UploadField
-              label="Video 360° (.mp4/.webm/.mov, tùy chọn)"
-              value={form.video360Url ? [form.video360Url] : []}
-              accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
-              maxSizeMb={120}
-              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VIDEO_360_URL, entityRef: id }}
-              onChange={(v) => updateField('video360Url', readFirstString(v))}
-            />
-          </div>
-        </div>
-
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Chứng nhận & gốc tích</h3>
-          {!isEdit ? (
-            <div style={{ fontSize: '0.86rem', color: '#8a8178' }}>Lưu sản phẩm trước, sau đó quay lại để upload chứng nhận PDF.</div>
-          ) : (
-            <div style={{ display: 'grid', gap: 16 }}>
-              {provenanceLoadError && (
-                <div role="alert" style={{ color: '#b45309', fontSize: '0.82rem' }}>
-                  {provenanceLoadError}.{' '}
-                  <button type="button" onClick={loadProvenance} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
-                    Thử lại
-                  </button>
+            {activeTab === 'basic' && (
+              <div style={sectionStyle} role="tabpanel" id="ghs-product-panel-basic" aria-labelledby="ghs-product-tab-basic">
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Thông tin cơ bản</h3>
+                <div style={grid2}>
+                  <div><label style={labelStyle}>Tên sản phẩm *</label><input name="name" value={form.name} onChange={handleChange} required style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Slug</label><input name="slug" value={form.slug} onChange={handleChange} style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>SKU</label><input name="sku" value={form.sku} onChange={handleChange} style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Trạng thái</label>
+                    <select name="status" value={form.status} onChange={handleChange} style={fieldStyle}>
+                      {statusOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                    </select>
+                  </div>
+                  <div><label style={labelStyle}>Danh mục</label>
+                    <select
+                      name="collectionId"
+                      value={form.collectionId}
+                      onChange={(event) => {
+                        const nextId = event.target.value;
+                        const selected = categories.find((item) => item.id === nextId);
+                        setForm((prev) => ({
+                          ...prev,
+                          collectionId: nextId,
+                          collection: selected?.name ?? prev.collection,
+                        }));
+                      }}
+                      style={fieldStyle}
+                    >
+                      <option value="">Chưa chọn danh mục</option>
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>{category.name}</option>
+                      ))}
+                    </select>
+                    {categoryLoadError && (
+                      <div role="alert" style={{ marginTop: 6, color: '#b45309', fontSize: '0.78rem' }}>
+                        {categoryLoadError}.{' '}
+                        <button type="button" onClick={loadCategories} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
+                          Thử lại
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <div><label style={labelStyle}>Nghệ nhân</label>
+                    <select name="artisanId" value={form.artisanId} onChange={handleChange} style={fieldStyle}>
+                      <option value="">Chưa gán nghệ nhân</option>
+                      {artisans.map(a => <option key={a.id} value={a.id}>{a.name}{a.title ? ` - ${a.title}` : ''}</option>)}
+                    </select>
+                    {artisanLoadError && (
+                      <div role="alert" style={{ marginTop: 6, color: '#b45309', fontSize: '0.78rem' }}>
+                        {artisanLoadError}.{' '}
+                        <button type="button" onClick={loadArtisans} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
+                          Thử lại
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div style={grid2}>
-                <div><label style={labelStyle}>Loại chứng nhận</label>
-                  <select value={provenanceDraft.type} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, type: e.target.value as ProvenanceType }))} style={fieldStyle}>
-                    {PROVENANCE_TYPE_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div><label style={labelStyle}>Tiêu đề</label><input value={provenanceDraft.title} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, title: e.target.value }))} style={fieldStyle} /></div>
-                <div><label style={labelStyle}>Ngày cấp</label><input type="date" value={provenanceDraft.issuedDate} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, issuedDate: e.target.value }))} style={fieldStyle} /></div>
-                <div><label style={labelStyle}>Đơn vị cấp</label><input value={provenanceDraft.issuedBy} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, issuedBy: e.target.value }))} style={fieldStyle} /></div>
+                <div style={{ marginTop: 16 }}><label style={labelStyle}>Mô tả</label><textarea name="description" value={form.description} onChange={handleChange} rows={3} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
               </div>
-              <UploadField
-                label="Upload PDF chứng nhận"
-                value={[]}
-                accept="application/pdf,.pdf"
-                maxSizeMb={10}
-                onChange={() => undefined}
-                onUploadFile={uploadProvenance}
-              />
-              {provenance.length > 0 && (
-                <div style={{ display: 'grid', gap: 8 }}>
-                  {provenance.map(record => (
-                    <div key={record.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center', border: '1px solid #eee', borderRadius: 12, padding: 14, background: '#fffdf8' }}>
-                      <div>
-                        <div style={{ fontWeight: 700, color: '#191714' }}>{record.title}</div>
-                        <div style={{ fontSize: '0.78rem', color: '#8a8178' }}>
-                          {PROVENANCE_TYPE_LABELS[record.type]} · {readDisplayText(record.issuedBy, 'Không rõ đơn vị')} · {formatOptionalDate(record.issuedDate, 'Không ngày cấp')}
+            )}
+
+            {activeTab === 'ceramic' && (
+              <div style={sectionStyle} role="tabpanel" id="ghs-product-panel-ceramic" aria-labelledby="ghs-product-tab-ceramic">
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Chi tiết gốm sứ</h3>
+                <div style={grid3}>
+                  <div><label style={labelStyle}>Dòng men</label><input name="glaze" value={form.glaze} onChange={handleChange} placeholder="Men Cobalt" style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Loại sản phẩm</label><input name="type" value={form.type} onChange={handleChange} placeholder="Bình hoa" style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Kích thước</label><input name="size" value={form.size} onChange={handleChange} placeholder="Cao 20cm x ĐK 8.3cm" style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Giá tham khảo</label><input name="referencePrice" type="number" value={form.referencePrice} onChange={handleChange} style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Nhãn giá</label><input name="priceLabel" value={form.priceLabel} onChange={handleChange} placeholder="15.800.000 VND" style={fieldStyle} /></div>
+                  <div><label style={labelStyle}>Trọng lượng (g)</label><input name="weight" type="number" value={form.weight} onChange={handleChange} style={fieldStyle} /></div>
+                </div>
+                <div style={{ marginTop: 16 }}><label style={labelStyle}>Tags</label><input name="tags" value={form.tags} onChange={handleChange} placeholder="hoa-sen, cobalt, cao-cap" style={fieldStyle} /></div>
+              </div>
+            )}
+
+            {activeTab === 'media' && (
+              <div style={sectionStyle} role="tabpanel" id="ghs-product-panel-media" aria-labelledby="ghs-product-tab-media">
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Ảnh và poster</h3>
+                <div style={{ display: 'grid', gap: 16 }}>
+                  <UploadField
+                    label="Ảnh tác phẩm *"
+                    value={form.images}
+                    accept="image/png,image/jpeg,image/webp"
+                    multiple
+                    maxFiles={10}
+                    maxSizeMb={5}
+                    uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.IMAGES, entityRef: id }}
+                    onChange={(v) => updateField('images', v)}
+                  />
+                  <UploadField
+                    label="Poster"
+                    value={form.poster ? [form.poster] : []}
+                    accept="image/png,image/jpeg,image/webp"
+                    maxSizeMb={5}
+                    uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.POSTER, entityRef: id }}
+                    onChange={(v) => updateField('poster', readFirstString(v))}
+                  />
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'spatial' && (
+              <div style={sectionStyle} role="tabpanel" id="ghs-product-panel-spatial" aria-labelledby="ghs-product-tab-spatial">
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Model 3D và video 360°</h3>
+                <div style={{ display: 'grid', gap: 16 }}>
+                  <UploadField
+                    label="Model 3D (.glb, tùy chọn)"
+                    value={form.modelUrl ? [form.modelUrl] : []}
+                    accept=".glb,.gltf,model/gltf-binary,model/gltf+json"
+                    maxSizeMb={50}
+                    uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.MODEL_URL, entityRef: id }}
+                    onChange={(v) => updateField('modelUrl', readFirstString(v))}
+                  />
+                  <UploadField
+                    label="Video 360° (.mp4/.webm/.mov, tùy chọn)"
+                    value={form.video360Url ? [form.video360Url] : []}
+                    accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
+                    maxSizeMb={120}
+                    uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VIDEO_360_URL, entityRef: id }}
+                    onChange={(v) => updateField('video360Url', readFirstString(v))}
+                  />
+                  {!hasModel && (
+                    <div style={{ fontSize: '0.86rem', color: '#8a8178' }}>
+                      Chưa có model 3D. Upload file .glb để mở phần góc nhìn và hotspot trong tab Nâng cao.
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'advanced' && (
+              <div role="tabpanel" id="ghs-product-panel-advanced" aria-labelledby="ghs-product-tab-advanced">
+                <div style={sectionStyle}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Câu chuyện tác phẩm</h3>
+                  <div style={grid2}>
+                    <div><label style={labelStyle}>Tiêu đề</label><input name="storyTitle" value={form.storyTitle} onChange={handleChange} style={fieldStyle} /></div>
+                    <div><label style={labelStyle}>Phụ đề</label><input name="storySubtitle" value={form.storySubtitle} onChange={handleChange} style={fieldStyle} /></div>
+                    <div>
+                      <UploadField
+                        label="Ảnh câu chuyện"
+                        value={form.storyImage ? [form.storyImage] : []}
+                        accept="image/png,image/jpeg,image/webp"
+                        maxSizeMb={5}
+                        uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.STORY_IMAGE, entityRef: id }}
+                        onChange={(v) => updateField('storyImage', readFirstString(v))}
+                      />
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 16 }}><label style={labelStyle}>Nội dung</label><textarea name="storyContent" value={form.storyContent} onChange={handleChange} rows={4} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
+                </div>
+
+                <div style={sectionStyle}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Thông số kỹ thuật</h3>
+                  <div style={grid3}>
+                    <div><label style={labelStyle}>Nhiệt độ nung</label><input name="specsTemperature" type="number" value={form.specsTemperature} onChange={handleChange} style={fieldStyle} /></div>
+                    <div><label style={labelStyle}>Thời gian nung (giờ)</label><input name="specsFiringTime" type="number" value={form.specsFiringTime} onChange={handleChange} style={fieldStyle} /></div>
+                    <div><label style={labelStyle}>Kỹ thuật</label><input name="specsTechnique" value={form.specsTechnique} onChange={handleChange} placeholder="Tạo hình thủ công, phủ men, vẽ họa tiết" style={fieldStyle} /></div>
+                  </div>
+                </div>
+
+                <div style={sectionStyle}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>SEO</h3>
+                  <div style={grid2}>
+                    <div><label style={labelStyle}>Meta title</label><input name="seoTitle" value={form.seoTitle} onChange={handleChange} style={fieldStyle} /></div>
+                    <div><label style={labelStyle}>Meta description</label><input name="seoDescription" value={form.seoDescription} onChange={handleChange} style={fieldStyle} /></div>
+                  </div>
+                </div>
+
+                <div style={sectionStyle}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>Biến thể</h3>
+                    <Button type="button" variant="secondary" size="sm" onClick={() => updateField('variants', [...form.variants, makeVariant(form.variants.length)])}>Thêm biến thể</Button>
+                  </div>
+                  <div style={{ display: 'grid', gap: 12 }}>
+                    {form.variants.map((variant, index) => (
+                      <div key={variant.id} style={{ border: '1px solid #eee', borderRadius: 10, padding: 14 }}>
+                        <div style={grid3}>
+                          <div><label style={labelStyle}>Tên</label><input value={variant.name} onChange={(e) => updateVariant(index, { name: e.target.value })} style={fieldStyle} /></div>
+                          <div><label style={labelStyle}>Men</label><input value={variant.glaze} onChange={(e) => updateVariant(index, { glaze: e.target.value })} style={fieldStyle} /></div>
+                          <div><label style={labelStyle}>Size</label><input value={variant.size} onChange={(e) => updateVariant(index, { size: e.target.value })} style={fieldStyle} /></div>
+                          <div><label style={labelStyle}>Màu swatch</label><input value={variant.swatchColor} onChange={(e) => updateVariant(index, { swatchColor: e.target.value })} style={fieldStyle} /></div>
+                          <div><label style={labelStyle}>Giá</label><input type="number" value={variant.referencePrice} onChange={(e) => updateVariant(index, { referencePrice: e.target.value === '' ? '' : Number(e.target.value) })} style={fieldStyle} /></div>
+                          <div><label style={labelStyle}>Trạng thái</label><select value={variant.status} onChange={(e) => updateVariant(index, { status: e.target.value as ProductVariantStatus })} style={fieldStyle}><option value={PRODUCT_VARIANT_STATUSES.ACTIVE}>Đang có</option><option value={PRODUCT_VARIANT_STATUSES.SOLD_OUT}>Đã bán</option></select></div>
+                          <div>
+                            <UploadField
+                              label="Ảnh"
+                              value={variant.image ? [variant.image] : []}
+                              accept="image/png,image/jpeg,image/webp"
+                              maxSizeMb={5}
+                              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VARIANT_IMAGE, entityRef: id }}
+                              onChange={(v) => updateVariant(index, { image: readFirstString(v) })}
+                            />
+                          </div>
+                          <div>
+                            <UploadField
+                              label="Model riêng"
+                              value={variant.modelUrl ? [variant.modelUrl] : []}
+                              accept=".glb,.gltf,model/gltf-binary,model/gltf+json"
+                              maxSizeMb={50}
+                              uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VARIANT_MODEL_URL, entityRef: id }}
+                              onChange={(v) => updateVariant(index, { modelUrl: readFirstString(v) })}
+                            />
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'end' }}><Button type="button" variant="destructive" size="sm" onClick={() => updateField('variants', form.variants.filter((_, i) => i !== index))}>Xóa</Button></div>
                         </div>
-                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
-                          <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#7b5e18', background: '#fff6dd', border: '1px solid #ead8a4', borderRadius: 999, padding: '4px 8px' }}>
-                            PDF
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => setPreviewProvenance(record)}
-                            style={{ fontSize: '0.78rem', color: '#9A7520', fontWeight: 600, border: 0, background: 'none', padding: 0, cursor: 'pointer' }}
-                          >
-                            {fileNameFromPath(record.fileUrl)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={sectionStyle}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Chứng nhận & gốc tích</h3>
+                  {!isEdit ? (
+                    <div style={{ fontSize: '0.86rem', color: '#8a8178' }}>Lưu sản phẩm trước, sau đó quay lại để upload chứng nhận PDF.</div>
+                  ) : (
+                    <div style={{ display: 'grid', gap: 16 }}>
+                      {provenanceLoadError && (
+                        <div role="alert" style={{ color: '#b45309', fontSize: '0.82rem' }}>
+                          {provenanceLoadError}.{' '}
+                          <button type="button" onClick={loadProvenance} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
+                            Thử lại
                           </button>
                         </div>
+                      )}
+                      <div style={grid2}>
+                        <div><label style={labelStyle}>Loại chứng nhận</label>
+                          <select value={provenanceDraft.type} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, type: e.target.value as ProvenanceType }))} style={fieldStyle}>
+                            {PROVENANCE_TYPE_OPTIONS.map((option) => (
+                              <option key={option.value} value={option.value}>{option.label}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div><label style={labelStyle}>Tiêu đề</label><input value={provenanceDraft.title} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, title: e.target.value }))} style={fieldStyle} /></div>
+                        <div><label style={labelStyle}>Ngày cấp</label><input type="date" value={provenanceDraft.issuedDate} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, issuedDate: e.target.value }))} style={fieldStyle} /></div>
+                        <div><label style={labelStyle}>Đơn vị cấp</label><input value={provenanceDraft.issuedBy} onChange={(e) => setProvenanceDraft(prev => ({ ...prev, issuedBy: e.target.value }))} style={fieldStyle} /></div>
                       </div>
-                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                        <Button type="button" variant="secondary" size="sm" onClick={() => setPreviewProvenance(record)}>
-                          Xem trước
-                        </Button>
-                        <Button type="button" variant="destructive" size="sm" onClick={() => requestDeleteProvenance(record.id, record.title)}>Xóa</Button>
-                      </div>
+                      <UploadField
+                        label="Upload PDF chứng nhận"
+                        value={[]}
+                        accept="application/pdf,.pdf"
+                        maxSizeMb={10}
+                        onChange={() => undefined}
+                        onUploadFile={uploadProvenance}
+                      />
+                      {provenance.length > 0 && (
+                        <div style={{ display: 'grid', gap: 8 }}>
+                          {provenance.map(record => (
+                            <div key={record.id} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center', border: '1px solid #eee', borderRadius: 12, padding: 14, background: '#fffdf8' }}>
+                              <div>
+                                <div style={{ fontWeight: 700, color: '#191714' }}>{record.title}</div>
+                                <div style={{ fontSize: '0.78rem', color: '#8a8178' }}>
+                                  {PROVENANCE_TYPE_LABELS[record.type]} · {readDisplayText(record.issuedBy, 'Không rõ đơn vị')} · {formatOptionalDate(record.issuedDate, 'Không ngày cấp')}
+                                </div>
+                                <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+                                  <span style={{ fontSize: '0.74rem', fontWeight: 700, color: '#7b5e18', background: '#fff6dd', border: '1px solid #ead8a4', borderRadius: 999, padding: '4px 8px' }}>
+                                    PDF
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setPreviewProvenance(record)}
+                                    style={{ fontSize: '0.78rem', color: '#9A7520', fontWeight: 600, border: 0, background: 'none', padding: 0, cursor: 'pointer' }}
+                                  >
+                                    {fileNameFromPath(record.fileUrl)}
+                                  </button>
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                                <Button type="button" variant="secondary" size="sm" onClick={() => setPreviewProvenance(record)}>
+                                  Xem trước
+                                </Button>
+                                <Button type="button" variant="destructive" size="sm" onClick={() => requestDeleteProvenance(record.id, record.title)}>Xóa</Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </div>
-          )}
-        </div>
 
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Thông số kỹ thuật</h3>
-          <div style={grid3}>
-            <div><label style={labelStyle}>Nhiệt độ nung</label><input name="specsTemperature" type="number" value={form.specsTemperature} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Thời gian nung (giờ)</label><input name="specsFiringTime" type="number" value={form.specsFiringTime} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Kỹ thuật</label><input name="specsTechnique" value={form.specsTechnique} onChange={handleChange} placeholder="Tạo hình thủ công, phủ men, vẽ họa tiết" style={fieldStyle} /></div>
-          </div>
-        </div>
-
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Câu chuyện tác phẩm</h3>
-          <div style={grid2}>
-            <div><label style={labelStyle}>Tiêu đề</label><input name="storyTitle" value={form.storyTitle} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Phụ đề</label><input name="storySubtitle" value={form.storySubtitle} onChange={handleChange} style={fieldStyle} /></div>
-            <div>
-              <UploadField
-                label="Ảnh câu chuyện"
-                value={form.storyImage ? [form.storyImage] : []}
-                accept="image/png,image/jpeg,image/webp"
-                maxSizeMb={5}
-                uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.STORY_IMAGE, entityRef: id }}
-                onChange={(v) => updateField('storyImage', readFirstString(v))}
-              />
-            </div>
-          </div>
-          <div style={{ marginTop: 16 }}><label style={labelStyle}>Nội dung</label><textarea name="storyContent" value={form.storyContent} onChange={handleChange} rows={4} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
-        </div>
-
-        <div style={sectionStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>Biến thể</h3>
-            <Button type="button" variant="secondary" size="sm" onClick={() => updateField('variants', [...form.variants, makeVariant(form.variants.length)])}>Thêm biến thể</Button>
-          </div>
-          <div style={{ display: 'grid', gap: 12 }}>
-            {form.variants.map((variant, index) => (
-              <div key={variant.id} style={{ border: '1px solid #eee', borderRadius: 10, padding: 14 }}>
-                <div style={grid3}>
-                  <div><label style={labelStyle}>Tên</label><input value={variant.name} onChange={(e) => updateVariant(index, { name: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Men</label><input value={variant.glaze} onChange={(e) => updateVariant(index, { glaze: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Size</label><input value={variant.size} onChange={(e) => updateVariant(index, { size: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Màu swatch</label><input value={variant.swatchColor} onChange={(e) => updateVariant(index, { swatchColor: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Giá</label><input type="number" value={variant.referencePrice} onChange={(e) => updateVariant(index, { referencePrice: e.target.value === '' ? '' : Number(e.target.value) })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Trạng thái</label><select value={variant.status} onChange={(e) => updateVariant(index, { status: e.target.value as ProductVariantStatus })} style={fieldStyle}><option value={PRODUCT_VARIANT_STATUSES.ACTIVE}>Đang có</option><option value={PRODUCT_VARIANT_STATUSES.SOLD_OUT}>Đã bán</option></select></div>
-                  <div>
-                    <UploadField
-                      label="Ảnh"
-                      value={variant.image ? [variant.image] : []}
-                      accept="image/png,image/jpeg,image/webp"
-                      maxSizeMb={5}
-                      uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VARIANT_IMAGE, entityRef: id }}
-                      onChange={(v) => updateVariant(index, { image: readFirstString(v) })}
-                    />
-                  </div>
-                  <div>
-                    <UploadField
-                      label="Model riêng"
-                      value={variant.modelUrl ? [variant.modelUrl] : []}
-                      accept=".glb,.gltf,model/gltf-binary,model/gltf+json"
-                      maxSizeMb={50}
-                      uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.VARIANT_MODEL_URL, entityRef: id }}
-                      onChange={(v) => updateVariant(index, { modelUrl: readFirstString(v) })}
-                    />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'end' }}><Button type="button" variant="destructive" size="sm" onClick={() => updateField('variants', form.variants.filter((_, i) => i !== index))}>Xóa</Button></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={sectionStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>3D view sections và hotspots</h3>
-            <Button type="button" variant="secondary" size="sm" onClick={() => updateField('viewSections', [...form.viewSections, makeSection(form.viewSections.length)])}>Thêm góc nhìn</Button>
-          </div>
-          <div style={{ display: 'grid', gap: 14 }}>
-            {form.viewSections.map((section, sectionIndex) => (
-              <div key={section.id} style={{ border: '1px solid #eee', borderRadius: 10, padding: 14 }}>
-                <div style={grid3}>
-                  <div><label style={labelStyle}>ID</label><input value={section.id} onChange={(e) => updateSection(sectionIndex, { id: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Tên góc nhìn</label><input value={section.name} onChange={(e) => updateSection(sectionIndex, { name: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Icon key</label><input value={section.icon} onChange={(e) => updateSection(sectionIndex, { icon: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Camera orbit</label><input value={section.cameraOrbit} onChange={(e) => updateSection(sectionIndex, { cameraOrbit: e.target.value })} style={fieldStyle} /></div>
-                  <div><label style={labelStyle}>Camera target</label><input value={section.cameraTarget} onChange={(e) => updateSection(sectionIndex, { cameraTarget: e.target.value })} style={fieldStyle} /></div>
-                  <div style={{ display: 'flex', alignItems: 'end', gap: 8 }}>
-                    <Button type="button" variant="secondary" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: [...section.hotspots, makeHotspot(section.hotspots.length)] })}>Thêm hotspot</Button>
-                    {form.viewSections.length > 1 && <Button type="button" variant="destructive" size="sm" onClick={() => updateField('viewSections', form.viewSections.filter((_, i) => i !== sectionIndex))}>Xóa góc</Button>}
-                  </div>
-                </div>
-                <div style={{ marginTop: 12 }}><label style={labelStyle}>Mô tả góc nhìn</label><input value={section.description} onChange={(e) => updateSection(sectionIndex, { description: e.target.value })} style={fieldStyle} /></div>
-                {section.hotspots.map((hotspot, hotspotIndex) => (
-                  <div key={hotspot.id} style={{ marginTop: 12, borderTop: '1px solid #f0ede6', paddingTop: 12 }}>
-                    <div style={grid3}>
-                      <div><label style={labelStyle}>Hotspot ID</label><input value={hotspot.id} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { id: e.target.value })} style={fieldStyle} /></div>
-                      <div><label style={labelStyle}>Position</label><input value={hotspot.position} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { position: e.target.value })} style={fieldStyle} /></div>
-                      <div><label style={labelStyle}>Normal</label><input value={hotspot.normal} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { normal: e.target.value })} style={fieldStyle} /></div>
-                      <div><label style={labelStyle}>Label</label><input value={hotspot.label} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { label: e.target.value })} style={fieldStyle} /></div>
-                      <div><label style={labelStyle}>Tiêu đề panel</label><input value={hotspot.panelTitle} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelTitle: e.target.value })} style={fieldStyle} /></div>
-                      <div>
-                        <UploadField
-                          label="Ảnh panel"
-                          value={hotspot.panelImage ? [hotspot.panelImage] : []}
-                          accept="image/png,image/jpeg,image/webp"
-                          maxSizeMb={5}
-                          uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.HOTSPOT_PANEL_IMAGE, entityRef: id }}
-                          onChange={(v) => updateHotspot(sectionIndex, hotspotIndex, { panelImage: readFirstString(v) })}
-                        />
-                      </div>
+                {hasModel && (
+                  <div style={sectionStyle}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', margin: 0 }}>3D view sections và hotspots</h3>
+                      <Button type="button" variant="secondary" size="sm" onClick={() => updateField('viewSections', [...form.viewSections, makeSection(form.viewSections.length)])}>Thêm góc nhìn</Button>
                     </div>
-                    <div style={{ marginTop: 10 }}><label style={labelStyle}>Nội dung panel</label><textarea value={hotspot.panelContent} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelContent: e.target.value })} rows={2} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}><Button type="button" variant="destructive" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: section.hotspots.filter((_, i) => i !== hotspotIndex) })}>Xóa hotspot</Button></div>
+                    <div style={{ display: 'grid', gap: 14 }}>
+                      {form.viewSections.map((section, sectionIndex) => (
+                        <div key={section.id} style={{ border: '1px solid #eee', borderRadius: 10, padding: 14 }}>
+                          <div style={grid3}>
+                            <div><label style={labelStyle}>ID</label><input value={section.id} onChange={(e) => updateSection(sectionIndex, { id: e.target.value })} style={fieldStyle} /></div>
+                            <div><label style={labelStyle}>Tên góc nhìn</label><input value={section.name} onChange={(e) => updateSection(sectionIndex, { name: e.target.value })} style={fieldStyle} /></div>
+                            <div><label style={labelStyle}>Icon key</label><input value={section.icon} onChange={(e) => updateSection(sectionIndex, { icon: e.target.value })} style={fieldStyle} /></div>
+                            <div><label style={labelStyle}>Camera orbit</label><input value={section.cameraOrbit} onChange={(e) => updateSection(sectionIndex, { cameraOrbit: e.target.value })} style={fieldStyle} /></div>
+                            <div><label style={labelStyle}>Camera target</label><input value={section.cameraTarget} onChange={(e) => updateSection(sectionIndex, { cameraTarget: e.target.value })} style={fieldStyle} /></div>
+                            <div style={{ display: 'flex', alignItems: 'end', gap: 8 }}>
+                              <Button type="button" variant="secondary" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: [...section.hotspots, makeHotspot(section.hotspots.length)] })}>Thêm hotspot</Button>
+                              {form.viewSections.length > 1 && <Button type="button" variant="destructive" size="sm" onClick={() => updateField('viewSections', form.viewSections.filter((_, i) => i !== sectionIndex))}>Xóa góc</Button>}
+                            </div>
+                          </div>
+                          <div style={{ marginTop: 12 }}><label style={labelStyle}>Mô tả góc nhìn</label><input value={section.description} onChange={(e) => updateSection(sectionIndex, { description: e.target.value })} style={fieldStyle} /></div>
+                          {section.hotspots.map((hotspot, hotspotIndex) => (
+                            <div key={hotspot.id} style={{ marginTop: 12, borderTop: '1px solid #f0ede6', paddingTop: 12 }}>
+                              <div style={grid3}>
+                                <div><label style={labelStyle}>Hotspot ID</label><input value={hotspot.id} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { id: e.target.value })} style={fieldStyle} /></div>
+                                <div><label style={labelStyle}>Position</label><input value={hotspot.position} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { position: e.target.value })} style={fieldStyle} /></div>
+                                <div><label style={labelStyle}>Normal</label><input value={hotspot.normal} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { normal: e.target.value })} style={fieldStyle} /></div>
+                                <div><label style={labelStyle}>Label</label><input value={hotspot.label} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { label: e.target.value })} style={fieldStyle} /></div>
+                                <div><label style={labelStyle}>Tiêu đề panel</label><input value={hotspot.panelTitle} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelTitle: e.target.value })} style={fieldStyle} /></div>
+                                <div>
+                                  <UploadField
+                                    label="Ảnh panel"
+                                    value={hotspot.panelImage ? [hotspot.panelImage] : []}
+                                    accept="image/png,image/jpeg,image/webp"
+                                    maxSizeMb={5}
+                                    uploadContext={{ moduleRef: FILE_ASSET_MODULE_REFS.CATALOG_PRODUCT, fieldRef: FILE_ASSET_FIELD_REFS.HOTSPOT_PANEL_IMAGE, entityRef: id }}
+                                    onChange={(v) => updateHotspot(sectionIndex, hotspotIndex, { panelImage: readFirstString(v) })}
+                                  />
+                                </div>
+                              </div>
+                              <div style={{ marginTop: 10 }}><label style={labelStyle}>Nội dung panel</label><textarea value={hotspot.panelContent} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelContent: e.target.value })} rows={2} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
+                              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}><Button type="button" variant="destructive" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: section.hotspots.filter((_, i) => i !== hotspotIndex) })}>Xóa hotspot</Button></div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
-            ))}
+            )}
+
+            {error && <div role="alert" style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', fontSize: '0.85rem', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}
           </div>
+
+          <aside className="ghs-product-preview ghs-card">
+            <div className="ghs-preview-title">Xem trước</div>
+            <div className="ghs-preview-cover">
+              {previewCover
+                ? <img src={apiAssetUrl(previewCover)} alt={readDisplayText(form.name, 'Ảnh sản phẩm')} />
+                : <span>Chưa có ảnh</span>}
+            </div>
+            <div className="ghs-preview-name">{readDisplayText(form.name, 'Sản phẩm chưa đặt tên')}</div>
+            <div className="ghs-preview-price">{previewPrice}</div>
+            <div className="ghs-preview-badges">
+              <span className="ghs-badge ghs-badge-accent">{STATUS_LABEL[form.status]}</span>
+              <span className="ghs-badge">{form.images.length} ảnh</span>
+              {hasModel && <span className="ghs-badge">3D</span>}
+            </div>
+          </aside>
         </div>
 
-        <div style={sectionStyle}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>SEO</h3>
-          <div style={grid2}>
-            <div><label style={labelStyle}>Meta title</label><input name="seoTitle" value={form.seoTitle} onChange={handleChange} style={fieldStyle} /></div>
-            <div><label style={labelStyle}>Meta description</label><input name="seoDescription" value={form.seoDescription} onChange={handleChange} style={fieldStyle} /></div>
-          </div>
-        </div>
-
-        {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', fontSize: '0.85rem', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}
-
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <Button variant="secondary" type="button" onClick={() => navigate('/admin/products')}>Hủy</Button>
-          <Button variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo sản phẩm'}</Button>
+        <div className="ghs-sticky-actions">
+          <button type="button" className="ghs-btn ghs-btn-ghost" onClick={() => navigate('/admin/products')}>Hủy</button>
+          <button type="submit" className="ghs-btn ghs-btn-primary" disabled={saving}>{saving ? 'Đang lưu…' : 'Lưu sản phẩm'}</button>
         </div>
       </form>
     </div>
