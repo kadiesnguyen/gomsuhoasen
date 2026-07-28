@@ -6,6 +6,8 @@ import type { ShowroomV2Data } from './data/adapter';
 import Link from './mocks/next/link';
 import { ArtFrame } from './ArtFrame';
 import './collections-page.css';
+import { RichHtml } from './components/RichHtml';
+import { stripRichHtml } from '@gomhoasen/ui-showroom';
 
 function LotusIcon({ size = 20 }: { size?: number }) {
   return (
@@ -62,7 +64,7 @@ function BentoItem({
         <div className="bento-item-content-inner">
           <h3 className="bento-title">{item.title}</h3>
           <BentoDivider />
-          <p className="bento-desc">{item.desc}</p>
+          <RichHtml className="bento-desc" value={item.desc} />
           <Link className="bento-link" href={href} aria-label={`${ctaLabel}: ${item.title}`}>
             {ctaLabel} <ArrowRight size={12} strokeWidth={1.5} />
           </Link>
@@ -86,9 +88,7 @@ export function CollectionsPage() {
           <Reveal className="collections-hero-content-inner">
             <span className="collections-eyebrow">{collectionsLanding.eyebrow}</span>
             <h1 className="collections-hero-title">{collectionsLanding.title}</h1>
-            <p className="collections-hero-desc">
-              {collectionsLanding.desc}
-            </p>
+            <RichHtml className="collections-hero-desc" value={collectionsLanding.desc} />
             <Link href={collectionsLanding.heroCtaHref} className="art-btn collections-cta">
               <ArtFrame />
               <span>{collectionsLanding.heroCtaLabel}</span>

@@ -11,6 +11,7 @@ import type {
 } from '@gomhoasen/contracts';
 import { resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import css from './product-detail-viewer.module.css';
+import { toRenderableRichHtml } from './rich-html';
 import { readShowroomText } from './showroom-display-normalization';
 
 const LAST_CATALOG_URL_KEY = 'ghs:lastCatalogUrl';
@@ -549,7 +550,12 @@ export function ProductDetailViewer({
             // eslint-disable-next-line @next/next/no-img-element
             <img className={css.sidebarImage} src={panel.image} alt={panel.title} />
           ) : null}
-          {panel?.lead ? <p className={css.sidebarLead}>{panel.lead}</p> : null}
+          {panel?.lead && panel.kind !== 'hotspot' ? (
+            <div
+              className={`${css.sidebarLead} ${css.richHtml}`}
+              dangerouslySetInnerHTML={{ __html: toRenderableRichHtml(panel.lead) }}
+            />
+          ) : null}
 
           {panel?.kind === 'overview' && (displayPrice || specEntries.length > 0) ? (
             <dl className={css.meta}>
@@ -571,14 +577,20 @@ export function ProductDetailViewer({
           {panel?.kind === 'overview' && story?.content ? (
             <div className={css.block}>
               <h3>{story.title || copy.storyTitle}</h3>
-              <p>{story.content}</p>
+              <div
+                className={css.richHtml}
+                dangerouslySetInnerHTML={{ __html: toRenderableRichHtml(story.content) }}
+              />
             </div>
           ) : null}
 
           {panel?.kind === 'hotspot' && panel.hotspot?.panel?.content ? (
             <div className={css.block}>
               <h3>{panel.hotspot.panel.title || panel.hotspot.label}</h3>
-              <p>{panel.hotspot.panel.content}</p>
+              <div
+                className={css.richHtml}
+                dangerouslySetInnerHTML={{ __html: toRenderableRichHtml(panel.hotspot.panel.content) }}
+              />
             </div>
           ) : null}
         </div>

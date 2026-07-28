@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { ArrowLeft, ArrowRight, Clock3, UserRound } from 'lucide-react';
+import { toRenderableRichHtml } from '@gomhoasen/ui-showroom';
 import { useShowroomData } from './data/ShowroomContext';
 import type { ShowroomV2Data } from './data/adapter';
 import { updatePageMetadata } from './data/page-metadata';
@@ -60,10 +61,7 @@ export function NewsDetailPage({ slug }: { slug: string }) {
     );
   }
 
-  const paragraphs = article.content
-    .split(/\n\s*\n/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
+  const bodyHtml = toRenderableRichHtml(article.content);
 
   return (
     <article className="news-detail-page">
@@ -96,11 +94,10 @@ export function NewsDetailPage({ slug }: { slug: string }) {
         </div>
       </header>
 
-      <div className="news-detail-body">
-        {paragraphs.map((paragraph, index) => (
-          <p key={`${article.id}-${index}`}>{paragraph}</p>
-        ))}
-      </div>
+      <div
+        className="news-detail-body news-detail-rich"
+        dangerouslySetInnerHTML={{ __html: bodyHtml }}
+      />
 
       {related.length > 0 && (
         <section className="news-related" aria-labelledby="news-related-title">

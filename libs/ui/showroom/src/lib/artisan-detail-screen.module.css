@@ -29,6 +29,13 @@
 .sectionTitle { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9a7520; margin: 0 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(154,117,32,0.2); }
 .bio { font-size: 1rem; line-height: 1.8; color: #5f554c; white-space: pre-line; }
 
+.bio.richHtml { white-space: normal; }
+
+.richHtml :is(p, ul, ol, table, blockquote, h2, h3, h4) { margin: 0 0 0.75em; }
+.richHtml :is(ul, ol) { padding-left: 1.35em; }
+.richHtml img { max-width: 100%; height: auto; border-radius: 8px; margin: 0.4em 0; }
+.richHtml a { color: #9a7520; text-decoration: underline; }
+
 .certList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
 .certItem { font-size: 0.95rem; color: #5f554c; padding: 0.75rem 1rem; background: rgba(154,117,32,0.04); border-radius: 8px; border-left: 3px solid #c9a84c; }
 
@@ -47,8 +54,7 @@
 
 /* Loading / Error */
 .loading, .error { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; color: #7a6f63; gap: 1rem; }
-.spinner { width: 32px; height: 32px; border: 3px solid rgba(154,117,32,0.2); border-top-color: #9a7520; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { composes: spinner from './shared.module.css'; }
 .errorIcon { font-size: 3rem; }
 
 .footer { text-align: center; padding: 2.5rem; color: #7a6f63; font-size: 0.75rem; border-top: 1px solid rgba(154,117,32,0.1); letter-spacing: 0.05em; }

@@ -8,6 +8,9 @@ import { ArtisanDetailPage, ArtisansPage } from "./ArtisansPage";
 import { ContactPage } from "./ContactPage";
 import { CatalogListingPage } from "./components/CatalogListingPage";
 import { ProductDetailPage } from "./components/ProductDetailPage";
+import { RichHtml } from "./components/RichHtml";
+import { stripRichHtml } from "@gomhoasen/ui-showroom";
+import "./rich-html.css";
 import { IntroOverlay } from "./IntroOverlay";
 import { ArtFrame } from "./ArtFrame";
 import { updatePageMetadata } from "./data/page-metadata";
@@ -541,7 +544,7 @@ function ProcessCard({ img, title, desc, position = "50% 50%", delay = 0 }: { im
       <div className="process-footer">
         <CircleLotus size={34} iconSize={15} />
         <h3 className="process-title">{title}</h3>
-        <p className="process-desc">{desc}</p>
+        <RichHtml className="process-desc" value={desc} />
       </div>
     </motion.article>
   );
@@ -558,9 +561,7 @@ function Heritage() {
         <h2 id="heritage-title" className="section-title">
           <span className="title-balanced" style={{ whiteSpace: 'pre-line' }}>{homeLanding.heritageTitle}</span>
         </h2>
-        <p className="heritage-body">
-          {homeLanding.heritageBody}
-        </p>
+        <RichHtml className="heritage-body" value={homeLanding.heritageBody} />
         <Link href={homeLanding.heritageCtaHref} className="text-link">
           {homeLanding.heritageCtaLabel} <ChevronRight size={13} strokeWidth={1.3} />
         </Link>
@@ -649,7 +650,7 @@ function Promises() {
             <CircleLotus size={40} iconSize={18} />
             <div className="promise-text">
               <h3 className="promise-title">{p.title}</h3>
-              <p className="promise-desc">{p.desc}</p>
+              <RichHtml className="promise-desc" value={p.desc} />
             </div>
           </motion.div>
         ))}
@@ -1716,7 +1717,7 @@ export default function App() {
       title: path === "/"
         ? `${brand.name} | ${brand.tagline}`
         : `${meta.title} | ${brand.name}`,
-      description: meta.description,
+      description: stripRichHtml(meta.description),
       path,
     });
   }, [

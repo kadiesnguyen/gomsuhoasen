@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import css from './listing-screen.module.css';
+import { stripRichHtml } from './rich-html';
 
 interface SiteProduct {
   id: string;
@@ -572,10 +573,11 @@ export function ListingScreen({ siteData }: ListingScreenProps) {
               {filtered.map((product, index) => {
                 const featured = index === 0 || product.isBestSeller || product.has360;
                 const imageSrc = toAssetUrl(product.image, API_ORIGIN) || product.image;
+                const plainDesc = stripRichHtml(product.desc);
                 const cardTitle =
                   product.name.trim().length > 2
                     ? product.name
-                    : product.desc.split(/[.—–-]/)[0]?.trim() ||
+                    : plainDesc.split(/[.—–-]/)[0]?.trim() ||
                       product.collection ||
                       product.name;
                 return (
@@ -604,7 +606,7 @@ export function ListingScreen({ siteData }: ListingScreenProps) {
                     <div className={css.productType}>{product.type || product.collection}</div>
                     <div className={css.productInfo}>
                       <h2>{cardTitle}</h2>
-                      <p>{product.desc || `${product.collection} · ${product.glaze}`}</p>
+                      <p>{plainDesc || `${product.collection} · ${product.glaze}`}</p>
                       <span className={css.productLink}>
                         {product.has360
                           ? copy.labels.experience360Label

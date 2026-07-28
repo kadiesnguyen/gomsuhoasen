@@ -273,6 +273,9 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  width: auto;
 }
 
 .ghs-btn-primary {
@@ -454,6 +457,12 @@ body {
   grid-template-columns: 1.5fr 0.8fr 0.8fr 0.7fr 1fr auto;
   gap: 10px;
   align-items: end;
+}
+
+@media (max-width: 992px) {
+  .ghs-quote-line-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 
 .ghs-quote-summary-grid {

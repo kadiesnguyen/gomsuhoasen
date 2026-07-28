@@ -108,7 +108,8 @@
   padding: 72px 0 96px;
 }
 
-.news-detail-body p {
+.news-detail-body p,
+.news-detail-rich :is(p, li) {
   margin: 0 0 28px;
   color: #c9bcae;
   font-family: var(--sans);
@@ -116,13 +117,79 @@
   line-height: 1.95;
 }
 
-.news-detail-body p:first-child::first-letter {
+.news-detail-body p:first-child::first-letter,
+.news-detail-rich > p:first-child::first-letter {
   float: left;
   margin: 9px 12px 0 0;
   color: var(--gold);
   font-family: var(--serif);
   font-size: 68px;
   line-height: 0.72;
+}
+
+.news-detail-rich :is(h2, h3, h4) {
+  margin: 0 0 18px;
+  color: var(--ivory);
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.news-detail-rich h2 {
+  font-size: 30px;
+}
+
+.news-detail-rich h3 {
+  font-size: 24px;
+}
+
+.news-detail-rich h4 {
+  font-size: 20px;
+}
+
+.news-detail-rich :is(ul, ol) {
+  margin: 0 0 28px;
+  padding-left: 1.4em;
+  color: #c9bcae;
+}
+
+.news-detail-rich li {
+  margin: 0 0 10px;
+}
+
+.news-detail-rich img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 0 28px;
+  border-radius: 8px;
+}
+
+.news-detail-rich table {
+  width: 100%;
+  margin: 0 0 28px;
+  border-collapse: collapse;
+  color: #c9bcae;
+  font-size: 15px;
+}
+
+.news-detail-rich :is(th, td) {
+  border: 1px solid rgba(201, 177, 144, 0.22);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+.news-detail-rich a {
+  color: var(--gold);
+  text-decoration: underline;
+}
+
+.news-detail-rich blockquote {
+  margin: 0 0 28px;
+  padding: 4px 0 4px 18px;
+  border-left: 2px solid var(--gold);
+  color: #d9c7a8;
+  font-family: var(--serif);
 }
 
 .news-related {
@@ -246,7 +313,8 @@
   }
 
   .news-detail-lead,
-  .news-detail-body p {
+  .news-detail-body p,
+  .news-detail-rich :is(p, li) {
     font-size: 15px;
   }
 

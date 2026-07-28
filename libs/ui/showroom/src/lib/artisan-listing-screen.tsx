@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { GHS_API, resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import css from './artisan-listing-screen.module.css';
+import { stripRichHtml } from './rich-html';
 import { showroomApiGet } from './showroom-api-client';
 import { readShowroomText } from './showroom-display-normalization';
 
@@ -94,7 +95,7 @@ export function ArtisanListingScreen() {
             const title = readShowroomText(a.title);
             const specialty = readShowroomText(a.specialty);
             const location = readShowroomText(a.location);
-            const bio = readShowroomText(a.bio);
+            const bio = stripRichHtml(readShowroomText(a.bio) ?? '');
             return (
             <Link href={`/nghe-nhan/${a.slug}`} key={a._id} className={css.card}>
               <div className={css.cardAvatar}>

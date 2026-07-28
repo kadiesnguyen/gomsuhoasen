@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { api, type ArtisanApi } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { Button } from '@vt/ui-components';
+import { RichTextEditor } from '../components/rich-text-editor';
 import { UploadField } from '../components/upload-field';
 import { useToast } from '../components/toast';
 import { LoadErrorState } from '../components/load-error-state';
@@ -17,6 +18,7 @@ import {
 } from '@gomhoasen/contracts';
 import { readTrimmedString } from '@vt/common-utils';
 import { readCsvStringList, readFirstString, readStringArray, readStringInput } from '../utils/form-normalization';
+import { sanitizeRichHtml } from '../utils/rich-html';
 
 interface ArtisanFormData {
   name: string; slug: string; title: string; bio: string;
@@ -85,6 +87,7 @@ export function ArtisanFormPage() {
     setSaving(true); setError(null);
     const payload = {
       ...form,
+      bio: sanitizeRichHtml(form.bio),
       avatar: readTrimmedString(form.avatar),
       yearsExperience: typeof form.yearsExperience === 'number' ? form.yearsExperience : undefined,
       certifications: readCsvStringList(form.certifications),
@@ -132,7 +135,18 @@ export function ArtisanFormPage() {
               </select>
             </div>
           </div>
-          <div style={{ marginTop: 16 }}><label style={l}>Tiểu sử</label><textarea name="bio" value={form.bio} onChange={handleChange} rows={4} style={{ ...f, resize: 'vertical' }} /></div>
+          <div style={{ marginTop: 16 }}>
+            <RichTextEditor
+              label="Tiểu sử"
+              value={form.bio}
+              entityRef={id}
+              moduleRef={FILE_ASSET_MODULE_REFS.ARTISAN}
+              fieldRef="bio"
+              minHeight={200}
+              onChange={(html) => setForm((prev) => ({ ...prev, bio: html }))}
+              placeholder="Tiểu sử nghệ nhân, có thể dán từ Word…"
+            />
+          </div>
         </div>
 
         <div className="ghs-card" style={{ marginBottom: 16 }}>

@@ -1,0 +1,35 @@
+.rich-html :is(p, ul, ol, table, blockquote, h2, h3, h4) {
+  margin: 0 0 0.75em;
+}
+
+.rich-html :is(p, ul, ol, table, blockquote, h2, h3, h4):last-child {
+  margin-bottom: 0;
+}
+
+.rich-html :is(ul, ol) {
+  padding-left: 1.35em;
+}
+
+.rich-html img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.4em 0;
+  border-radius: 8px;
+}
+
+.rich-html table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rich-html :is(th, td) {
+  border: 1px solid rgba(201, 177, 144, 0.22);
+  padding: 8px 10px;
+  vertical-align: top;
+}
+
+.rich-html a {
+  color: inherit;
+  text-decoration: underline;
+}

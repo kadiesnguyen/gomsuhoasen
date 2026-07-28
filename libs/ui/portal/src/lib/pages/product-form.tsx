@@ -13,10 +13,12 @@ import {
 import { mergeApiErrorMessage } from '../services/api-error';
 import { Button } from '@vt/ui-components';
 import { UploadField } from '../components/upload-field';
+import { RichTextEditor } from '../components/rich-text-editor';
 import { MediaLightboxModal } from '../components/media-lightbox-modal';
 import { LoadErrorState } from '../components/load-error-state';
 import { useToast } from '../components/toast';
 import { useConfirm } from '../components/confirm-dialog';
+import { sanitizeRichHtml } from '../utils/rich-html';
 import {
   PRODUCT_STATUSES,
   PRODUCT_STATUS_VALUES,
@@ -542,7 +544,9 @@ export function ProductFormPage() {
     }
 
     const storyTitle = readTrimmedString(form.storyTitle);
-    const storyContent = readTrimmedString(form.storyContent);
+    const storyContentHtml = sanitizeRichHtml(form.storyContent);
+    const storyContent = readTrimmedString(storyContentHtml);
+    const descriptionHtml = sanitizeRichHtml(form.description);
     const payloadBase = {
       name: form.name,
       sku: readTrimmedString(form.sku),
@@ -556,7 +560,7 @@ export function ProductFormPage() {
       referencePrice: typeof form.referencePrice === 'number' ? form.referencePrice : 0,
       priceLabel: readTrimmedString(form.priceLabel),
       weight: typeof form.weight === 'number' ? form.weight : undefined,
-      description: readTrimmedString(form.description),
+      description: readTrimmedString(descriptionHtml),
       tags: readCsvStringList(form.tags),
       images: form.images,
       modelUrl: readTrimmedString(form.modelUrl),
@@ -606,7 +610,7 @@ export function ProductFormPage() {
               label: readStringInput(h.label),
               panel: {
                 title: readTrimmedString(h.panelTitle) ?? readStringInput(h.label),
-                content: readStringInput(h.panelContent),
+                content: sanitizeRichHtml(h.panelContent),
                 image: readTrimmedString(h.panelImage),
                 cta: readTrimmedString(h.panelCta),
               },
@@ -742,7 +746,15 @@ export function ProductFormPage() {
                     )}
                   </div>
                 </div>
-                <div style={{ marginTop: 16 }}><label style={labelStyle}>Mô tả</label><textarea name="description" value={form.description} onChange={handleChange} rows={3} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
+                <div style={{ marginTop: 16 }}>
+                  <RichTextEditor
+                    label="Mô tả"
+                    value={form.description}
+                    entityRef={id}
+                    onChange={(html) => updateField('description', html)}
+                    placeholder="Mô tả sản phẩm, có thể dán từ Word…"
+                  />
+                </div>
               </div>
             )}
 
@@ -834,7 +846,16 @@ export function ProductFormPage() {
                       />
                     </div>
                   </div>
-                  <div style={{ marginTop: 16 }}><label style={labelStyle}>Nội dung</label><textarea name="storyContent" value={form.storyContent} onChange={handleChange} rows={4} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
+                  <div style={{ marginTop: 16 }}>
+                    <RichTextEditor
+                      label="Nội dung"
+                      value={form.storyContent}
+                      entityRef={id}
+                      minHeight={200}
+                      onChange={(html) => updateField('storyContent', html)}
+                      placeholder="Câu chuyện tác phẩm…"
+                    />
+                  </div>
                 </div>
 
                 <div style={sectionStyle}>
@@ -1006,7 +1027,16 @@ export function ProductFormPage() {
                                   />
                                 </div>
                               </div>
-                              <div style={{ marginTop: 10 }}><label style={labelStyle}>Nội dung panel</label><textarea value={hotspot.panelContent} onChange={(e) => updateHotspot(sectionIndex, hotspotIndex, { panelContent: e.target.value })} rows={2} style={{ ...fieldStyle, resize: 'vertical' }} /></div>
+                              <div style={{ marginTop: 10 }}>
+                                <RichTextEditor
+                                  label="Nội dung panel"
+                                  value={hotspot.panelContent}
+                                  entityRef={id}
+                                  minHeight={140}
+                                  onChange={(html) => updateHotspot(sectionIndex, hotspotIndex, { panelContent: html })}
+                                  placeholder="Nội dung hotspot…"
+                                />
+                              </div>
                               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}><Button className="ghs-btn ghs-btn-danger" type="button" variant="destructive" size="sm" onClick={() => updateSection(sectionIndex, { hotspots: section.hotspots.filter((_, i) => i !== hotspotIndex) })}>Xóa hotspot</Button></div>
                             </div>
                           ))}

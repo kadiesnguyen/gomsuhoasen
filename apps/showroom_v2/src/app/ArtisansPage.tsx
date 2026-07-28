@@ -10,6 +10,8 @@ import {
 import { updatePageMetadata } from './data/page-metadata';
 import Link from './mocks/next/link';
 import './artisans-page.css';
+import { RichHtml } from './components/RichHtml';
+import { stripRichHtml } from '@gomhoasen/ui-showroom';
 
 const API_ORIGIN = resolveApiOrigin();
 
@@ -52,7 +54,7 @@ export function ArtisansPage() {
       <header className="artisans-header">
         <span>{artisansLanding.eyebrow}</span>
         <h1>{artisansLanding.title}</h1>
-        <p>{artisansLanding.desc}</p>
+        <RichHtml value={artisansLanding.desc} as="p" />
       </header>
 
       <section className="artisans-list" aria-live="polite">
@@ -68,7 +70,9 @@ export function ArtisansPage() {
         ) : artisans.length === 0 ? (
           <div className="artisans-state">{artisansLanding.emptyText}</div>
         ) : (
-          artisans.map((artisan) => (
+          artisans.map((artisan) => {
+            const plainBio = stripRichHtml(artisan.bio);
+            return (
             <Link key={artisan.id} href={profileHref(artisan)} className="artisan-card">
               <div className="artisan-card-media">
                 {artisan.avatar ? (
@@ -80,7 +84,7 @@ export function ArtisansPage() {
               <div className="artisan-card-content">
                 <span className="artisan-card-eyebrow">{artisan.specialty || artisan.title}</span>
                 <h2>{artisan.name}</h2>
-                {artisan.bio && <p>{artisan.bio}</p>}
+                {plainBio && <p>{plainBio.slice(0, 160)}{plainBio.length > 160 ? '…' : ''}</p>}
                 <div className="artisan-card-meta">
                   {artisan.yearsExperience && (
                     <span>
@@ -101,7 +105,8 @@ export function ArtisansPage() {
                 </span>
               </div>
             </Link>
-          ))
+            );
+          })
         )}
       </section>
     </div>
@@ -138,7 +143,7 @@ export function ArtisanDetailPage({ slug }: { slug: string }) {
     const title = artisan?.name ?? artisansLanding.notFoundTitle;
     updatePageMetadata({
       title: `${title} | ${brand.name}`,
-      description: artisan?.bio || artisansLanding.desc,
+      description: stripRichHtml(artisan?.bio || artisansLanding.desc),
       path: `/nghe-nhan/${slug}`,
       image: artisan ? artisan.coverImage || artisan.avatar : undefined,
     });
@@ -167,7 +172,7 @@ export function ArtisanDetailPage({ slug }: { slug: string }) {
       <section className="artisan-detail-state" aria-labelledby="artisan-not-found-title">
         <div>
           <h1 id="artisan-not-found-title">{artisansLanding.notFoundTitle}</h1>
-          <p>{artisansLanding.notFoundBody}</p>
+          <RichHtml value={artisansLanding.notFoundBody} as="div" />
           <Link href="/nghe-nhan">
             <ArrowLeft size={15} aria-hidden="true" />
             {artisansLanding.backLabel}
@@ -218,7 +223,7 @@ export function ArtisanDetailPage({ slug }: { slug: string }) {
         {artisan.bio && (
           <section>
             <h2>{artisansLanding.bioTitle}</h2>
-            <p>{artisan.bio}</p>
+            <RichHtml value={artisan.bio} />
           </section>
         )}
         {artisan.lineage && (
@@ -249,7 +254,7 @@ export function ArtisanDetailPage({ slug }: { slug: string }) {
 
         <section className="artisan-contact">
           <h2>{artisansLanding.contactTitle}</h2>
-          <p>{artisansLanding.contactBody}</p>
+          <RichHtml value={artisansLanding.contactBody} />
           <div>
             {phone && (
               <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>

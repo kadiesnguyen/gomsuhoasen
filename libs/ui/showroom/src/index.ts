@@ -6,3 +6,4 @@ export * from './lib/listing-screen';
 export * from './lib/artisan-listing-screen';
 export * from './lib/artisan-detail-screen';
 export * from './lib/showroom-api-client';
+export * from './lib/rich-html';

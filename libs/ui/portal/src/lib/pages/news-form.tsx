@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { slugifyVi as slugify } from '@gomhoasen/contracts';
 import { readTrimmedString } from '@vt/common-utils';
 import { LoadErrorState } from '../components/load-error-state';
+import { RichTextEditor } from '../components/rich-text-editor';
 import { UploadField } from '../components/upload-field';
 import { useToast } from '../components/toast';
 import { mergeApiErrorMessage } from '../services/api-error';
@@ -16,6 +17,7 @@ import {
 } from '../services/news-content';
 import type { ShowroomV2ContentContract } from '@gomhoasen/contracts';
 import { readStringInput } from '../utils/form-normalization';
+import { isBlankRichHtml, sanitizeRichHtml } from '../utils/rich-html';
 
 interface NewsFormData {
   id: string;
@@ -134,9 +136,9 @@ export function NewsFormPage() {
     const slug = readTrimmedString(form.slug);
     const category = readTrimmedString(form.category);
     const image = readTrimmedString(form.image);
-    const articleContent = readTrimmedString(form.content);
+    const articleContent = sanitizeRichHtml(form.content);
 
-    if (!title || !slug || !category || !image || !articleContent) {
+    if (!title || !slug || !category || !image || isBlankRichHtml(articleContent)) {
       const message = 'Vui lòng nhập đủ tiêu đề, slug, danh mục, hình ảnh và nội dung.';
       setError(message);
       toast(message, 'error');
@@ -177,7 +179,7 @@ export function NewsFormPage() {
       image,
       author: readTrimmedString(form.author) || content.brand?.name || 'Gốm Hoa Sen',
       readingTime: readTrimmedString(form.readingTime) || '3 phút đọc',
-      content: form.content.trim(),
+      content: articleContent,
     };
 
     const nextCards = isEdit
@@ -304,18 +306,18 @@ export function NewsFormPage() {
             </label>
           </div>
 
-          <label style={{ display: 'block', marginBottom: 16 }}>
-            <span className="ghs-label">Nội dung chi tiết</span>
-            <textarea
-              className="ghs-textarea"
-              name="content"
+          <div style={{ marginBottom: 16 }}>
+            <RichTextEditor
+              label="Nội dung chi tiết"
               value={form.content}
-              onChange={handleChange}
-              rows={12}
-              required
-              placeholder="Cách đoạn bằng một dòng trống"
+              entityRef={form.id}
+              moduleRef="showroom-v2-content"
+              fieldRef={`newsLanding.newsCards.${form.id}.content`}
+              minHeight={280}
+              onChange={(html) => setForm((prev) => ({ ...prev, content: html }))}
+              placeholder="Nội dung bài viết, có thể dán từ Word…"
             />
-          </label>
+          </div>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <input type="checkbox" name="featured" checked={form.featured} onChange={handleChange} />

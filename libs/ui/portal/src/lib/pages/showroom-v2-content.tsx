@@ -3,11 +3,14 @@ import { createShowroomV2DefaultContent, type ShowroomV2ContentContract } from '
 import { api } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { useToast } from '../components/toast';
+import { RichTextEditor } from '../components/rich-text-editor';
 import { UploadField } from '../components/upload-field';
 import { ArrowDown, ArrowUp, Trash2, Plus } from 'lucide-react';
+import { sanitizeRichHtml } from '../utils/rich-html';
 
 type EditorRecord = Record<string, unknown>;
-type EditorFieldType = 'text' | 'number' | 'checkbox' | 'image' | 'textarea';
+type EditorFieldType = 'text' | 'number' | 'checkbox' | 'image' | 'textarea' | 'richtext';
+type InputKind = boolean | 'richtext';
 
 function isEditorRecord(value: unknown): value is EditorRecord {
   return Boolean(value) && !Array.isArray(value) && typeof value === 'object';
@@ -370,14 +373,28 @@ export function ShowroomV2ContentPage() {
     );
   }
 
-  const renderInput = (label: string, path: string[], isTextArea = false) => {
+  const renderInput = (label: string, path: string[], kind: InputKind = false) => {
     const rawValue = readPath(content, path);
     const val = typeof rawValue === 'string' ? rawValue : '';
     const inputId = `showroom-v2-${path.join('-')}`;
+    if (kind === 'richtext') {
+      return (
+        <div style={{ marginBottom: 16 }}>
+          <RichTextEditor
+            label={label}
+            value={val}
+            moduleRef="showroom-v2-content"
+            fieldRef={path.join('.')}
+            minHeight={160}
+            onChange={(html) => handleChange(path, sanitizeRichHtml(html))}
+          />
+        </div>
+      );
+    }
     return (
       <div style={{ marginBottom: 16 }}>
         <label htmlFor={inputId} style={{ display: 'block', marginBottom: 6, fontWeight: 500, fontSize: 13 }}>{label}</label>
-        {isTextArea ? (
+        {kind ? (
           <textarea
             id={inputId}
             className="ghs-input"
@@ -488,6 +505,19 @@ export function ShowroomV2ContentPage() {
                   );
                 }
                 const fieldValue = item[f.key];
+                if (f.type === 'richtext') {
+                  return (
+                    <RichTextEditor
+                      key={f.key}
+                      label={f.label}
+                      value={typeof fieldValue === 'string' ? fieldValue : ''}
+                      moduleRef="showroom-v2-content"
+                      fieldRef={[...path, String(i), f.key].join('.')}
+                      minHeight={140}
+                      onChange={(html) => handleArrayChange(path, i, f.key, sanitizeRichHtml(html))}
+                    />
+                  );
+                }
                 if (f.type === 'textarea') {
                   return (
                     <textarea
@@ -671,7 +701,7 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Tên thương hiệu', ['brand', 'name'])}
             {renderInput('Tagline ngắn', ['brand', 'tagline'])}
-            {renderInput('Mô tả thương hiệu', ['brand', 'subtitle'], true)}
+            {renderInput('Mô tả thương hiệu', ['brand', 'subtitle'], 'richtext')}
             {renderInput('Địa chỉ showroom', ['brand', 'location'], true)}
             {renderInput('Số hotline', ['brand', 'phone'])}
             {renderInput('Email liên hệ', ['brand', 'email'])}
@@ -682,7 +712,7 @@ export function ShowroomV2ContentPage() {
             ], { label: '', href: '' })}
             {renderInput('404 Nhãn phụ', ['notFound', 'eyebrow'])}
             {renderInput('404 Tiêu đề', ['notFound', 'title'])}
-            {renderInput('404 Nội dung', ['notFound', 'body'], true)}
+            {renderInput('404 Nội dung', ['notFound', 'body'], 'richtext')}
             {renderInput('404 Nút về trang chủ', ['notFound', 'backLabel'])}
           </div>
         )}
@@ -691,7 +721,7 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Tiêu đề Hero', ['home', 'heroTitle'])}
             {renderInput('Phụ đề Hero', ['home', 'heroSubtitle'])}
-            {renderInput('Nội dung Hero', ['home', 'heroBody'], true)}
+            {renderInput('Nội dung Hero', ['home', 'heroBody'], 'richtext')}
             {renderInput('Tệp model 3D Hero (.glb)', ['home', 'heroModelUrl'])}
             {renderImageInput('Poster dự phòng của model', ['home', 'heroModelPoster'])}
             {renderImageInput('Ảnh bóng tham chiếu Hero', ['home', 'heroReferenceImage'])}
@@ -706,7 +736,7 @@ export function ShowroomV2ContentPage() {
             {renderStringArrayEditor('Danh sách tính năng tương tác', ['home', 'interactionFeatures'], 'Ví dụ: Xoay mô hình 360 độ')}
             {renderInput('Nhãn phụ Di sản', ['home', 'heritageEyebrow'])}
             {renderInput('Tiêu đề Di sản', ['home', 'heritageTitle'])}
-            {renderInput('Nội dung Di sản', ['home', 'heritageBody'], true)}
+            {renderInput('Nội dung Di sản', ['home', 'heritageBody'], 'richtext')}
             {renderInput('Nhãn nút Di sản', ['home', 'heritageCtaLabel'])}
             {renderInput('Liên kết nút Di sản', ['home', 'heritageCtaHref'])}
             {renderInput('Nhãn phụ Bộ sưu tập', ['home', 'collectionEyebrow'])}
@@ -725,13 +755,13 @@ export function ShowroomV2ContentPage() {
             {renderArrayEditor('Quy trình', ['home', 'process'], [
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'position', label: 'Vị trí background (vd: 50% 50%)' }
             ], { img: '', title: '', desc: '', position: '50% 50%' })}
 
             {renderArrayEditor('Cam kết', ['home', 'promises'], [
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' }
+              { key: 'desc', label: 'Mô tả', type: 'richtext' }
             ], { title: '', desc: '' })}
           </div>
         )}
@@ -740,19 +770,19 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Nhãn phụ Hero', ['about', 'heroEyebrow'])}
             {renderInput('Tiêu đề Hero', ['about', 'heroTitle'])}
-            {renderInput('Mô tả Hero', ['about', 'heroDesc'], true)}
+            {renderInput('Mô tả Hero', ['about', 'heroDesc'], 'richtext')}
             {renderImageInput('Ảnh nền Hero', ['about', 'heroBg'])}
             {renderInput('Nhãn nút Hero', ['about', 'heroCtaLabel'])}
             {renderInput('Liên kết nút Hero', ['about', 'heroCtaHref'])}
             {renderInput('Mô tả ảnh Hero', ['about', 'heroImageAlt'])}
-            {renderInput('Nội dung trích dẫn', ['about', 'quoteText'], true)}
+            {renderInput('Nội dung trích dẫn', ['about', 'quoteText'], 'richtext')}
             {renderInput('Tác giả trích dẫn', ['about', 'quoteAuthor'])}
             {renderImageInput('Ảnh nền trích dẫn', ['about', 'quoteBg'])}
 
             {renderArrayEditor('Thành tố Ngũ hành', ['about', 'elements'], [
               { key: 'id', label: 'ID' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'iconType', label: 'Tên icon (vd: lotus, leaf, flame)' },
               { key: 'isActive', label: 'Đang nổi bật', type: 'checkbox' }
@@ -768,7 +798,7 @@ export function ShowroomV2ContentPage() {
             </div>
             {renderInput('Nhãn phụ Hero', ['collections', 'heroEyebrow'])}
             {renderInput('Tiêu đề Hero', ['collections', 'heroTitle'])}
-            {renderInput('Mô tả Hero', ['collections', 'heroDesc'], true)}
+            {renderInput('Mô tả Hero', ['collections', 'heroDesc'], 'richtext')}
             {renderImageInput('Ảnh nền Hero', ['collections', 'heroBg'])}
             {renderInput('Nhãn nút Hero', ['collections', 'heroCtaLabel'])}
             {renderInput('Liên kết nút Hero', ['collections', 'heroCtaHref'])}
@@ -777,7 +807,7 @@ export function ShowroomV2ContentPage() {
             {renderArrayEditor('Hàng 1 (2 ô lớn)', ['collections', 'rows', 'row1'], [
               { key: 'id', label: 'ID' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'href', label: 'Đường dẫn khi bấm Khám phá' },
               { key: 'span', label: 'Độ rộng cột (1-10)', type: 'number' }
@@ -786,7 +816,7 @@ export function ShowroomV2ContentPage() {
             {renderArrayEditor('Hàng 2 (3 ô)', ['collections', 'rows', 'row2'], [
               { key: 'id', label: 'ID' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'href', label: 'Đường dẫn khi bấm Khám phá' },
               { key: 'span', label: 'Độ rộng cột (1-10)', type: 'number' }
@@ -795,7 +825,7 @@ export function ShowroomV2ContentPage() {
             {renderArrayEditor('Hàng 3 (2 ô)', ['collections', 'rows', 'row3'], [
               { key: 'id', label: 'ID' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'href', label: 'Đường dẫn khi bấm Khám phá' },
               { key: 'span', label: 'Độ rộng cột (1-10)', type: 'number' }
@@ -807,15 +837,15 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Tiêu đề Hero', ['productsLanding', 'heroTitle'])}
             {renderInput('Phụ đề Hero', ['productsLanding', 'heroSubtitle'])}
-            {renderInput('Mô tả Hero', ['productsLanding', 'heroDesc'], true)}
-            {renderInput('Nội dung badge', ['productsLanding', 'badgeText'], true)}
+            {renderInput('Mô tả Hero', ['productsLanding', 'heroDesc'], 'richtext')}
+            {renderInput('Nội dung badge', ['productsLanding', 'badgeText'], 'richtext')}
             {renderImageInput('Ảnh nền Hero', ['productsLanding', 'heroBg'])}
             {renderInput('Nhãn khu nổi bật', ['productsLanding', 'featuredSectionLabel'])}
             
             {renderArrayEditor('Danh mục nổi bật', ['productsLanding', 'categories'], [
               { key: 'id', label: 'ID' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' },
+              { key: 'desc', label: 'Mô tả', type: 'richtext' },
               { key: 'img', label: 'Hình ảnh', type: 'image' },
               { key: 'href', label: 'Đường dẫn (URL)' }
             ], { id: '', title: '', desc: '', img: '', href: '' })}
@@ -823,13 +853,13 @@ export function ShowroomV2ContentPage() {
             {renderArrayEditor('Điểm nhấn sản phẩm', ['productsLanding', 'productFeatures'], [
               { key: 'iconType', label: 'Tên icon (vd: lotus, wind)' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' }
+              { key: 'desc', label: 'Mô tả', type: 'richtext' }
             ], { iconType: '', title: '', desc: '' })}
 
             {renderArrayEditor('Cam kết dịch vụ', ['productsLanding', 'trustBadges'], [
               { key: 'iconType', label: 'Tên icon (vd: check, package)' },
               { key: 'title', label: 'Tiêu đề' },
-              { key: 'desc', label: 'Mô tả' }
+              { key: 'desc', label: 'Mô tả', type: 'richtext' }
             ], { iconType: '', title: '', desc: '' })}
           </div>
         )}
@@ -838,14 +868,14 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Nhãn phụ', ['artisans', 'eyebrow'])}
             {renderInput('Tiêu đề trang', ['artisans', 'title'])}
-            {renderInput('Mô tả trang', ['artisans', 'desc'], true)}
+            {renderInput('Mô tả trang', ['artisans', 'desc'], 'richtext')}
             {renderInput('Đang tải', ['artisans', 'loadingText'])}
             {renderInput('Tiêu đề lỗi tải', ['artisans', 'errorTitle'])}
             {renderInput('Nội dung lỗi tải', ['artisans', 'errorText'], true)}
             {renderInput('Nhãn thử lại', ['artisans', 'retryLabel'])}
             {renderInput('Danh sách trống', ['artisans', 'emptyText'])}
             {renderInput('Tiêu đề không tìm thấy', ['artisans', 'notFoundTitle'])}
-            {renderInput('Mô tả không tìm thấy', ['artisans', 'notFoundBody'], true)}
+            {renderInput('Mô tả không tìm thấy', ['artisans', 'notFoundBody'], 'richtext')}
             {renderInput('Nhãn quay lại', ['artisans', 'backLabel'])}
             {renderInput('Nhãn xem hồ sơ', ['artisans', 'profileCtaLabel'])}
             {renderInput('Nhãn số năm kinh nghiệm', ['artisans', 'experienceLabel'])}
@@ -854,7 +884,7 @@ export function ShowroomV2ContentPage() {
             {renderInput('Tiêu đề Xưởng gốm', ['artisans', 'workshopTitle'])}
             {renderInput('Tiêu đề Chứng nhận', ['artisans', 'certificationsTitle'])}
             {renderInput('Tiêu đề Liên hệ', ['artisans', 'contactTitle'])}
-            {renderInput('Nội dung Liên hệ', ['artisans', 'contactBody'], true)}
+            {renderInput('Nội dung Liên hệ', ['artisans', 'contactBody'], 'richtext')}
             {renderInput('Nhãn gọi điện', ['artisans', 'phoneCtaLabel'])}
             {renderInput('Nhãn gửi email', ['artisans', 'emailCtaLabel'])}
           </div>
@@ -863,7 +893,7 @@ export function ShowroomV2ContentPage() {
         {activeTab === 'contact' && (
           <div>
             {renderInput('Tiêu đề Hero', ['contact', 'heroTitle'])}
-            {renderInput('Mô tả Hero', ['contact', 'heroDesc'], true)}
+            {renderInput('Mô tả Hero', ['contact', 'heroDesc'], 'richtext')}
             {renderImageInput('Ảnh nền Hero', ['contact', 'heroBg'])}
             {renderInput('Tiêu đề biểu mẫu', ['contact', 'formTitle'])}
             {renderInput('Nhãn nút gửi', ['contact', 'submitLabel'])}
@@ -891,9 +921,9 @@ export function ShowroomV2ContentPage() {
           <div>
             {renderInput('Nhãn phụ danh mục', ['catalog', 'listingEyebrow'])}
             {renderInput('Tiêu đề danh mục', ['catalog', 'listingTitle'])}
-            {renderInput('Mô tả danh mục', ['catalog', 'listingSubtitle'], true)}
+            {renderInput('Mô tả danh mục', ['catalog', 'listingSubtitle'], 'richtext')}
             {renderInput('Tiêu đề tư vấn', ['catalog', 'listingAdvisorTitle'])}
-            {renderInput('Nội dung tư vấn', ['catalog', 'listingAdvisorBody'], true)}
+            {renderInput('Nội dung tư vấn', ['catalog', 'listingAdvisorBody'], 'richtext')}
             {renderInput('Nội dung đang tải danh mục', ['catalog', 'listingLoadingText'])}
             {renderInput('Nội dung lỗi danh mục', ['catalog', 'listingErrorText'])}
             {renderInput('Nhãn thử lại danh mục', ['catalog', 'listingRetryLabel'])}

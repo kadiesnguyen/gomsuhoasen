@@ -60,8 +60,7 @@
 
 /* Loading / Empty */
 .loading, .empty { grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: #7a6f63; }
-.spinner { width: 32px; height: 32px; border: 3px solid rgba(154,117,32,0.2); border-top-color: #9a7520; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { composes: spinner from './shared.module.css'; margin: 0 auto 1rem; }
 .emptyIcon { font-size: 3rem; margin-bottom: 1rem; }
 
 /* Footer */
