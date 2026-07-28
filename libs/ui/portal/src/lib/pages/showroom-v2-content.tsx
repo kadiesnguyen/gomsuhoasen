@@ -642,17 +642,17 @@ export function ShowroomV2ContentPage() {
 
   return (
     <div className="page-container" style={{ maxWidth: 800 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div className="ghs-page-header">
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, margin: 0 }}>Nội dung website</h1>
-          <p style={{ margin: '4px 0 0 0', color: '#666' }}>Quản lý nội dung cho các trang Showroom V2</p>
+          <h1>Nội dung website</h1>
+          <p>Quản lý nội dung cho các trang Showroom V2</p>
         </div>
         <button
           type="button"
           className="ghs-btn ghs-btn-primary"
           onClick={handleSave}
           disabled={saving || !dirty}
-          style={{ padding: '8px 16px', background: '#000', color: '#fff', border: 'none', borderRadius: 4, cursor: saving || !dirty ? 'not-allowed' : 'pointer', opacity: dirty ? 1 : 0.6 }}
+          style={{ opacity: dirty ? 1 : 0.6 }}
         >
           {saving ? 'Đang lưu...' : dirty ? 'Lưu thay đổi' : 'Đã lưu'}
         </button>
@@ -670,7 +670,7 @@ export function ShowroomV2ContentPage() {
         <button className={`ghs-tab-item ${activeTab === 'catalog' ? 'active' : ''}`} onClick={() => setActiveTab('catalog')}>Danh mục & chi tiết</button>
       </div>
 
-      <div className="page-section">
+      <div className="ghs-card">
         {activeTab === 'brand' && (
           <div>
             {renderInput('Tên thương hiệu', ['brand', 'name'])}

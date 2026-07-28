@@ -220,21 +220,12 @@ export function FileLibraryPage() {
         }
       />
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          gap: 12,
-          marginBottom: 16,
-          alignItems: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="ghs-page-header">
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#191714' }}>Thư viện tệp</h1>
-          <div style={{ color: '#7a7265', fontSize: '0.85rem', marginTop: 4 }}>
+          <h1>Thư viện tệp</h1>
+          <p>
             Theo dõi tài nguyên đã tải lên, trạng thái gắn tham chiếu, và nguồn sử dụng trong hệ thống.
-          </div>
+          </p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <Button
@@ -250,14 +241,7 @@ export function FileLibraryPage() {
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '180px 180px minmax(240px, 1fr) auto auto',
-          gap: 10,
-          marginBottom: 16,
-        }}
-      >
+      <div className="ghs-card" style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
         <select
           value={status}
           onChange={(event) => {
@@ -311,14 +295,7 @@ export function FileLibraryPage() {
       {error ? (
         <LoadErrorState message={error} onRetry={() => { void load(); }} />
       ) : (
-        <div
-          style={{
-            background: '#fff',
-            borderRadius: 16,
-            overflow: 'hidden',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-          }}
-        >
+        <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
           {loading ? (
             <div style={{ padding: 48, textAlign: 'center', color: '#999' }}>Đang tải...</div>
           ) : items.length === 0 ? (

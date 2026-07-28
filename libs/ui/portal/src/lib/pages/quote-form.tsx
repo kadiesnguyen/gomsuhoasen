@@ -12,9 +12,9 @@ import { computeCheckoutPricing } from '@vt/ecommerce-core/pricing';
 interface Rfq { id?: string; _id?: string; customerName: string; customerPhone: string; lineItems?: Array<{ productId: string; productName: string; quantity: number; variant?: string }>; }
 interface QuoteLine { productId: string; productName: string; glaze: string; size: string; quantity: number; unitPrice: number; customization: string; }
 
-const field: CSSProperties = { width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: 10, boxSizing: 'border-box' };
-const label: CSSProperties = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#555', marginBottom: 6 };
-const section: CSSProperties = { background: '#fff', borderRadius: 16, padding: 24, marginBottom: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' };
+const field: CSSProperties = { width: '100%', minHeight: 'var(--ghs-control-h)', padding: '0 12px', border: '1px solid var(--ghs-border)', borderRadius: 8, boxSizing: 'border-box' };
+const label: CSSProperties = { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--ghs-text-muted)', marginBottom: 6 };
+const section: CSSProperties = { marginBottom: 16 };
 
 
 function addDays(days: number) { const date = new Date(); date.setDate(date.getDate() + days); return date.toISOString().slice(0, 10); }
@@ -190,8 +190,8 @@ export function QuoteFormPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, margin: 0 }}>{isEdit ? 'Chỉnh sửa báo giá' : 'Tạo báo giá'}</h1>
+      <div className="ghs-page-header">
+        <div><h1>{isEdit ? 'Chỉnh sửa báo giá' : 'Tạo báo giá'}</h1></div>
         <Button variant="secondary" onClick={() => navigate('/admin/quotes')}>Quay lại</Button>
       </div>
       {referenceError && (
@@ -203,7 +203,7 @@ export function QuoteFormPage() {
         </div>
       )}
       <form onSubmit={handleSubmit}>
-        <div style={section}>
+        <div className="ghs-card" style={section}>
           <h3 style={{ marginTop: 0, color: '#9A7520' }}>RFQ & điều khoản</h3>
           {rfqs.length === 0 && !referenceError && (
             <div style={{ marginBottom: 16, padding: '12px 14px', borderRadius: 12, background: '#fffaf0', color: '#7b5e18', fontSize: '0.86rem' }}>
@@ -232,7 +232,7 @@ export function QuoteFormPage() {
           <div style={{ marginTop: 16 }}><label style={label}>Điều khoản</label><textarea value={terms} onChange={(e) => setTerms(e.target.value)} rows={3} style={{ ...field, resize: 'vertical' }} /></div>
         </div>
 
-        <div style={section}>
+        <div className="ghs-card" style={section}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
             <h3 style={{ margin: 0, color: '#9A7520' }}>Dòng báo giá</h3>
             <Button type="button" variant="secondary" size="sm" onClick={() => setLines(prev => [...prev, { productId: '', productName: '', glaze: '', size: '', quantity: 1, unitPrice: 0, customization: '' }])}>Thêm dòng</Button>
@@ -267,7 +267,7 @@ export function QuoteFormPage() {
           </div>
         </div>
 
-        <div style={section}>
+        <div className="ghs-card" style={section}>
           <h3 style={{ marginTop: 0, color: '#9A7520' }}>Tổng tiền</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             <div><label style={label}>Tạm tính</label><div style={{ fontWeight: 800, fontSize: '1.2rem' }}>{money(subtotal)}</div></div>

@@ -102,8 +102,8 @@ export function QuoteListPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>Báo giá</h1>
+      <div className="ghs-page-header">
+        <div><h1>Báo giá</h1></div>
         <Button variant="primary" onClick={() => navigate('/admin/quotes/new')}>Tạo báo giá</Button>
       </div>
 
@@ -139,7 +139,7 @@ export function QuoteListPage() {
         )}
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+      <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: 48, color: '#999' }}>Đang tải...</div>
         ) : loadError ? (

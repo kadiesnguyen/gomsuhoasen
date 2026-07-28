@@ -118,28 +118,17 @@ export function DashboardPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 20 }}>
+      <div className="ghs-page-header">
         <div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 700, marginBottom: 8, color: '#191714' }}>Tổng quan</h1>
-          <div style={{ color: '#8a8178', fontSize: '0.92rem' }}>
+          <h1>Tổng quan</h1>
+          <p>
             Theo dõi nhanh tình hình RFQ, báo giá, sản phẩm và vận hành showroom.
-          </div>
+          </p>
         </div>
         <button
           type="button"
           onClick={load}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '10px 14px',
-            borderRadius: 10,
-            border: '1px solid #e6dfd2',
-            background: '#fff',
-            color: '#6b5b45',
-            cursor: 'pointer',
-            fontWeight: 600,
-          }}
+          className="ghs-btn"
         >
           <RefreshCw size={15} />
           Làm mới
@@ -155,19 +144,7 @@ export function DashboardPage() {
             key={action.href}
             type="button"
             onClick={() => navigate(action.href)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '10px 14px',
-              borderRadius: 999,
-              border: '1px solid #e8dcc5',
-              background: '#fffaf0',
-              color: '#7b5e18',
-              cursor: 'pointer',
-              fontWeight: 700,
-              fontSize: '0.84rem',
-            }}
+            className="ghs-btn ghs-btn-ghost"
           >
             {action.label}
             <ArrowRight size={14} />
@@ -182,15 +159,8 @@ export function DashboardPage() {
             key={card.label}
             type="button"
             onClick={() => navigate(card.href)}
-            style={{
-              background: '#fff',
-              borderRadius: 16,
-              padding: '24px 20px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-              border: '1px solid #f1ece2',
-              textAlign: 'left',
-              cursor: 'pointer',
-            }}
+            className="ghs-card"
+            style={{ textAlign: 'left', cursor: 'pointer' }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <span style={{ width: 42, height: 42, borderRadius: 12, display: 'grid', placeItems: 'center', background: '#fbf7ef', color: card.color }}>
@@ -209,7 +179,7 @@ export function DashboardPage() {
       </div>
       
       {/* Chart Section */}
-      <div style={{ background: '#fff', borderRadius: 16, padding: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.04)', marginTop: 20, height: 320 }}>
+      <div className="ghs-card" style={{ marginTop: 20, height: 320 }}>
         <h3 style={{ marginTop: 0, color: '#9A7520', marginBottom: 16 }}>Hoạt động 7 ngày qua</h3>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={stats.chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -222,7 +192,7 @@ export function DashboardPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 20 }}>
-        <div style={{ background: '#fff', borderRadius: 16, padding: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+        <div className="ghs-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
             <h3 style={{ marginTop: 0, color: '#9A7520' }}>RFQ mới nhất</h3>
             <button type="button" onClick={() => navigate('/admin/rfq')} style={{ border: 0, background: 'none', color: '#7b5e18', cursor: 'pointer', fontWeight: 700 }}>
@@ -251,7 +221,7 @@ export function DashboardPage() {
             </button>
           ))}
         </div>
-        <div style={{ background: '#fff', borderRadius: 16, padding: 20, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+        <div className="ghs-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
             <h3 style={{ marginTop: 0, color: '#9A7520' }}>Báo giá mới nhất</h3>
             <button type="button" onClick={() => navigate('/admin/quotes')} style={{ border: 0, background: 'none', color: '#7b5e18', cursor: 'pointer', fontWeight: 700 }}>
