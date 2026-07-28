@@ -282,6 +282,20 @@ class NewsLandingContent {
   @Prop({
     type: [{
       id: String,
+      name: String,
+      slug: String,
+    }],
+    default: [],
+  })
+  categories?: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+
+  @Prop({
+    type: [{
+      id: String,
       slug: String,
       category: String,
       date: String,

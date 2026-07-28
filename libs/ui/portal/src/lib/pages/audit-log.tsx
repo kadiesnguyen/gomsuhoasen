@@ -58,22 +58,14 @@ export function AuditLogPage() {
     load();
   }, [load]);
 
-  const inputStyle = {
-    padding: '8px 10px',
-    borderRadius: 10,
-    border: '1px solid #ddd',
-    minWidth: 160,
-    background: '#fff',
-  } as const;
-
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'end', marginBottom: 20, flexWrap: 'wrap' }}>
+      <div className="ghs-page-header">
         <div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>Nhật ký hệ thống</h1>
-          <div style={{ color: '#7a7265', fontSize: '0.85rem', marginTop: 4 }}>
+          <h1>Nhật ký hệ thống</h1>
+          <p>
             Theo dõi thao tác quản trị để dễ rà soát thay đổi và hỗ trợ vận hành.
-          </div>
+          </p>
         </div>
       </div>
 
@@ -86,7 +78,7 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             placeholder="Hành động"
@@ -95,7 +87,7 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             placeholder="Đối tượng"
@@ -104,18 +96,19 @@ export function AuditLogPage() {
             onKeyDown={(event) => {
               if (event.key === 'Enter') setFilters({ ...draftFilters });
             }}
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
           <input
             type="date"
             value={draftFilters.date}
             onChange={(event) => setDraftFilters((prev) => ({ ...prev, date: event.target.value }))}
-            style={inputStyle}
+            className="ghs-input ghs-filter-input"
           />
-          <Button variant="secondary" onClick={() => setFilters({ ...draftFilters })}>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" onClick={() => setFilters({ ...draftFilters })}>
             Lọc
           </Button>
           <Button
+            className="ghs-btn ghs-btn-ghost"
             variant="outline"
             onClick={() => {
               setDraftFilters(EMPTY_FILTERS);
@@ -127,7 +120,7 @@ export function AuditLogPage() {
         </div>
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+      <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
         {loading ? (
           <div style={{ padding: 48, textAlign: 'center', color: '#999' }}>Đang tải...</div>
         ) : loadError ? (

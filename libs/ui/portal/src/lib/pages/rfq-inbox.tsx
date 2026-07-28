@@ -125,7 +125,7 @@ export function RfqInboxPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: '1.6rem', fontWeight: 700, marginBottom: 20, color: '#191714' }}>Yêu cầu báo giá</h1>
+      <div className="ghs-page-header"><div><h1>Yêu cầu báo giá</h1></div></div>
 
       {/* Status filter tabs with counts */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
@@ -137,9 +137,9 @@ export function RfqInboxPage() {
         />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: selected ? '1fr 400px' : '1fr', gap: 16, alignItems: 'start' }}>
+      <div className={selected ? 'ghs-rfq-inbox-layout is-detail-open' : 'ghs-rfq-inbox-layout'}>
         {/* List */}
-        <div style={{ background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+        <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
           {loading ? (
             <div style={{ textAlign: 'center', padding: 48, color: '#999' }}>Đang tải...</div>
           ) : loadError ? (
@@ -207,7 +207,7 @@ export function RfqInboxPage() {
 
         {/* Detail panel */}
         {selected && (
-          <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.04)', position: 'sticky', top: 24 }}>
+          <div className="ghs-card ghs-rfq-inbox-detail">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>Chi tiết RFQ</h3>
               <button type="button" aria-label="Đóng chi tiết yêu cầu" onClick={closeSelected} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem', color: '#999' }}>✕</button>
@@ -260,10 +260,7 @@ export function RfqInboxPage() {
             </div>
 
             <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              <button onClick={() => navigate(`/admin/quotes/new?rfqId=${selected.id}`)} style={{
-                padding: '8px 16px', borderRadius: 10, border: '1px solid #9A7520', background: '#9A7520',
-                color: '#fff', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer',
-              }}>
+              <button type="button" onClick={() => navigate(`/admin/quotes/new?rfqId=${selected.id}`)} className="ghs-btn ghs-btn-primary">
                 Tạo báo giá
               </button>
               {([RFQ_STATUSES.CONTACTED, RFQ_STATUSES.QUOTED, RFQ_STATUSES.CLOSED] as const).filter(s => s !== selected.status).map(s => {

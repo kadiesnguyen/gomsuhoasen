@@ -156,6 +156,11 @@ export interface ShowroomV2ContentContract {
     relatedTitle?: string;
     notFoundTitle?: string;
     notFoundBody?: string;
+    categories?: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
     newsCards?: {
       id: string;
       slug: string;

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { GHS_API, resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import css from './artisan-detail-screen.module.css';
+import { toRenderableRichHtml } from './rich-html';
 import { showroomApiGet } from './showroom-api-client';
 import { readShowroomDisplayText, readShowroomText } from './showroom-display-normalization';
 
@@ -133,7 +134,10 @@ export function ArtisanDetailScreen({ slug, initialData }: ArtisanDetailScreenPr
         {artisanBio && (
           <section className={css.section}>
             <h2 className={css.sectionTitle}>Tiểu sử</h2>
-            <p className={css.bio}>{artisanBio}</p>
+            <div
+              className={`${css.bio} ${css.richHtml}`}
+              dangerouslySetInnerHTML={{ __html: toRenderableRichHtml(artisanBio) }}
+            />
           </section>
         )}
 

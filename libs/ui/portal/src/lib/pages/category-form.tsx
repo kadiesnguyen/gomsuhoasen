@@ -100,53 +100,40 @@ export function CategoryFormPage() {
     return <LoadErrorState message={loadError} onRetry={() => setReloadKey((value) => value + 1)} />;
   }
 
-  const fieldStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '10px 14px',
-    border: '1px solid #ddd',
-    borderRadius: 10,
-    fontSize: '0.9rem',
-    outline: 'none',
-    background: '#fafaf8',
-    boxSizing: 'border-box',
-  };
-  const labelStyle: React.CSSProperties = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#555', marginBottom: 6 };
-  const sectionStyle: React.CSSProperties = { background: '#fff', borderRadius: 16, padding: 24, marginBottom: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' };
-
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>
+      <div className="ghs-page-header">
+        <div><h1>
           {isEdit ? 'Chỉnh sửa danh mục' : 'Thêm danh mục'}
-        </h1>
-        <button type="button" onClick={() => navigate('/admin/categories')} style={{ background: 'none', border: '1px solid #ddd', borderRadius: 8, padding: '6px 16px', cursor: 'pointer', fontSize: '0.85rem', color: '#666' }}>
+        </h1></div>
+        <button type="button" onClick={() => navigate('/admin/categories')} className="ghs-btn ghs-btn-ghost">
           ← Quay lại
         </button>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={sectionStyle}>
+        <div className="ghs-card" style={{ marginBottom: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div>
-              <label style={labelStyle}>Tên danh mục *</label>
-              <input name="name" value={form.name} onChange={handleChange} required style={fieldStyle} />
+              <label className="ghs-label">Tên danh mục *</label>
+              <input name="name" value={form.name} onChange={handleChange} required className="ghs-input" />
             </div>
             <div>
-              <label style={labelStyle}>Slug</label>
-              <input name="slug" value={form.slug} onChange={handleChange} style={fieldStyle} />
+              <label className="ghs-label">Slug</label>
+              <input name="slug" value={form.slug} onChange={handleChange} className="ghs-input" />
             </div>
             <div>
-              <label style={labelStyle}>Thứ tự hiển thị</label>
-              <input name="sortOrder" type="number" value={form.sortOrder} onChange={handleChange} style={fieldStyle} />
+              <label className="ghs-label">Thứ tự hiển thị</label>
+              <input name="sortOrder" type="number" value={form.sortOrder} onChange={handleChange} className="ghs-input" />
             </div>
           </div>
           <div style={{ marginTop: 16 }}>
-            <label style={labelStyle}>Mô tả</label>
-            <textarea name="description" value={form.description} onChange={handleChange} rows={4} style={{ ...fieldStyle, resize: 'vertical' }} />
+            <label className="ghs-label">Mô tả</label>
+            <textarea name="description" value={form.description} onChange={handleChange} rows={4} className="ghs-textarea" />
           </div>
         </div>
 
-        <div style={sectionStyle}>
+        <div className="ghs-card" style={{ marginBottom: 16 }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 8, marginTop: 0 }}>Ảnh danh mục</h3>
           <p style={{ marginTop: 0, marginBottom: 16, color: '#777', fontSize: '0.85rem' }}>
             Ảnh hiển thị trên trang Sản phẩm. Nếu không upload, website dùng ảnh mặc định hiện tại.
@@ -168,8 +155,8 @@ export function CategoryFormPage() {
         {error && <div role="alert" style={{ color: '#b91c1c', marginBottom: 12 }}>{error}</div>}
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <Button variant="secondary" type="button" onClick={() => navigate('/admin/categories')}>Hủy</Button>
-          <Button variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo danh mục'}</Button>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" type="button" onClick={() => navigate('/admin/categories')}>Hủy</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo danh mục'}</Button>
         </div>
       </form>
     </div>

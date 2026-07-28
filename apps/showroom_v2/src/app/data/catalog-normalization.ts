@@ -334,8 +334,21 @@ export function readShowroomJournal(value: SiteJournalItemContract[] | undefined
       const title = readTrimmedString(entry.title);
       const excerpt = readTrimmedString(entry.excerpt);
       const image = readTrimmedString(entry.image);
+      const category = readTrimmedString(entry.category);
+      const date = readTrimmedString(entry.date);
       if (id === undefined || title === undefined || excerpt === undefined || image === undefined) return null;
-      return { id, title, excerpt, image };
+      return { id, title, excerpt, image, category, date };
     })
-    .filter((entry): entry is { id: string; title: string; excerpt: string; image: string } => entry !== null);
+    .filter(
+      (
+        entry,
+      ): entry is {
+        id: string;
+        title: string;
+        excerpt: string;
+        image: string;
+        category: string | undefined;
+        date: string | undefined;
+      } => entry !== null,
+    );
 }

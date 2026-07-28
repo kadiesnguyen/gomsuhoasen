@@ -5,6 +5,8 @@ import { useShowroomData } from './data/ShowroomContext';
 import Link from './mocks/next/link';
 import { ArtFrame } from './ArtFrame';
 import './about-page.css';
+import { RichHtml } from './components/RichHtml';
+import { stripRichHtml } from '@gomhoasen/ui-showroom';
 
 function LotusIcon({ size = 22 }: { size?: number }) {
   return (
@@ -48,9 +50,7 @@ export function AboutPage() {
         <Reveal className="about-hero-left">
           <span className="about-eyebrow">{aboutLanding.eyebrow}</span>
           <h1 className="about-hero-title title-balanced">{aboutLanding.title}</h1>
-          <p className="about-hero-desc">
-            {aboutLanding.desc}
-          </p>
+          <RichHtml className="about-hero-desc" value={aboutLanding.desc} />
           <Link href={aboutLanding.heroCtaHref} className="art-btn about-cta">
             <ArtFrame />
             <span>{aboutLanding.heroCtaLabel}</span>
@@ -70,9 +70,7 @@ export function AboutPage() {
             <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1 }}></div>
             <div style={{ position: 'relative', zIndex: 2 }}>
               <div className="about-quote-mark">“</div>
-              <div className="about-quote-text">
-                {aboutLanding.quoteText}
-              </div>
+              <RichHtml className="about-quote-text" value={aboutLanding.quoteText} />
               <div style={{ marginTop: '12px', fontSize: '13px', fontStyle: 'italic', color: '#cbb279' }}>
                 — {aboutLanding.quoteAuthor}
               </div>
@@ -105,7 +103,7 @@ export function AboutPage() {
                     </div>
                   </div>
                   <h3 className="element-title">{el.title}</h3>
-                  <p className="element-desc">{el.desc}</p>
+                  <RichHtml className="element-desc" value={el.desc} />
                 </article>
               </Reveal>
             ))}

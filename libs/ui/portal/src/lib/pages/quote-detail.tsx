@@ -93,10 +93,10 @@ export function QuoteDetailPage() {
             : undefined
         }
       />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div className="ghs-page-header">
         <div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 700, margin: 0 }}>{quote.code}</h1>
-          <div style={{ color: '#8a8178', fontSize: '0.9rem' }}>{quote.customerName} · {quote.customerPhone} · {readDisplayText(quote.customerEmail, 'chưa có email')}</div>
+          <h1>{quote.code}</h1>
+          <p>{quote.customerName} · {quote.customerPhone} · {readDisplayText(quote.customerEmail, 'chưa có email')}</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <Button variant="secondary" onClick={() => navigate('/admin/quotes')}>Danh sách</Button>
@@ -112,11 +112,11 @@ export function QuoteDetailPage() {
               Xem PDF
             </Button>
           )}
-          <Button variant="primary" onClick={requestSendQuote} isLoading={busy}>Gửi email</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={requestSendQuote} isLoading={busy}>Gửi email</Button>
         </div>
       </div>
       {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}
-      <div style={{ background: '#fff', borderRadius: 16, padding: 24, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+      <div className="ghs-card">
         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
           <thead><tr style={{ textAlign: 'left', borderBottom: '1px solid #eee' }}><th style={{ padding: 10 }}>Sản phẩm</th><th style={{ padding: 10 }}>Tùy chỉnh</th><th style={{ padding: 10 }}>SL</th><th style={{ padding: 10 }}>Đơn giá</th><th style={{ padding: 10 }}>Thành tiền</th></tr></thead>
           <tbody>{quote.items.map((item, idx) => <tr key={idx} style={{ borderBottom: '1px solid #f5f3ee' }}><td style={{ padding: 10 }}>{item.productName}<br /><span style={{ color: '#888', fontSize: '0.8rem' }}>{item.glaze} {item.size}</span></td><td style={{ padding: 10 }}>{readDisplayText(item.customization, '—')}</td><td style={{ padding: 10 }}>{item.quantity}</td><td style={{ padding: 10 }}>{money(item.unitPrice)}</td><td style={{ padding: 10, fontWeight: 700 }}>{money(item.lineTotal)}</td></tr>)}</tbody>

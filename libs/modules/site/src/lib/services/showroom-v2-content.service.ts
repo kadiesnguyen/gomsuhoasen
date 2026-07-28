@@ -10,7 +10,7 @@ import { ShowroomV2Content, ShowroomV2ContentDocument } from '../schemas/showroo
 import { UpdateShowroomV2ContentDto } from '../dto/showroom-v2-content.dto';
 
 const DEFAULT_CONTENT_KEY = 'singleton_v2_content';
-const CURRENT_CONTENT_VERSION = 4;
+const CURRENT_CONTENT_VERSION = 5;
 const VERSION_THREE_NEWS_DATES = new Map<string, string>([
   ['hero', '15 THG 11, 2026'],
   ['n1', '10 THG 11, 2026'],
@@ -71,6 +71,58 @@ function mergeItemsWithDefaults<T extends ContentItemWithId>(
 }
 
 type NewsCard = NonNullable<ShowroomV2ContentContract['newsLanding']['newsCards']>[number];
+type NewsCategory = NonNullable<ShowroomV2ContentContract['newsLanding']['categories']>[number];
+
+function normalizeNewsCategories(
+  categories: NewsCategory[],
+  newsCards: NewsCard[],
+  defaults: NewsCategory[],
+): NewsCategory[] {
+  const source = categories.length > 0
+    ? categories
+    : (() => {
+        const fromCards: NewsCategory[] = [];
+        const seen = new Set<string>();
+        for (const card of newsCards) {
+          const name = typeof card.category === 'string' ? card.category.trim() : '';
+          if (!name) continue;
+          const key = name.toLocaleLowerCase('vi');
+          if (seen.has(key)) continue;
+          seen.add(key);
+          const slug = slugifyVi(name) || `danh-muc-${fromCards.length + 1}`;
+          const fallback = defaults.find((item) => item.name === name || item.slug === slug);
+          fromCards.push({
+            id: fallback?.id || `nc-${slug}`,
+            name,
+            slug: fallback?.slug || slug,
+          });
+        }
+        return fromCards.length > 0 ? fromCards : defaults;
+      })();
+
+  const usedSlugs = new Set<string>();
+  return source.map((item, index) => {
+    const name = (typeof item.name === 'string' && item.name.trim()) || `Danh mục ${index + 1}`;
+    const baseSlug =
+      (typeof item.slug === 'string' && item.slug.trim()) ||
+      slugifyVi(name) ||
+      `danh-muc-${index + 1}`;
+    let slug = baseSlug;
+    let duplicateIndex = 2;
+    while (usedSlugs.has(slug)) {
+      slug = `${baseSlug}-${duplicateIndex}`;
+      duplicateIndex += 1;
+    }
+    usedSlugs.add(slug);
+    return {
+      id:
+        (typeof item.id === 'string' && item.id.trim()) ||
+        `nc-${slug}`,
+      name,
+      slug,
+    };
+  });
+}
 
 function normalizeNewsCards(
   items: NewsCard[],
@@ -214,15 +266,23 @@ function normalizeContent(value: unknown): ShowroomV2ContentContract {
       productFeatures: ensureArray(productsLanding.productFeatures ?? defaults.productsLanding.productFeatures),
       trustBadges: ensureArray(productsLanding.trustBadges ?? defaults.productsLanding.trustBadges),
     },
-    newsLanding: {
-      ...defaults.newsLanding,
-      ...newsLanding,
-      newsCards: normalizeNewsCards(
+    newsLanding: (() => {
+      const newsCards = normalizeNewsCards(
         ensureArray(newsLanding.newsCards ?? defaults.newsLanding.newsCards),
         ensureArray(defaults.newsLanding.newsCards),
         (typeof brand.name === 'string' && brand.name.trim()) || defaults.brand.name || 'Gốm Hoa Sen',
-      ),
-    },
+      );
+      return {
+        ...defaults.newsLanding,
+        ...newsLanding,
+        newsCards,
+        categories: normalizeNewsCategories(
+          ensureArray(newsLanding.categories),
+          newsCards,
+          ensureArray(defaults.newsLanding.categories),
+        ),
+      };
+    })(),
     artisans: {
       ...defaults.artisans,
       ...artisans,
@@ -312,6 +372,11 @@ function migrateContent(
         }
         return item;
       }),
+      categories: normalizeNewsCategories(
+        ensureArray(content.newsLanding.categories),
+        ensureArray(content.newsLanding.newsCards),
+        ensureArray(defaults.newsLanding.categories),
+      ),
     },
   };
 }

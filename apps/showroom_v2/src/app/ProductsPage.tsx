@@ -4,6 +4,8 @@ import { Droplet, Sun, Wind, CheckCircle, Package, Truck, Headset, Phone, MapPin
 import { useShowroomData } from './data/ShowroomContext';
 import Link from './mocks/next/link';
 import './products-page.css';
+import { RichHtml } from './components/RichHtml';
+import { stripRichHtml } from '@gomhoasen/ui-showroom';
 
 /** Always carousel: ~3 cards visible per row (mobile + desktop). */
 const CATEGORY_VISIBLE = 3;
@@ -163,9 +165,7 @@ export function ProductsPage() {
 
             <h1 className="poster-title">{productsLandingInfo.title}</h1>
             <h2 className="poster-subtitle">{productsLandingInfo.subtitle}</h2>
-            <p className="poster-desc">
-              {productsLandingInfo.desc}
-            </p>
+            <RichHtml className="poster-desc" value={productsLandingInfo.desc} />
 
             <div className="poster-features">
               {productFeatures.map((feature, index) => (
@@ -173,7 +173,7 @@ export function ProductsPage() {
                   <div className="poster-feature-icon">{ICON_MAP[feature.iconType]}</div>
                   <div className="poster-feature-text">
                     <h4>{feature.title}</h4>
-                    <p>{feature.desc}</p>
+                    <RichHtml value={feature.desc} />
                   </div>
                 </div>
               ))}
@@ -182,7 +182,7 @@ export function ProductsPage() {
 
           <Reveal delay={0.4} className="poster-badge-right">
             <LotusIcon size={28} />
-            <p className="script-text" style={{ whiteSpace: 'pre-line' }}>{productsLandingInfo.badgeText}</p>
+            <RichHtml className="script-text" value={productsLandingInfo.badgeText} />
           </Reveal>
         </div>
 
@@ -199,7 +199,7 @@ export function ProductsPage() {
                 <div className="trust-icon">{ICON_MAP[badge.iconType]}</div>
                 <div className="trust-info">
                   <h4>{badge.title}</h4>
-                  <p>{badge.desc}</p>
+                  <RichHtml value={badge.desc} />
                 </div>
               </Reveal>
             ))}

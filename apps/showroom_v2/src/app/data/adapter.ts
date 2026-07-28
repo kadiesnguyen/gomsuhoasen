@@ -1,8 +1,7 @@
 import { GHS_API, SiteConfigContract, resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import { readTrimmedString } from '@vt/common-utils';
-import { fetchOptionalApiArray, fetchOptionalApiObject } from './api';
-import { getShowroomV2Content } from './catalog-api';
-import { readShowroomJournal } from './normalization';
+import { fetchOptionalApiArray, fetchOptionalApiObject, getShowroomV2Content } from './catalog-api';
+import { readShowroomJournal } from './catalog-normalization';
 import {
   FALLBACK_ABOUT_ELEMENTS,
   FALLBACK_ABOUT_LANDING,

@@ -90,21 +90,12 @@ export function ArtisanListPage() {
             : undefined
         }
       />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>Nghệ nhân</h1>
+      <div className="ghs-page-header">
+        <div><h1>Nghệ nhân</h1></div>
         <button
           type="button"
           onClick={() => navigate('/admin/artisans/new')}
-          style={{
-            background: 'linear-gradient(135deg, #9A7520, #C4A550)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 10,
-            padding: '8px 18px',
-            fontSize: '0.85rem',
-            fontWeight: 600,
-            cursor: 'pointer',
-          }}
+          className="ghs-btn ghs-btn-primary"
         >
           + Thêm nghệ nhân
         </button>
@@ -115,7 +106,7 @@ export function ArtisanListPage() {
       ) : loadError ? (
         <LoadErrorState message={loadError} onRetry={load} />
       ) : artisans.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: 48, background: '#fff', borderRadius: 16 }}>
+        <div className="ghs-card ghs-empty">
           <div style={{ fontSize: '3rem', marginBottom: 12 }}>NGHỆ NHÂN</div>
           <h3 style={{ fontWeight: 600, color: '#333', marginBottom: 8 }}>Chưa có nghệ nhân</h3>
           <p style={{ color: '#999', fontSize: '0.9rem' }}>Thêm nghệ nhân đầu tiên để kể câu chuyện thương hiệu.</p>
@@ -139,14 +130,8 @@ export function ArtisanListPage() {
                 role="link"
                 tabIndex={0}
                 aria-label={`Xem hồ sơ nghệ nhân ${artisan.name}`}
-                style={{
-                  background: '#fff',
-                  borderRadius: 16,
-                  padding: 24,
-                  cursor: 'pointer',
-                  boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                  transition: 'box-shadow 0.15s',
-                }}
+                className="ghs-card"
+                style={{ cursor: 'pointer', transition: 'box-shadow 0.15s' }}
                 onMouseEnter={(event) => {
                   event.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)';
                 }}

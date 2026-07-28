@@ -23,6 +23,7 @@
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
   transition:
     border-color 300ms var(--ease, ease),

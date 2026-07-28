@@ -521,6 +521,50 @@
   line-height: 1.75;
 }
 
+.richHtml {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.richHtml :is(p, ul, ol, table, blockquote, h2, h3, h4) {
+  margin: 0 0 0.75em;
+}
+
+.richHtml :is(ul, ol) {
+  padding-left: 1.35em;
+}
+
+.richHtml img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 0.4em 0;
+}
+
+.richHtml table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.richHtml :is(th, td) {
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  vertical-align: top;
+}
+
+.richHtml a {
+  color: var(--gold-2);
+  text-decoration: underline;
+}
+
+.sidebarLead.richHtml {
+  font: 400 17px / 1.7 var(--serif);
+  color: #d9c7a8;
+  margin: 0 0 20px;
+}
+
+
 .sidebarCta {
   position: absolute;
   left: 0;

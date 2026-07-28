@@ -6,6 +6,8 @@ import { showroomApiPost } from '@gomhoasen/ui-showroom';
 import { GHS_API, RFQ_SOURCES } from '@gomhoasen/contracts';
 import { ArtFrame } from './ArtFrame';
 import './contact-page.css';
+import { RichHtml } from './components/RichHtml';
+import { stripRichHtml } from '@gomhoasen/ui-showroom';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   check: <CheckCircle size={24} strokeWidth={1.5} />,
@@ -71,9 +73,7 @@ export function ContactPage() {
         <div className="contact-hero-overlay"></div>
         <Reveal className="contact-hero-content">
           <h1 className="contact-hero-title">{contactLanding.title}</h1>
-          <p className="contact-hero-desc">
-            {contactLanding.desc}
-          </p>
+          <RichHtml className="contact-hero-desc" value={contactLanding.desc} />
         </Reveal>
       </section>
 
@@ -181,7 +181,7 @@ export function ContactPage() {
           <Reveal key={index} delay={0.1 * index} className="contact-trust-item">
             <div className="trust-item-icon" aria-hidden="true">{ICON_MAP[badge.iconType]}</div>
             <h4 className="trust-item-title">{badge.title}</h4>
-            <p className="trust-item-desc">{badge.desc}</p>
+            <RichHtml className="trust-item-desc" value={badge.desc} />
           </Reveal>
         ))}
       </div>

@@ -18,6 +18,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@gomhoasen/ui-portal': resolve(__dirname, '../../libs/ui/portal/src/index.ts'),
+      '@gomhoasen/ui-rich-html': resolve(__dirname, '../../libs/ui/rich-html/src/index.ts'),
       '@gomhoasen/contracts': resolve(__dirname, '../../libs/contracts/src/index.ts'),
       '@gomhoasen/core': resolve(__dirname, '../../libs/core/src/index.ts'),
       '@vt/common-utils': resolve(__dirname, '../../submodules/vt-common-utils/src/index.ts'),

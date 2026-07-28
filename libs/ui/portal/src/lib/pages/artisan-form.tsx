@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { api, type ArtisanApi } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { Button } from '@vt/ui-components';
+import { RichTextEditor } from '../components/rich-text-editor';
 import { UploadField } from '../components/upload-field';
 import { useToast } from '../components/toast';
 import { LoadErrorState } from '../components/load-error-state';
@@ -17,6 +18,7 @@ import {
 } from '@gomhoasen/contracts';
 import { readTrimmedString } from '@vt/common-utils';
 import { readCsvStringList, readFirstString, readStringArray, readStringInput } from '../utils/form-normalization';
+import { sanitizeRichHtml } from '../utils/rich-html';
 
 interface ArtisanFormData {
   name: string; slug: string; title: string; bio: string;
@@ -85,6 +87,7 @@ export function ArtisanFormPage() {
     setSaving(true); setError(null);
     const payload = {
       ...form,
+      bio: sanitizeRichHtml(form.bio),
       avatar: readTrimmedString(form.avatar),
       yearsExperience: typeof form.yearsExperience === 'number' ? form.yearsExperience : undefined,
       certifications: readCsvStringList(form.certifications),
@@ -106,21 +109,20 @@ export function ArtisanFormPage() {
     return <LoadErrorState message={loadError} onRetry={() => setReloadKey((value) => value + 1)} />;
   }
 
-  const f: React.CSSProperties = { width: '100%', padding: '10px 14px', border: '1px solid #ddd', borderRadius: 10, fontSize: '0.9rem', outline: 'none', background: '#fafaf8', boxSizing: 'border-box' };
-  const l: React.CSSProperties = { display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#555', marginBottom: 6 };
-  const s: React.CSSProperties = { background: '#fff', borderRadius: 16, padding: 24, marginBottom: 16, boxShadow: '0 1px 4px rgba(0,0,0,0.04)' };
+  const f: React.CSSProperties = { width: '100%', minHeight: 'var(--ghs-control-h)', border: '1px solid var(--ghs-border)', borderRadius: 8, padding: '0 12px', boxSizing: 'border-box' };
+  const l: React.CSSProperties = { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--ghs-text-muted)', marginBottom: 6 };
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 700, color: '#191714', margin: 0 }}>
+      <div className="ghs-page-header">
+        <div><h1>
           {isEdit ? 'Chỉnh sửa nghệ nhân' : 'Thêm nghệ nhân'}
-        </h1>
-        <button type="button" onClick={() => navigate('/admin/artisans')} style={{ background: 'none', border: '1px solid #ddd', borderRadius: 8, padding: '6px 16px', cursor: 'pointer', fontSize: '0.85rem', color: '#666' }}>← Quay lại</button>
+        </h1></div>
+        <button type="button" onClick={() => navigate('/admin/artisans')} className="ghs-btn ghs-btn-ghost">← Quay lại</button>
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div style={s}>
+        <div className="ghs-card" style={{ marginBottom: 16 }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Thông tin cá nhân</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div><label style={l}>Họ tên *</label><input name="name" value={form.name} onChange={handleChange} required style={f} /></div>
@@ -133,10 +135,21 @@ export function ArtisanFormPage() {
               </select>
             </div>
           </div>
-          <div style={{ marginTop: 16 }}><label style={l}>Tiểu sử</label><textarea name="bio" value={form.bio} onChange={handleChange} rows={4} style={{ ...f, resize: 'vertical' }} /></div>
+          <div style={{ marginTop: 16 }}>
+            <RichTextEditor
+              label="Tiểu sử"
+              value={form.bio}
+              entityRef={id}
+              moduleRef={FILE_ASSET_MODULE_REFS.ARTISAN}
+              fieldRef="bio"
+              minHeight={200}
+              onChange={(html) => setForm((prev) => ({ ...prev, bio: html }))}
+              placeholder="Tiểu sử nghệ nhân, có thể dán từ Word…"
+            />
+          </div>
         </div>
 
-        <div style={s}>
+        <div className="ghs-card" style={{ marginBottom: 16 }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Chuyên môn</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div><label style={l}>Chuyên môn</label><input name="specialty" value={form.specialty} onChange={handleChange} placeholder="Men Cobalt, Vẽ tay" style={f} /></div>
@@ -148,7 +161,7 @@ export function ArtisanFormPage() {
           <div style={{ marginTop: 16 }}><label style={l}>Chứng nhận (phân cách bằng dấu phẩy)</label><input name="certifications" value={form.certifications} onChange={handleChange} placeholder="Nghệ nhân ưu tú, Hội gốm truyền thống" style={f} /></div>
         </div>
 
-        <div style={s}>
+        <div className="ghs-card" style={{ marginBottom: 16 }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#9A7520', marginBottom: 16, marginTop: 0 }}>Liên hệ & Media</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div><label style={l}>SĐT</label><input name="phone" value={form.phone} onChange={handleChange} style={f} /></div>
@@ -177,8 +190,8 @@ export function ArtisanFormPage() {
         {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', fontSize: '0.85rem', color: '#b91c1c', marginBottom: 16 }}>⚠️ {error}</div>}
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-          <Button variant="secondary" type="button" onClick={() => navigate('/admin/artisans')}>Hủy</Button>
-          <Button variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Thêm nghệ nhân'}</Button>
+          <Button className="ghs-btn ghs-btn-ghost" variant="secondary" type="button" onClick={() => navigate('/admin/artisans')}>Hủy</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Thêm nghệ nhân'}</Button>
         </div>
       </form>
     </div>

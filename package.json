@@ -43,12 +43,23 @@
     "@nestjs/swagger": "^11.4.2",
     "@nestjs/throttler": "6.4.0",
     "@radix-ui/react-slot": "^1.2.4",
+    "@tiptap/extension-image": "^3.29.2",
+    "@tiptap/extension-link": "^3.29.2",
+    "@tiptap/extension-placeholder": "^3.29.2",
+    "@tiptap/extension-table": "^3.29.2",
+    "@tiptap/extension-text-align": "^3.29.2",
+    "@tiptap/extension-text-style": "^3.29.2",
+    "@tiptap/extension-underline": "^3.29.2",
+    "@tiptap/pm": "^3.29.2",
+    "@tiptap/react": "^3.29.2",
+    "@tiptap/starter-kit": "^3.29.2",
     "axios": "1.16.1",
     "bcrypt": "6.0.0",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
     "express": "^4.21.2",
     "helmet": "8.0.0",
+    "isomorphic-dompurify": "^3.19.0",
     "lucide-react": "0.468.0",
     "mongoose": "^9.2.0",
     "motion": "^12.23.24",
@@ -65,8 +76,7 @@
     "recharts": "^2.15.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
-    "sharp": "^0.34.5",
-    "tar": "7.5.11"
+    "sharp": "^0.34.5"
   },
   "overrides": {
     "postcss": "8.5.10"

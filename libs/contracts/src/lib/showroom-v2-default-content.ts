@@ -367,6 +367,11 @@ export const SHOWROOM_V2_DEFAULT_CONTENT: ShowroomV2ContentContract = {
     relatedTitle: 'Bài viết liên quan',
     notFoundTitle: 'Không tìm thấy bài viết',
     notFoundBody: 'Bài viết bạn tìm kiếm không tồn tại hoặc đã được chuyển sang địa chỉ khác.',
+    categories: [
+      { id: 'nc-su-kien', name: 'Sự kiện', slug: 'su-kien' },
+      { id: 'nc-nghe-thuat-gom', name: 'Nghệ thuật gốm', slug: 'nghe-thuat-gom' },
+      { id: 'nc-lang-nghe', name: 'Làng nghề', slug: 'lang-nghe' },
+    ],
     newsCards: [
       {
         id: 'hero',

@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { api, apiAssetUrl } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { useToast } from '../components/toast';
@@ -105,19 +105,6 @@ const FIELDS: FieldDescriptor[] = [
   { key: 'defaultDescription', label: 'Mô tả SEO', group: 'seo' },
 ];
 
-const inputStyle: CSSProperties = {
-  width: '100%',
-  padding: '8px 12px',
-  border: '1px solid #ddd',
-  borderRadius: 6,
-  fontSize: '0.9rem',
-};
-
-const textAreaStyle: CSSProperties = {
-  ...inputStyle,
-  resize: 'vertical',
-};
-
 export function SiteConfigPage() {
   const [form, setForm] = useState<SiteConfigForm>(EMPTY_FORM);
   const [loading, setLoading] = useState(true);
@@ -178,18 +165,20 @@ export function SiteConfigPage() {
 
   return (
     <div style={{ maxWidth: 760, margin: '0 auto' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: 8 }}>Cấu hình website</h1>
-      <div style={{ color: '#7a7265', fontSize: '0.9rem', marginBottom: 24 }}>
-        Quản lý thông tin thương hiệu, liên hệ và bộ dữ liệu SEO mặc định dùng cho toàn site.
+      <div className="ghs-page-header">
+        <div>
+          <h1>Cấu hình website</h1>
+          <p>Quản lý thông tin thương hiệu, liên hệ và bộ dữ liệu SEO mặc định dùng cho toàn site.</p>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div className="ghs-card" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {FIELDS.map((f) => {
           const val = getValue(f);
           const inputId = `site-config-${f.group ?? 'root'}-${f.key}`;
           return (
             <div key={`${f.group ?? 'root'}-${f.key}`}>
-              <label htmlFor={inputId} style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: 4, color: '#555' }}>
+              <label htmlFor={inputId} className="ghs-label">
                 {f.label}
               </label>
               {f.type === 'textarea' ? (
@@ -198,7 +187,7 @@ export function SiteConfigPage() {
                   value={val}
                   onChange={(e) => handleChange(f, e.target.value)}
                   rows={f.rows ?? 3}
-                  style={textAreaStyle}
+                  className="ghs-textarea"
                 />
               ) : (
                 <input
@@ -206,7 +195,7 @@ export function SiteConfigPage() {
                   type="text"
                   value={val}
                   onChange={(e) => handleChange(f, e.target.value)}
-                  style={inputStyle}
+                  className="ghs-input"
                 />
               )}
             </div>
@@ -242,11 +231,7 @@ export function SiteConfigPage() {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          style={{
-            padding: '10px 24px', background: '#9a7520', color: '#fff', border: 'none',
-            borderRadius: 6, fontSize: '0.9rem', fontWeight: 600, cursor: saving ? 'wait' : 'pointer',
-            opacity: saving ? 0.6 : 1,
-          }}
+          className="ghs-btn ghs-btn-primary"
         >
           {saving ? 'Đang lưu...' : 'Lưu cấu hình'}
         </button>
