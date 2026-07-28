@@ -290,6 +290,12 @@ body {
   color: var(--ghs-danger);
 }
 
+.ghs-btn-sm {
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 0.78rem;
+}
+
 .ghs-tabs {
   display: flex;
   gap: 4px;
