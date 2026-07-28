@@ -50,6 +50,24 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Make api package public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5; do
+            code=$(curl -sS -o /tmp/vis.json -w '%{http_code}' -X PUT \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/user/packages/container/gomsuhoasen%2Fapi/visibility" \
+              -d '{"visibility":"public"}')
+            echo "visibility api HTTP ${code}"
+            cat /tmp/vis.json || true
+            if [ "$code" = "204" ] || [ "$code" = "200" ]; then exit 0; fi
+            sleep 5
+          done
+          echo "::warning::Could not set api package public — add GHCR registry creds on Dokploy"
+
   build-web:
     runs-on: ubuntu-latest
     permissions:
@@ -84,6 +102,24 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Make web package public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3 4 5; do
+            code=$(curl -sS -o /tmp/vis.json -w '%{http_code}' -X PUT \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/user/packages/container/gomsuhoasen%2Fweb/visibility" \
+              -d '{"visibility":"public"}')
+            echo "visibility web HTTP ${code}"
+            cat /tmp/vis.json || true
+            if [ "$code" = "204" ] || [ "$code" = "200" ]; then exit 0; fi
+            sleep 5
+          done
+          echo "::warning::Could not set web package public — add GHCR registry creds on Dokploy"
 
   deploy:
     name: Deploy Dokploy

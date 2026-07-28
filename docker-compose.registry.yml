@@ -4,26 +4,12 @@
 #   IMAGE_TAG=latest
 #   JWT_SECRET=... (min 32 bytes)
 #   CORS_ORIGIN=https://your-domain
-#   ADMIN_SEED_EMAIL / ADMIN_SEED_PASSWORD (first seed only)
-# Registry: GitHub PAT read:packages (username = kadiesnguyen)
-#
-# Paste this file into Dokploy → Compose → Raw / Git path.
+# Registry: public packages OR GitHub PAT read:packages on Dokploy
 
 name: gomsuhoasen
 
-x-limits-mongo: &limits-mongo
-  cpus: "1.0"
-  mem_limit: 1024m
-x-limits-api: &limits-api
-  cpus: "1.0"
-  mem_limit: 1024m
-x-limits-web: &limits-web
-  cpus: "0.5"
-  mem_limit: 256m
-
 services:
   mongo:
-    <<: *limits-mongo
     image: mongo:7.0
     restart: unless-stopped
     command: ["--replSet", "rs0", "--bind_ip_all"]
@@ -41,7 +27,6 @@ services:
       start_period: 25s
 
   api:
-    <<: *limits-api
     image: ${REGISTRY_IMAGE:-ghcr.io/kadiesnguyen/gomsuhoasen}/api:${IMAGE_TAG:-latest}
     pull_policy: always
     restart: unless-stopped
@@ -80,7 +65,6 @@ services:
       - "4000"
 
   web:
-    <<: *limits-web
     image: ${REGISTRY_IMAGE:-ghcr.io/kadiesnguyen/gomsuhoasen}/web:${IMAGE_TAG:-latest}
     pull_policy: always
     restart: unless-stopped
