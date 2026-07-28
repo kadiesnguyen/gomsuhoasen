@@ -75,6 +75,7 @@ export interface ProductApi extends ApiObject {
   sku?: string;
   status: ProductStatus;
   collection?: string;
+  collectionId?: string;
   artisanId?: string;
   glaze?: string;
   type?: string;
@@ -158,6 +159,16 @@ export interface ProductViewSectionApi {
 export interface ProductSeoApi {
   metaTitle?: string;
   metaDescription?: string;
+}
+
+export interface CategoryApi extends ApiObject {
+  id: string;
+  _id?: string;
+  name: string;
+  slug: string;
+  description?: string;
+  image?: string;
+  sortOrder: number;
 }
 
 export interface ArtisanApi extends ApiObject {
@@ -442,6 +453,19 @@ export const api = {
       delete: (id: string) =>
         http.delete(GHS_API.CATALOG.PROVENANCE_BY_ID(id)).then(payload('catalog.provenance.delete')),
     },
+  },
+
+  category: {
+    list: (params?: QueryParams) =>
+      http.get(GHS_API.CATALOG.CATEGORIES, { params }).then(listPayloadWithId<CategoryApi>('category.list')),
+    get: (id: string) =>
+      http.get(GHS_API.CATALOG.CATEGORY_BY_ID(id)).then(objectPayloadWithId<CategoryApi>('category.get')),
+    create: (data: MutationPayload) =>
+      http.post(GHS_API.CATALOG.CATEGORIES, data).then(objectPayloadWithId<CategoryApi>('category.create')),
+    update: (id: string, data: MutationPayload) =>
+      http.patch(GHS_API.CATALOG.CATEGORY_BY_ID(id), data).then(objectPayloadWithId<CategoryApi>('category.update')),
+    delete: (id: string) =>
+      http.delete(GHS_API.CATALOG.CATEGORY_BY_ID(id)).then(payload('category.delete')),
   },
 
   rfq: {

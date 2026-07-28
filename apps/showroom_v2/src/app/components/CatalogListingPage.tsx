@@ -7,7 +7,7 @@ const STATUS_STYLE: React.CSSProperties = {
   minHeight: '60vh',
   display: 'grid',
   placeItems: 'center',
-  padding: '64px 24px',
+  padding: 'calc(var(--header-height, 72px) + 48px) 24px 64px',
   textAlign: 'center',
   color: '#e6d8c4',
   background: '#080704',

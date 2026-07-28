@@ -1,4 +1,4 @@
-import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, LogOut, FolderOpen } from 'lucide-react';
+import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, LogOut, FolderOpen, Tags } from 'lucide-react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth-context';
 
@@ -11,6 +11,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { to: '/admin/', label: 'Tổng quan', icon: LayoutDashboard },
   { to: '/admin/products', label: 'Sản phẩm', icon: Package },
+  { to: '/admin/categories', label: 'Danh mục', icon: Tags },
   { to: '/admin/rfq', label: 'Yêu cầu báo giá', icon: ClipboardList },
   { to: '/admin/quotes', label: 'Báo giá', icon: ScrollText },
   { to: '/admin/artisans', label: 'Nghệ nhân', icon: Users },

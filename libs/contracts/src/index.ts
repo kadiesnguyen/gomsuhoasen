@@ -4,6 +4,7 @@ export * from './lib/api-paths';
 
 // ─── Entity contracts ─────────────────────────────────────────────────
 export * from './lib/artisan';
+export * from './lib/category';
 export * from './lib/product';
 export * from './lib/quote';
 export * from './lib/rfq';

@@ -5,11 +5,21 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { Public } from '@gomhoasen/iam';
 import { ProductService } from '../services/product.service';
+import { CategoryService } from '../services/category.service';
 import { GHS_CONTROLLERS, GHS_METHODS, PRODUCT_STATUSES } from '@gomhoasen/contracts';
 
 @Controller(GHS_CONTROLLERS.CATALOG.PUBLIC_CATALOG)
 export class PublicCatalogController {
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+  ) {}
+
+  @Public()
+  @Get(GHS_METHODS.CATALOG.PUBLIC_CATEGORIES)
+  async listCategories() {
+    return this.categoryService.findAll({});
+  }
 
   @Public()
   @Get(GHS_METHODS.CATALOG.PUBLIC_PRODUCTS)

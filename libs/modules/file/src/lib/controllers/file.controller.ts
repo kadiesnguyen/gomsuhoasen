@@ -17,7 +17,7 @@ import {
   DomainBadRequestException,
 } from '@vt/platform-error';
 import { CurrentUser, Roles } from '@gomhoasen/iam';
-import { uploadStorage } from '@gomhoasen/core';
+import { optimizeUploadedImage, uploadStorage } from '@gomhoasen/core';
 import {
   buildFileContentResponseHeaders,
   buildPublicUploadPath,
@@ -61,6 +61,7 @@ export class FileController {
     @Body() body: CreateAssetMetadataDto,
     @CurrentUser() user?: FileCurrentUser,
   ) {
+    await optimizeUploadedImage(file);
     const storagePath = buildPublicUploadPath('files', 'raw', file.filename);
     const uploadedBy = readUploadedBy(user);
     return this.fileService.createAsset({

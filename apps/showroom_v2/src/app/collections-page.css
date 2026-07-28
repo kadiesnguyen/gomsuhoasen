@@ -59,44 +59,29 @@
 }
 
 .collections-hero-title {
-  font-family: var(--serif);
-  font-size: clamp(40px, 4.5vw, 64px);
-  font-weight: 400;
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  text-wrap: balance;
   color: var(--ivory);
   margin: 0 0 24px;
 }
 
 .collections-hero-desc {
-  font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1.8;
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1.75;
+  font-weight: 400;
   color: var(--text-sec);
   margin: 0 0 48px;
   max-width: 420px;
 }
 
 .collections-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  height: 44px;
-  padding: 0 24px;
-  border: 1px solid rgba(201,177,144,0.3);
-  color: var(--ivory);
-  background: transparent;
-  font-family: var(--sans);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 300ms var(--ease);
-}
-
-.collections-cta:hover {
-  border-color: var(--gold);
-  background: rgba(201,177,144,0.05);
+  padding-inline: 26px;
 }
 
 /* Container for Bento Grid */

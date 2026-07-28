@@ -4,6 +4,7 @@ import {
   api,
   apiAssetUrl,
   type ProductApi,
+  type CategoryApi,
   type ProductHotspotApi,
   type ProductStoryApi,
   type ProductVariantApi,
@@ -51,6 +52,11 @@ interface ArtisanOption {
   title?: string;
 }
 
+interface CategoryOption {
+  id: string;
+  name: string;
+}
+
 interface VariantForm {
   id: string;
   name: string;
@@ -90,6 +96,7 @@ interface ProductFormData {
   slug: string;
   sku: string;
   status: ProductStatus;
+  collectionId: string;
   collection: string;
   artisanId: string;
   glaze: string;
@@ -161,6 +168,7 @@ const EMPTY: ProductFormData = {
   slug: '',
   sku: '',
   status: PRODUCT_STATUSES.DISPLAY_ONLY,
+  collectionId: '',
   collection: '',
   artisanId: '',
   glaze: '',
@@ -335,6 +343,7 @@ export function ProductFormPage() {
   const isEdit = Boolean(id);
   const [form, setForm] = useState<ProductFormData>(EMPTY);
   const [artisans, setArtisans] = useState<ArtisanOption[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [provenance, setProvenance] = useState<ProvenanceRecord[]>([]);
   const [provenanceDraft, setProvenanceDraft] = useState<ProvenanceDraft>({
     type: PROVENANCE_TYPES.CERTIFICATE,
@@ -345,6 +354,7 @@ export function ProductFormPage() {
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [artisanLoadError, setArtisanLoadError] = useState('');
+  const [categoryLoadError, setCategoryLoadError] = useState('');
   const [provenanceLoadError, setProvenanceLoadError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
   const [saving, setSaving] = useState(false);
@@ -358,7 +368,23 @@ export function ProductFormPage() {
       .catch((err) => setArtisanLoadError(mergeApiErrorMessage('Không tải được danh sách nghệ nhân', err)));
   };
 
-  useEffect(() => { loadArtisans(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const loadCategories = () => {
+    setCategoryLoadError('');
+    api.category
+      .list()
+      .then((items: CategoryApi[]) => setCategories(items.map((item) => ({ id: item.id, name: item.name }))))
+      .catch((err) => setCategoryLoadError(mergeApiErrorMessage('Không tải được danh sách danh mục', err)));
+  };
+
+  useEffect(() => { loadArtisans(); loadCategories(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (form.collectionId || !form.collection || categories.length === 0) return;
+    const matched = categories.find((item) => item.name === form.collection);
+    if (matched) {
+      setForm((prev) => ({ ...prev, collectionId: matched.id }));
+    }
+  }, [categories, form.collection, form.collectionId]);
 
   useEffect(() => {
     if (!isEdit || !id) return;
@@ -372,6 +398,7 @@ export function ProductFormPage() {
         slug: readStringInput(p.slug),
         sku: readStringInput(p.sku),
         status: readProductStatus(p.status),
+        collectionId: readStringInput(p.collectionId),
         collection: readStringInput(p.collection),
         artisanId: readStringInput(p.artisanId),
         glaze: readStringInput(p.glaze),
@@ -500,6 +527,7 @@ export function ProductFormPage() {
       name: form.name,
       sku: readTrimmedString(form.sku),
       status: form.status,
+      collectionId: readTrimmedString(form.collectionId),
       collection: readTrimmedString(form.collection),
       artisanId: readTrimmedString(form.artisanId),
       glaze: readTrimmedString(form.glaze),
@@ -627,7 +655,35 @@ export function ProductFormPage() {
                 {statusOptions.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
               </select>
             </div>
-            <div><label style={labelStyle}>Bộ sưu tập</label><input name="collection" value={form.collection} onChange={handleChange} placeholder="BST Hoa Sen" style={fieldStyle} /></div>
+            <div><label style={labelStyle}>Danh mục</label>
+              <select
+                name="collectionId"
+                value={form.collectionId}
+                onChange={(event) => {
+                  const nextId = event.target.value;
+                  const selected = categories.find((item) => item.id === nextId);
+                  setForm((prev) => ({
+                    ...prev,
+                    collectionId: nextId,
+                    collection: selected?.name ?? prev.collection,
+                  }));
+                }}
+                style={fieldStyle}
+              >
+                <option value="">Chưa chọn danh mục</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
+              </select>
+              {categoryLoadError && (
+                <div role="alert" style={{ marginTop: 6, color: '#b45309', fontSize: '0.78rem' }}>
+                  {categoryLoadError}.{' '}
+                  <button type="button" onClick={loadCategories} style={{ border: 0, padding: 0, background: 'none', color: '#9A7520', fontWeight: 700, cursor: 'pointer' }}>
+                    Thử lại
+                  </button>
+                </div>
+              )}
+            </div>
             <div><label style={labelStyle}>Nghệ nhân</label>
               <select name="artisanId" value={form.artisanId} onChange={handleChange} style={fieldStyle}>
                 <option value="">Chưa gán nghệ nhân</option>

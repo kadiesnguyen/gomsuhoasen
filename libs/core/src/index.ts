@@ -15,3 +15,4 @@ export {
 } from './lib/application-scope';
 export { buildApplicationScopeEventMetadata } from '@vt/platform-config';
 export * from './lib/api-response';
+export { optimizeUploadedImage } from './lib/image-optimize';

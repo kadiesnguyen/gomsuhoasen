@@ -4,6 +4,7 @@ import { CheckCircle, Package, Truck, Headset, MapPin } from 'lucide-react';
 import { useShowroomData } from './data/ShowroomContext';
 import { showroomApiPost } from '@gomhoasen/ui-showroom';
 import { GHS_API, RFQ_SOURCES } from '@gomhoasen/contracts';
+import { ArtFrame } from './ArtFrame';
 import './contact-page.css';
 
 const ICON_MAP: Record<string, React.ReactNode> = {
@@ -83,8 +84,9 @@ export function ContactPage() {
             <div className="form-success-msg" role="status" aria-live="polite">
               <CheckCircle size={32} className="success-icon" />
               <p style={{ whiteSpace: 'pre-line' }}>{contactLanding.successMessage}</p>
-              <button type="button" className="form-reset-btn" onClick={() => setIsSubmitted(false)}>
-                {contactLanding.successResetLabel}
+              <button type="button" className="art-btn form-reset-btn" onClick={() => setIsSubmitted(false)}>
+                <ArtFrame />
+                <span>{contactLanding.successResetLabel}</span>
               </button>
             </div>
           ) : (
@@ -112,8 +114,9 @@ export function ContactPage() {
                 <textarea name="note" className="form-input" placeholder={contactLanding.notePlaceholder} minLength={5} required></textarea>
               </div>
               {errorMsg && <p role="alert" style={{ color: '#ff6b6b', fontSize: '14px', marginBottom: '16px' }}>{errorMsg}</p>}
-              <button type="submit" className="form-submit-btn" disabled={isSubmitting} aria-busy={isSubmitting}>
-                {isSubmitting ? contactLanding.submittingLabel : contactLanding.submitLabel}
+              <button type="submit" className="art-btn form-submit-btn" disabled={isSubmitting} aria-busy={isSubmitting}>
+                <ArtFrame />
+                <span>{isSubmitting ? contactLanding.submittingLabel : contactLanding.submitLabel}</span>
               </button>
             </form>
           )}
@@ -159,12 +162,16 @@ export function ContactPage() {
         <img src={contactLanding.locationBandImage} alt={contactLanding.locationImageAlt} className="location-bg" />
         <div className="location-overlay"></div>
         {mapHref ? (
-          <a href={mapHref} target="_blank" rel="noreferrer" className="location-cta">
-            <MapPin size={18} strokeWidth={1.5} /> {contactLanding.mapCtaLabel}
+          <a href={mapHref} target="_blank" rel="noreferrer" className="art-btn location-cta">
+            <ArtFrame />
+            <MapPin size={18} strokeWidth={1.5} />
+            <span>{contactLanding.mapCtaLabel}</span>
           </a>
         ) : (
-          <span className="location-cta" aria-disabled="true">
-            <MapPin size={18} strokeWidth={1.5} /> {contactLanding.mapCtaLabel}
+          <span className="art-btn location-cta" aria-disabled="true">
+            <ArtFrame />
+            <MapPin size={18} strokeWidth={1.5} />
+            <span>{contactLanding.mapCtaLabel}</span>
           </span>
         )}
       </Reveal>
@@ -172,11 +179,9 @@ export function ContactPage() {
       <div className="contact-trust-strip">
         {trustBadges.map((badge, index) => (
           <Reveal key={index} delay={0.1 * index} className="contact-trust-item">
-            <div className="trust-item-icon">{ICON_MAP[badge.iconType]}</div>
-            <div>
-              <h4 className="trust-item-title">{badge.title}</h4>
-              <p className="trust-item-desc">{badge.desc}</p>
-            </div>
+            <div className="trust-item-icon" aria-hidden="true">{ICON_MAP[badge.iconType]}</div>
+            <h4 className="trust-item-title">{badge.title}</h4>
+            <p className="trust-item-desc">{badge.desc}</p>
           </Reveal>
         ))}
       </div>

@@ -110,6 +110,9 @@ export class Product {
   collection?: string;
 
   @Prop()
+  collectionId?: string;
+
+  @Prop()
   glaze?: string;
 
   @Prop()

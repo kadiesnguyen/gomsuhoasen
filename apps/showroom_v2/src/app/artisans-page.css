@@ -26,16 +26,21 @@
 .artisans-header h1 {
   margin: 14px 0 18px;
   color: var(--ivory);
-  font-family: var(--serif);
-  font-size: clamp(38px, 5vw, 58px);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  line-height: 1.05;
 }
 
 .artisans-header p {
   max-width: 680px;
   margin: 0 auto;
   color: var(--text-sec);
-  font-family: var(--sans);
+  font-family: var(--font-display);
+  font-size: 18px;
   line-height: 1.75;
 }
 

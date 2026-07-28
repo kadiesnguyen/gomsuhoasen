@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { useShowroomData } from './data/ShowroomContext';
 import type { ShowroomV2Data } from './data/adapter';
 import Link from './mocks/next/link';
+import { ArtFrame } from './ArtFrame';
 import './collections-page.css';
 
 function LotusIcon({ size = 20 }: { size?: number }) {
@@ -88,8 +89,10 @@ export function CollectionsPage() {
             <p className="collections-hero-desc">
               {collectionsLanding.desc}
             </p>
-            <Link href={collectionsLanding.heroCtaHref} className="collections-cta">
-              {collectionsLanding.heroCtaLabel} <ArrowRight size={14} strokeWidth={1.5} />
+            <Link href={collectionsLanding.heroCtaHref} className="art-btn collections-cta">
+              <ArtFrame />
+              <span>{collectionsLanding.heroCtaLabel}</span>
+              <ArrowRight size={14} strokeWidth={1.5} />
             </Link>
           </Reveal>
         </div>

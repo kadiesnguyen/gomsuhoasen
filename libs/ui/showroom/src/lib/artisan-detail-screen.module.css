@@ -1,8 +1,8 @@
-.page { min-height: 100vh; background: var(--heritage-warm-bg, #faf8f5); color: var(--heritage-earth, #3a342d); font-family: var(--font-body); }
+.page { min-height: 100vh; background: var(--heritage-warm-bg, #faf8f5); color: var(--heritage-earth, #3a342d); font-family: var(--font-ui); }
 
 /* Nav — same as listing */
 .nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: rgba(250,248,245,0.95); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.06); }
-.navBrand { display: inline-flex; align-items: center; font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--heritage-gold-deep, #9a7520); text-decoration: none; }
+.navBrand { display: inline-flex; align-items: center; font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--heritage-gold-deep, #9a7520); text-decoration: none; }
 .navBrand span { line-height: 1; }
 .navLinks { display: flex; gap: 2rem; }
 .navLink { font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase; color: #5f554c; text-decoration: none; transition: color 0.4s; font-weight: 400; }
@@ -57,9 +57,9 @@
 .navMenu { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; background: none; border: 1px solid rgba(0,0,0,0.08); border-radius: 50%; cursor: pointer; color: var(--heritage-ash); }
 .menuOverlay { position: fixed; inset: 0; z-index: 1100; background: rgba(247,244,238,0.98); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; }
 .menuClose { position: absolute; top: 1.25rem; right: 1.25rem; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); background: transparent; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.menuLink { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--heritage-ash, #5f554c); text-decoration: none; }
+.menuLink { font-family: var(--font-ui); font-size: 1.6rem; font-weight: 600; color: var(--heritage-ash, #5f554c); text-decoration: none; }
 .menuLink:hover { color: var(--heritage-gold-deep, #9a7520); }
-.menuLinkActive { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--heritage-gold-deep, #9a7520); text-decoration: none; }
+.menuLinkActive { font-family: var(--font-ui); font-size: 1.6rem; font-weight: 600; color: var(--heritage-gold-deep, #9a7520); text-decoration: none; }
 
 @media (max-width: 1024px) {
   .hero { padding: 3.5rem 1.5rem 2.5rem; }

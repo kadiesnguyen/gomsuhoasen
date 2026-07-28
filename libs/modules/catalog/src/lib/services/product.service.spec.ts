@@ -21,7 +21,7 @@ describe('ProductService', () => {
       findOneAndUpdate: jest.fn(),
       findByIdAndUpdate: jest.fn(),
     };
-    return { model, service: new ProductService(model as never) };
+    return { model, service: new ProductService(model as never, { findById: jest.fn() } as never) };
   }
 
   describe('schema initial values', () => {

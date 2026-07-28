@@ -16,10 +16,14 @@ import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
 import { CATALOG_ERRORS } from '../constants/catalog.constants';
 import { buildInitialProductValues } from '../constants/product-writer-initial-values';
 import { readSlugOrGenerate } from '@gomhoasen/contracts';
+import { CategoryService } from './category.service';
 
 @Injectable()
 export class ProductService {
-  constructor(@InjectModel(Product.name) private productModel: Model<Product, {}, {}, {}, ProductDocument>) {}
+  constructor(
+    @InjectModel(Product.name) private productModel: Model<Product, {}, {}, {}, ProductDocument>,
+    private readonly categoryService: CategoryService,
+  ) {}
 
   async findAll(query: { status?: ProductStatus; search?: string; collection?: string }) {
     const filter: QueryFilter<Product> = { isDeleted: false };
@@ -51,7 +55,8 @@ export class ProductService {
   async create(dto: CreateProductDto) {
     const slug = readSlugOrGenerate(dto.slug, dto.name);
     await this.assertSlugAvailable(slug);
-    return this.productModel.create(buildInitialProductValues({ ...dto, slug }));
+    const resolved = await this.resolveCollectionFields(dto);
+    return this.productModel.create(buildInitialProductValues({ ...resolved, slug }));
   }
 
   async update(id: string, dto: UpdateProductDto) {
@@ -60,7 +65,8 @@ export class ProductService {
       throw new DomainBadRequestException(CATALOG_ERRORS.CAT_SLUG_IMMUTABLE, 'Slug sản phẩm không thể thay đổi sau khi tạo.');
     }
 
-    const updateData: UpdateQuery<ProductDocument> = { ...dto };
+    const resolved = await this.resolveCollectionFields(dto);
+    const updateData: UpdateQuery<ProductDocument> = { ...resolved };
     const product = await this.productModel.findOneAndUpdate(
       { _id: id, isDeleted: false },
       { $set: updateData },
@@ -118,6 +124,12 @@ export class ProductService {
     );
     if (!product) throw new DomainNotFoundException(CATALOG_ERRORS.CAT_NOT_FOUND, 'Sản phẩm không tồn tại');
     return product;
+  }
+
+  private async resolveCollectionFields<T extends CreateProductDto | UpdateProductDto>(dto: T): Promise<T> {
+    if (!dto.collectionId) return dto;
+    const category = await this.categoryService.findById(dto.collectionId);
+    return { ...dto, collection: category.name };
   }
 
   private async assertSlugAvailable(slug: string, excludeId?: string) {

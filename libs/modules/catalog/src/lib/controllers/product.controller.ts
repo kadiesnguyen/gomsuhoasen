@@ -9,7 +9,7 @@ import { COMMON_ERROR_CODES, DomainBadRequestException } from '@vt/platform-erro
 import { ProductService } from '../services/product.service';
 import { CurrentUser, Roles, RolesGuard, AuditLoggerService } from '@gomhoasen/iam';
 import { CreateProductDto, UpdateProductDto } from '../dto/product.dto';
-import { extensionGuard, IMAGE_EXTENSIONS, MODEL_EXTENSIONS, VIDEO_EXTENSIONS, uploadStorage } from '@gomhoasen/core';
+import { extensionGuard, IMAGE_EXTENSIONS, MODEL_EXTENSIONS, optimizeUploadedImage, VIDEO_EXTENSIONS, uploadStorage } from '@gomhoasen/core';
 import { buildPublicUploadPath } from '@vt/platform-file-core/browser';
 import { GHS_AUDIT_ACTIONS, GHS_AUDIT_ENTITIES, GHS_CONTROLLERS, GHS_METHODS, USER_ROLE_GROUPS, type ProductStatus } from '@gomhoasen/contracts';
 
@@ -72,6 +72,7 @@ export class ProductController {
   }))
   async uploadImage(@Param('id') id: string, @UploadedFile() file?: Express.Multer.File, @CurrentUser() user?: { userId?: string }) {
     if (!file) throw new DomainBadRequestException(COMMON_ERROR_CODES.MISSING_REQUIRED_FIELD, 'Thiếu file ảnh');
+    await optimizeUploadedImage(file);
     const relativePath = buildPublicUploadPath('products', id, 'images', file.filename);
     const result = await this.productService.addImage(id, relativePath);
     await this.auditLogger.log({ userId: user?.userId, action: GHS_AUDIT_ACTIONS.UPLOAD_IMAGE, entity: GHS_AUDIT_ENTITIES.PRODUCT, entityId: id, payload: { path: relativePath } });

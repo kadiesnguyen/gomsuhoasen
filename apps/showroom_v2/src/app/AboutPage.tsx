@@ -3,18 +3,20 @@ import { ArrowRight, Mountain, Droplet, Flame, Aperture } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useShowroomData } from './data/ShowroomContext';
 import Link from './mocks/next/link';
+import { ArtFrame } from './ArtFrame';
 import './about-page.css';
 
-function LotusIcon({ size = 20 }: { size?: number }) {
+function LotusIcon({ size = 22 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <path d="M32 54C24 45 18 37 18 29C18 20 25 14 32 8C39 14 46 20 46 29C46 37 40 45 32 54Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M32 54C27 44 25 36 27 28C28.5 21 32 15 32 15C32 15 35.5 21 37 28C39 36 37 44 32 54Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M31 52C19 48 10 41 8 31C18 31 27 37 31 52Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M33 52C45 48 54 41 56 31C46 31 37 37 33 52Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M23 44C13 43 7 38 4 29C13 27 22 32 27 43" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M41 44C51 43 57 38 60 29C51 27 42 32 37 43" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-    </svg>
+    <img
+      src="/assets/brand/lotus-mark.png"
+      alt=""
+      width={size}
+      height={size}
+      className="element-lotus-img"
+      draggable={false}
+      aria-hidden="true"
+    />
   );
 }
 
@@ -45,12 +47,14 @@ export function AboutPage() {
       <section className="about-hero">
         <Reveal className="about-hero-left">
           <span className="about-eyebrow">{aboutLanding.eyebrow}</span>
-          <h1 className="about-hero-title" style={{ whiteSpace: 'pre-wrap' }}>{aboutLanding.title}</h1>
+          <h1 className="about-hero-title title-balanced">{aboutLanding.title}</h1>
           <p className="about-hero-desc">
             {aboutLanding.desc}
           </p>
-          <Link href={aboutLanding.heroCtaHref} className="about-cta">
-            {aboutLanding.heroCtaLabel} <ArrowRight size={14} strokeWidth={1.5} />
+          <Link href={aboutLanding.heroCtaHref} className="art-btn about-cta">
+            <ArtFrame />
+            <span>{aboutLanding.heroCtaLabel}</span>
+            <ArrowRight size={14} strokeWidth={1.5} />
           </Link>
         </Reveal>
 
@@ -81,23 +85,31 @@ export function AboutPage() {
       </section>
 
       <section id="ngu-hanh" className="elements-section">
-        <div className="elements-grid">
-          {aboutElements.map((el, idx) => (
-            <Reveal delay={0.1 * idx} key={el.id} className="element-card-shell">
-              <div className={`element-card ${el.isActive ? 'is-active' : ''}`}>
-                <div className="element-image">
-                  <img src={el.img} alt={el.title} />
-                </div>
-                <div className="element-icon-wrapper">
-                  <div className="element-icon">
-                    {ICON_MAP[el.iconType]}
+        <div
+          className="elements-carousel"
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Ngũ hành gốm Việt"
+        >
+          <div className="elements-grid">
+            {aboutElements.map((el, idx) => (
+              <Reveal delay={0.1 * idx} key={el.id} className="element-card-shell">
+                <article className={`element-card ${el.isActive ? 'is-active' : ''}`}>
+                  <ArtFrame />
+                  <div className="element-image">
+                    <img src={el.img} alt={el.title} loading="lazy" decoding="async" />
                   </div>
-                </div>
-                <h3 className="element-title">{el.title}</h3>
-                <p className="element-desc">{el.desc}</p>
-              </div>
-            </Reveal>
-          ))}
+                  <div className="element-icon-wrapper">
+                    <div className="element-icon">
+                      {ICON_MAP[el.iconType]}
+                    </div>
+                  </div>
+                  <h3 className="element-title">{el.title}</h3>
+                  <p className="element-desc">{el.desc}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </div>

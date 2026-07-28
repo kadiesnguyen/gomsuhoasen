@@ -25,6 +25,7 @@ export const GHS_CONTROLLERS = {
   },
   CATALOG: {
     PRODUCT: 'catalog/products',
+    CATEGORY: 'catalog/categories',
     ADMIN_CATALOG: 'catalog',
     PUBLIC_CATALOG: 'public/catalog',
     PUBLIC_PRODUCT_PROVENANCE: 'public/catalog/products/:productId/provenance',
@@ -84,6 +85,7 @@ export const GHS_METHODS = {
     PROVENANCE_BY_ID: 'provenance/:id',
     PUBLIC_PRODUCTS: 'products',
     PUBLIC_PRODUCT_BY_SLUG: 'products/:slug',
+    PUBLIC_CATEGORIES: 'categories',
   },
   ARTISAN: {
     ADMIN_LIST: 'admin',
@@ -178,6 +180,13 @@ export const GHS_API = {
           slug,
         }),
       ),
+    CATEGORIES: resolveGhsApiRoute(GHS_CONTROLLERS.CATALOG.CATEGORY),
+    CATEGORY_BY_ID: (id: string) =>
+      resolveGhsApiRoute(GHS_CONTROLLERS.CATALOG.CATEGORY, id),
+    PUBLIC_CATEGORIES: resolveGhsApiRoute(
+      GHS_CONTROLLERS.CATALOG.PUBLIC_CATALOG,
+      GHS_METHODS.CATALOG.PUBLIC_CATEGORIES,
+    ),
   },
   ARTISAN: {
     LIST: resolveGhsApiRoute(GHS_CONTROLLERS.ARTISAN.PUBLIC),

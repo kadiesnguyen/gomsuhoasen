@@ -289,7 +289,7 @@ function migrateContent(
         const fallback = defaultCategoryById.get(item.id);
         if (
           fallback &&
-          item.href === '/danh-muc-san-pham' &&
+          item.href === '/danh-muc' &&
           fallback.href !== item.href
         ) {
           return { ...item, href: fallback.href };

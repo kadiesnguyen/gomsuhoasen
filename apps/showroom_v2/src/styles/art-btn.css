@@ -1,0 +1,89 @@
+/* Artistic CTA frame — outer edge + inset bronze line + corner squares */
+
+.art-btn {
+  --art-gold: #A88A5D;
+  --art-inset: 5px;
+  --art-corner: 6px;
+  --art-radius: 5px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 12px 22px;
+  border: 1px solid rgba(168, 138, 93, 0.55);
+  border-radius: var(--art-radius);
+  background: rgba(8, 7, 4, 0.45);
+  color: var(--ivory, #D5C3AD);
+  font-family: var(--font-ui, var(--font-body), sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 300ms var(--ease, ease),
+    background 300ms var(--ease, ease),
+    color 300ms var(--ease, ease),
+    transform 300ms var(--ease, ease);
+}
+
+.art-btn > *:not(.art-frame) {
+  position: relative;
+  z-index: 1;
+}
+
+.art-frame {
+  position: absolute;
+  inset: var(--art-inset);
+  z-index: 0;
+  pointer-events: none;
+  border: 1px solid var(--art-gold);
+  border-radius: 3px;
+}
+
+.art-corner {
+  position: absolute;
+  width: var(--art-corner);
+  height: var(--art-corner);
+  border: 1px solid var(--art-gold);
+  border-radius: 2px;
+  background: #0A0907;
+  box-sizing: border-box;
+}
+
+.art-corner-tl { top: -1px; left: -1px; }
+.art-corner-tr { top: -1px; right: -1px; }
+.art-corner-bl { bottom: -1px; left: -1px; }
+.art-corner-br { bottom: -1px; right: -1px; }
+
+.art-btn:hover {
+  border-color: rgba(197, 160, 117, 0.85);
+  background: rgba(201, 177, 144, 0.08);
+  color: var(--gold, #C5A075);
+  transform: translateY(-1px);
+}
+
+.art-btn:hover .art-frame,
+.art-btn:hover .art-corner {
+  border-color: #C5A075;
+}
+
+.art-btn:disabled,
+.art-btn[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Compact variant for denser UI */
+.art-btn--sm {
+  --art-inset: 4px;
+  --art-corner: 5px;
+  min-height: 40px;
+  padding: 10px 16px;
+  font-size: 10px;
+}

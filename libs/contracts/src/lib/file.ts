@@ -31,6 +31,7 @@ export const FILE_ASSET_FIELD_REFS = {
   HOTSPOT_PANEL_IMAGE: 'hotspotPanelImage',
   AVATAR: 'avatar',
   COVER_IMAGE: 'coverImage',
+  CATEGORY_IMAGE: 'categoryImage',
 } as const;
 
 export type FileAssetFieldRef = (typeof FILE_ASSET_FIELD_REFS)[keyof typeof FILE_ASSET_FIELD_REFS];

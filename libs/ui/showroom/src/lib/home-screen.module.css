@@ -18,13 +18,13 @@
 .navBrand {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 500;
   letter-spacing: 0.25em; color: #9A7520; text-decoration: none;
 }
 .navBrand span { line-height: 1; }
 .navLinks { display: flex; gap: var(--space-8); }
 .navLink {
-  font-family: var(--font-body);
+  font-family: var(--font-ui);
   font-size: var(--text-sm); letter-spacing: 0.12em; color: #5F554C;
   text-decoration: none; transition: color 0.4s var(--ease-out); font-weight: 400;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
   font-size: 1.2rem; cursor: pointer; color: #2C2C2C;
 }
 .menuLink {
-  font-family: var(--font-display); font-size: 1.6rem; font-weight: 600;
+  font-family: var(--font-ui); font-size: 1.6rem; font-weight: 600;
   color: #5F554C; text-decoration: none; transition: color var(--ease-fast);
 }
 .menuLink:hover { color: #9A7520; }
@@ -94,8 +94,8 @@
 }
 .sectionTitle {
   font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 400; line-height: 1.15; color: var(--heritage-earth); margin-bottom: var(--space-4);
-  letter-spacing: 0.02em;
+  font-weight: 500; line-height: 1.12; color: var(--heritage-earth); margin-bottom: var(--space-4);
+  letter-spacing: 0.01em; text-wrap: balance;
 }
 .sectionSubtitle { font-size: var(--text-base); color: var(--heritage-ash); line-height: 1.8; font-weight: 300; }
 
@@ -405,10 +405,10 @@
 .featuredCard:hover .featuredImage img { transform: scale(1.03); }
 .featuredInfo { padding: var(--space-10) var(--space-8); }
 .featuredCollection { font-size: var(--text-xs); letter-spacing: 0.3em; color: #9A7520; margin-bottom: var(--space-2); display: block; font-weight: 600; }
-.featuredName { font-family: var(--font-display); font-size: clamp(1.6rem,3vw,2.2rem); font-weight: 700; margin-bottom: var(--space-4); color: #1A1714; }
+.featuredName { font-family: var(--font-display); font-size: clamp(1.6rem,3vw,2.2rem); font-weight: 500; margin-bottom: var(--space-4); color: #1A1714; }
 .featuredDesc { font-size: 0.95rem; line-height: 1.7; color: #5F554C; margin-bottom: var(--space-5); }
 .featuredMeta { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
-.featuredPrice { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: #9A7520; }
+.featuredPrice { font-family: var(--font-ui); font-size: 1.4rem; font-weight: 600; color: #9A7520; }
 .featuredTag { font-size: var(--text-sm); padding: var(--space-1) var(--space-3); background: rgba(154,117,32,0.12); color: #9A7520; border-radius: 9999px; }
 .featuredSwatches { display: flex; gap: var(--space-2); margin-bottom: var(--space-6); }
 .miniSwatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.12); cursor: pointer; transition: all var(--ease-fast); }
@@ -432,7 +432,7 @@
   position: absolute; bottom: 0; left: 0; right: 0; padding: var(--space-8) var(--space-6);
   background: linear-gradient(0deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.3) 56%, transparent 100%);
 }
-.collectionName { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: var(--space-2); text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.collectionName { font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: #fff; margin-bottom: var(--space-2); text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .collectionDesc { font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.5; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 .collectionCount {
   position: absolute; top: var(--space-4); right: var(--space-4);
@@ -485,10 +485,10 @@
 .productCard:hover .cardImage img { transform: scale(1.1); }
 .cardBody { padding: var(--space-6) var(--space-5); }
 .cardCollection { font-size: var(--text-xs); letter-spacing: 0.2em; color: var(--gold-primary); margin-bottom: var(--space-1); font-weight: 600; }
-.cardName { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; margin-bottom: var(--space-1); color: var(--text-primary); }
+.cardName { font-family: var(--font-display); font-size: 1.15rem; font-weight: 500; margin-bottom: var(--space-1); color: var(--text-primary); }
 .cardGlaze { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-3); }
 .cardFooter { display: flex; justify-content: space-between; align-items: center; }
-.cardPrice { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--gold-primary); }
+.cardPrice { font-family: var(--font-ui); font-size: 1.15rem; font-weight: 500; color: var(--gold-primary); }
 .cardSwatches { display: flex; gap: var(--space-1); }
 .cardSwatches .miniSwatch { width: 16px; height: 16px; border-width: 1px; }
 .spotlightCta { text-align: center; margin-top: var(--space-10); }
@@ -505,7 +505,7 @@
 }
 .occasionCard:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(154,117,32,0.1); border-color: rgba(196,165,80,0.25); }
 .occasionIcon { font-size: 1.8rem; margin-bottom: var(--space-4); width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: #F5F0E6; border-radius: 50%; }
-.occasionName { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; margin-bottom: var(--space-2); }
+.occasionName { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; margin-bottom: var(--space-2); }
 .occasionDesc { font-size: var(--text-sm); color: #5F554C; margin-bottom: var(--space-5); line-height: 1.5; flex: 1; }
 
 /* H-08: JOURNAL */
@@ -521,7 +521,7 @@
 .journalImage img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(0.2, 0, 0, 1); }
 .journalCard:hover .journalImage img { transform: scale(1.05); }
 .journalBody { padding: var(--space-6) var(--space-5); }
-.journalTitle { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 400; margin-bottom: var(--space-2); color: var(--heritage-earth, #1A1714); line-height: 1.3; }
+.journalTitle { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 500; margin-bottom: var(--space-2); color: var(--heritage-earth, #1A1714); line-height: 1.3; }
 .journalExcerpt { font-size: var(--text-sm); color: var(--heritage-ash); line-height: 1.6; margin-bottom: var(--space-4); font-weight: 300; }
 .journalReadMore { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; color: var(--heritage-gold); text-transform: uppercase; }
 
@@ -548,7 +548,7 @@
 /* FOOTER */
 .footer { background: var(--heritage-charcoal, #141210); padding: var(--space-16) 0 var(--space-8); color: rgba(245,240,230,0.5); }
 .footerGrid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--space-12); max-width: 1200px; margin: 0 auto; padding: 0 var(--space-6); }
-.footerBrand { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: #9A7520; letter-spacing: 0.15em; margin-bottom: var(--space-2); }
+.footerBrand { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; color: #9A7520; letter-spacing: 0.15em; margin-bottom: var(--space-2); }
 .footerTagline { font-size: 0.8rem; color: #7a7a7a; line-height: 1.6; }
 .footerColTitle { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: #9A7520; margin-bottom: var(--space-4); font-weight: 600; }
 .footerLink { display: block; font-size: 0.8rem; color: #9a9a9a; margin-bottom: var(--space-2); text-decoration: none; transition: color 0.2s; }

@@ -2,8 +2,11 @@ import { Module, forwardRef } from '@nestjs/common';
 import { IamModule } from '@gomhoasen/iam';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './schemas/product.schema';
+import { Category, CategorySchema } from './schemas/category.schema';
 import { ProductService } from './services/product.service';
+import { CategoryService } from './services/category.service';
 import { ProductController } from './controllers/product.controller';
+import { CategoryController } from './controllers/category.controller';
 import { PublicCatalogController } from './controllers/public-catalog.controller';
 import { ProvenanceController, PublicProvenanceController } from './controllers/provenance.controller';
 import { ProvenanceRecord, ProvenanceRecordSchema } from './schemas/provenance-record.schema';
@@ -13,12 +16,13 @@ import { ProvenanceService } from './services/provenance.service';
   imports: [
     MongooseModule.forFeature([
       { name: Product.name, schema: ProductSchema },
+      { name: Category.name, schema: CategorySchema },
       { name: ProvenanceRecord.name, schema: ProvenanceRecordSchema },
     ]),
     forwardRef(() => IamModule),
   ],
-  controllers: [ProductController, PublicCatalogController, ProvenanceController, PublicProvenanceController],
-  providers: [ProductService, ProvenanceService],
-  exports: [ProductService, ProvenanceService],
+  controllers: [ProductController, CategoryController, PublicCatalogController, ProvenanceController, PublicProvenanceController],
+  providers: [ProductService, CategoryService, ProvenanceService],
+  exports: [ProductService, CategoryService, ProvenanceService],
 })
 export class CatalogModule {}

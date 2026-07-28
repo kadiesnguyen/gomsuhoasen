@@ -136,7 +136,7 @@ describe('ShowroomV2ContentService', () => {
         ...defaults.productsLanding,
         categories: defaults.productsLanding.categories.map((item) => ({
           ...item,
-          href: '/danh-muc-san-pham',
+          href: '/danh-muc',
         })),
       },
       newsLanding: {
@@ -162,7 +162,7 @@ describe('ShowroomV2ContentService', () => {
     );
     expect(result.brand.name).toBe('Tên đã chỉnh');
     expect(result.collections.rows.row1[0].href).toContain('collection=');
-    expect(result.productsLanding.categories[0].href).toBe('/danh-muc-san-pham');
+    expect(result.productsLanding.categories[0].href).toBe('/danh-muc');
     expect(result.newsLanding.newsCards?.[0].slug).toBeTruthy();
     expect(result.newsLanding.newsCards?.[0].content).toBeTruthy();
   });

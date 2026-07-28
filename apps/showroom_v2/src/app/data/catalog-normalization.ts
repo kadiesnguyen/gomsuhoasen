@@ -17,6 +17,7 @@ import {
   type SiteJournalItemContract,
   type SiteOccasionContract,
 } from '@gomhoasen/contracts';
+import { enrichListingProductFields } from './product-content-enrichment';
 
 export type PublicProductApi = Omit<ProductContract, 'id'> & {
   id?: string;
@@ -189,9 +190,18 @@ export function mapShowroomProducts(
         ? product.variants.map((variant) => readTrimmedString(variant.swatch)).filter(isNotUndefined)
         : [];
 
+      const listing = enrichListingProductFields({
+        name: readDefaultString(product.name, id),
+        collection: collectionName,
+        slug: id,
+        type,
+        glaze,
+        description: readStringInput(product.description),
+      });
+
       return {
         id,
-        name: readDefaultString(product.name, id),
+        name: listing.name,
         collection: collectionName,
         collectionId,
         glaze,
@@ -208,7 +218,7 @@ export function mapShowroomProducts(
         isLimited: flags.isLimited,
         isBestSeller: flags.isBestSeller,
         swatches,
-        desc: readStringInput(product.description),
+        desc: listing.desc,
       };
     })
     .filter((product): product is ShowroomProduct => product !== null);
@@ -242,13 +252,30 @@ export function deriveShowroomCollections(
     incrementCount(counts, product.collectionId);
   }
 
-  return configuredCollections
+  const fromConfig = configuredCollections
     .map(readConfiguredCollection)
     .filter((collection): collection is NonNullable<typeof collection> => collection !== null)
     .map((collection) => ({
       ...collection,
       count: readCount(counts, collection.id),
     }));
+
+  // Append product collections missing from CMS config (e.g. bộ đồ thờ).
+  const known = new Set(fromConfig.map((collection) => collection.id));
+  const extras: ShowroomCollection[] = [];
+  for (const product of products) {
+    if (known.has(product.collectionId)) continue;
+    known.add(product.collectionId);
+    extras.push({
+      id: product.collectionId,
+      name: product.collection,
+      desc: '',
+      image: product.image,
+      count: readCount(counts, product.collectionId),
+    });
+  }
+
+  return [...fromConfig, ...extras];
 }
 
 export function deriveShowroomFilters(products: ShowroomProduct[]): SiteFiltersContract {

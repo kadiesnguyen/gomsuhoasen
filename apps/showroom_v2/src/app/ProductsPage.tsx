@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import { Droplet, Sun, Wind, CheckCircle, Package, Truck, Headset, Phone, MapPin, Facebook } from 'lucide-react';
+import { Droplet, Sun, Wind, CheckCircle, Package, Truck, Headset, Phone, MapPin, Facebook, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useShowroomData } from './data/ShowroomContext';
 import Link from './mocks/next/link';
 import './products-page.css';
+
+/** Always carousel: ~3 cards visible per row (mobile + desktop). */
+const CATEGORY_VISIBLE = 3;
 
 function LotusIcon({ size = 20 }: { size?: number }) {
   return (
@@ -40,6 +43,91 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   headset: <Headset size={20} strokeWidth={1.5} />,
 };
 
+function CategoryStrip({
+  categories,
+}: {
+  categories: Array<{ id?: string; title: string; img: string; href?: string }>;
+}) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const useCarousel = categories.length > CATEGORY_VISIBLE;
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const syncScrollState = () => {
+    const node = scrollerRef.current;
+    if (!node) return;
+    setCanScrollPrev(node.scrollLeft > 4);
+    setCanScrollNext(node.scrollLeft + node.clientWidth < node.scrollWidth - 4);
+  };
+
+  useEffect(() => {
+    const node = scrollerRef.current;
+    if (!node) return;
+    syncScrollState();
+    node.addEventListener('scroll', syncScrollState, { passive: true });
+    window.addEventListener('resize', syncScrollState);
+    return () => {
+      node.removeEventListener('scroll', syncScrollState);
+      window.removeEventListener('resize', syncScrollState);
+    };
+  }, [categories.length]);
+
+  const scrollByCard = (direction: -1 | 1) => {
+    const node = scrollerRef.current;
+    if (!node) return;
+    const card = node.querySelector<HTMLElement>('.strip-card');
+    const delta = (card?.offsetWidth ?? 220) + 12;
+    node.scrollBy({ left: direction * delta, behavior: 'smooth' });
+  };
+
+  return (
+    <div className={`strip-featured-wrap is-carousel${useCarousel ? '' : ' is-static'}`}>
+      {useCarousel && (
+        <button
+          type="button"
+          className="strip-nav strip-nav-prev"
+          aria-label="Danh mục trước"
+          disabled={!canScrollPrev}
+          onClick={() => scrollByCard(-1)}
+        >
+          <ChevronLeft size={18} />
+        </button>
+      )}
+      <div
+        ref={scrollerRef}
+        className="strip-featured is-carousel"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Danh mục sản phẩm"
+      >
+        {categories.map((category, index) => (
+          <Reveal key={category.id ?? index} delay={0.08 * Math.min(index, 5)} className="strip-card">
+            <Link
+              href={category.href || '/danh-muc'}
+              className="strip-card-link"
+              aria-label={`Xem ${category.title}`}
+            >
+              <img src={category.img} alt={category.title} loading="lazy" decoding="async" />
+              <h4>{category.title}</h4>
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+      {useCarousel && (
+        <button
+          type="button"
+          className="strip-nav strip-nav-next"
+          aria-label="Danh mục tiếp"
+          disabled={!canScrollNext}
+          onClick={() => scrollByCard(1)}
+        >
+          <ChevronRight size={18} />
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function ProductsPage() {
   const {
     brand,
@@ -58,13 +146,19 @@ export function ProductsPage() {
     <div className="products-page">
       <div className="poster-canvas">
         <div className="poster-canvas-bottom-corners"></div>
-        <div className="poster-hero-zone" style={{ backgroundImage: `url(${productsLandingInfo.heroBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <div className="poster-overlay" />
+        <div
+          className="poster-hero-zone"
+          style={{ ['--poster-hero-bg' as string]: `url(${productsLandingInfo.heroBg})` }}
+        >
           <Reveal className="poster-content-left">
             <div className="poster-logo-block">
-              <LotusIcon size={32} />
-              <div className="poster-logo-text">{brand.name}</div>
-              <div className="poster-logo-sub">{homeLanding.logoSubtext}</div>
+              <img
+                src="/assets/brand/logo.png"
+                alt={`${brand.name} — ${homeLanding.logoSubtext}`}
+                className="poster-logo-img"
+                width={320}
+                height={76}
+              />
             </div>
 
             <h1 className="poster-title">{productsLandingInfo.title}</h1>
@@ -88,7 +182,7 @@ export function ProductsPage() {
 
           <Reveal delay={0.4} className="poster-badge-right">
             <LotusIcon size={28} />
-            <p style={{ whiteSpace: 'pre-wrap' }}>{productsLandingInfo.badgeText}</p>
+            <p className="script-text" style={{ whiteSpace: 'pre-line' }}>{productsLandingInfo.badgeText}</p>
           </Reveal>
         </div>
 
@@ -97,20 +191,7 @@ export function ProductsPage() {
             <span>{productsLandingInfo.featuredSectionLabel}</span>
           </div>
 
-          <div className="strip-featured">
-            {productCategories.map((category, index) => (
-              <Reveal key={category.id ?? index} delay={0.1 * index} className="strip-card">
-                <Link
-                  href={category.href || '/danh-muc-san-pham'}
-                  className="strip-card-link"
-                  aria-label={`Xem ${category.title}`}
-                >
-                  <img src={category.img} alt={category.title} />
-                  <h4>{category.title}</h4>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
+          <CategoryStrip categories={productCategories} />
 
           <div className="strip-trust">
             {trustBadges.map((badge, index) => (
@@ -126,11 +207,13 @@ export function ProductsPage() {
 
           <div className="strip-contact">
             <div className="contact-logo">
-              <LotusIcon size={24} />
-              <div>
-                <div className="contact-logo-text">{brand.name}</div>
-                <div className="contact-logo-sub">{homeLanding.logoSubtext}</div>
-              </div>
+              <img
+                src="/assets/brand/logo.png"
+                alt={brand.name}
+                className="contact-logo-img"
+                width={210}
+                height={50}
+              />
             </div>
 
             {phoneHref ? (

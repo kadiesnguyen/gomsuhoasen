@@ -9,7 +9,7 @@ const STATUS_STYLE: React.CSSProperties = {
   minHeight: '60vh',
   display: 'grid',
   placeItems: 'center',
-  padding: '64px 24px',
+  padding: 'calc(var(--header-height, 72px) + 48px) 24px 64px',
   textAlign: 'center',
   color: '#e6d8c4',
   background: '#080704',
@@ -111,7 +111,7 @@ export function ProductDetailPage({ slug }: ProductDetailPageProps) {
             </button>
           ) : (
             <Link
-              href="/danh-muc-san-pham"
+              href="/danh-muc"
               style={STATUS_ACTION_STYLE}
             >
               {catalogUx.detailBackLabel}
@@ -133,6 +133,15 @@ export function ProductDetailPage({ slug }: ProductDetailPageProps) {
     );
   }
 
+  const hasPrice =
+    (typeof data.referencePrice === 'number' &&
+      Number.isFinite(data.referencePrice) &&
+      data.referencePrice > 0) ||
+    Boolean(
+      data.priceLabel?.trim() &&
+        !/liên\s*hệ|contact|tư\s*vấn/i.test(data.priceLabel.trim()),
+    );
+
   return (
     <ProductDetailViewer
       productId={data.id}
@@ -147,7 +156,14 @@ export function ProductDetailPage({ slug }: ProductDetailPageProps) {
       variants={data.variants}
       specs={data.specs}
       story={data.story ?? undefined}
-      cta={{ ...data.cta, label: catalogUx.detailCtaLabel }}
+      referencePrice={data.referencePrice}
+      priceLabel={data.priceLabel}
+      cta={{
+        ...data.cta,
+        label: hasPrice
+          ? 'Đặt mua sản phẩm'
+          : (catalogUx.detailCtaLabel || 'Tư vấn đặt hàng'),
+      }}
       copy={data.copy}
     />
   );

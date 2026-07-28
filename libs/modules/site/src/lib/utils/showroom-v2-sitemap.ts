@@ -6,7 +6,7 @@ const STATIC_PATHS = [
   '/gioi-thieu',
   '/bo-suu-tap',
   '/san-pham',
-  '/danh-muc-san-pham',
+  '/danh-muc',
   '/tin-tuc',
   '/nghe-nhan',
   '/lien-he',

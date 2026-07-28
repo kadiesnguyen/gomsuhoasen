@@ -185,6 +185,7 @@ export async function getListingSiteData() {
 // Product Details Helpers
 // ----------------------------------------------------------------------------
 import { readStringInput, readArrayInput, readStringArray } from './catalog-normalization';
+import { enrichProductDetail } from './product-content-enrichment';
 import { PRODUCT_VARIANT_STATUSES } from '@gomhoasen/contracts';
 
 type ApiProductPayload = Omit<ProductContract, 'specs' | 'story'> & {
@@ -310,19 +311,33 @@ export async function getProduct(slug: string) {
     ...defaultContent.catalog.detailLabels,
     ...v2Content?.catalog?.detailLabels,
   };
+  const enriched = enrichProductDetail({
+    slug,
+    name: p.name,
+    collection: readTrimmedString(p.collection),
+    type: readTrimmedString(p.type),
+    glaze: readTrimmedString(p.glaze),
+    description: readShowroomProductTagline(p.description, joinedTagline),
+    tagline: readShowroomProductTagline(joinedTagline, p.description),
+    poster: readTrimmedString(p.poster),
+    images: readStringArray(p.images),
+    viewSections: normalizeViewSections(p.viewSections, p.hotspots),
+    specs: readShowroomSpecs(p.specs),
+    story: normalizeStory(p.story),
+  });
   return {
     id: requireFirstShowroomText('product.id', p.id, p._id, p.slug, slug),
-    name: p.name,
-    tagline: readShowroomProductTagline(joinedTagline, p.description),
-    description: readShowroomProductTagline(p.description, joinedTagline),
+    name: enriched.name,
+    tagline: enriched.tagline,
+    description: enriched.description,
     modelUrl: readTrimmedString(p.modelUrl),
     video360Url: readTrimmedString(p.video360Url),
     poster: readTrimmedString(p.poster),
     images: readStringArray(p.images),
-    viewSections: normalizeViewSections(p.viewSections, p.hotspots),
+    viewSections: enriched.viewSections ?? [],
     variants: normalizeVariants(p.variants),
-    specs: readShowroomSpecs(p.specs),
-    story: normalizeStory(p.story),
+    specs: enriched.specs ?? null,
+    story: enriched.story ?? null,
     brandName:
       readTrimmedString(v2Content?.brand?.name) ||
       readTrimmedString(DEFAULT_SHOWROOM_V2_BRAND.name) ||
@@ -336,6 +351,8 @@ export async function getProduct(slug: string) {
         Object.entries(detailLabels).map(([key, value]) => [key, readTrimmedString(value) || '']),
       ) as { [K in keyof NonNullable<ShowroomV2ContentContract['catalog']['detailLabels']>]-?: string },
     },
+    referencePrice: typeof p.referencePrice === 'number' ? p.referencePrice : undefined,
+    priceLabel: readTrimmedString(p.priceLabel),
     cta: {
       label: readTrimmedString(p.cta?.label) || '',
       zalo: readStringInput(contact?.zaloOA),

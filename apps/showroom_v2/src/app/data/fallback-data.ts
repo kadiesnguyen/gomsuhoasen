@@ -46,6 +46,8 @@ export const FALLBACK_NEWS_HERO = { ...DEFAULT_FEATURED_ARTICLE };
 export const FALLBACK_NEWS_CARDS = DEFAULT_NEWS_ITEMS.filter((item) => item.id !== FALLBACK_NEWS_HERO.id);
 
 export const FALLBACK_HOME_LANDING = {
+  eyebrow: 'Showroom nghệ thuật gốm Việt',
+  tagline: 'Nơi tinh hoa gốm Việt được gìn giữ\nbằng tâm và nâng tầm bằng nghệ thuật',
   title: DEFAULT_CONTENT.home.heroTitle ?? '',
   subtitle: DEFAULT_CONTENT.home.heroSubtitle ?? '',
   body: DEFAULT_CONTENT.home.heroBody ?? '',

@@ -1,5 +1,6 @@
-import { GHS_API, SiteConfigContract } from '@gomhoasen/contracts';
-import { fetchOptionalApiObject } from './api';
+import { GHS_API, SiteConfigContract, resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
+import { readTrimmedString } from '@vt/common-utils';
+import { fetchOptionalApiArray, fetchOptionalApiObject } from './api';
 import { getShowroomV2Content } from './catalog-api';
 import { readShowroomJournal } from './normalization';
 import {
@@ -208,21 +209,62 @@ function applyHomeContent(data: ShowroomV2Data, home: NonNullable<Awaited<Return
   assignDefined(data.homeLanding, 'footerCopyright', home.footerCopyright);
 }
 
+type CatalogCategoryApi = {
+  id?: string;
+  _id?: string;
+  name: string;
+  slug: string;
+  description?: string;
+  image?: string;
+  sortOrder?: number;
+};
+
+function mapCatalogCategoriesToStrip(
+  categories: CatalogCategoryApi[],
+  fallback: typeof FALLBACK_PRODUCT_CATEGORIES,
+  apiOrigin: string,
+): typeof FALLBACK_PRODUCT_CATEGORIES {
+  return categories.map((category, index) => {
+    const fallbackItem = fallback[index % fallback.length] ?? fallback[0];
+    const customImage = readTrimmedString(category.image);
+    const id = category.slug || category.id || category._id || `category-${index + 1}`;
+    return {
+      id,
+      title: category.name,
+      desc: category.description ?? fallbackItem?.desc ?? '',
+      img: customImage
+        ? (toAssetUrl(customImage, apiOrigin) ?? fallbackItem?.img ?? '/assets/products/product-cat-1.jpg')
+        : (fallbackItem?.img ?? '/assets/products/product-cat-1.jpg'),
+      href: `/danh-muc?collection=${encodeURIComponent(id)}`,
+    };
+  });
+}
+
 export async function fetchShowroomV2Data(): Promise<ShowroomV2Data> {
-  const [siteConfig, v2Content] = await Promise.all([
+  const [siteConfig, v2Content, catalogCategories] = await Promise.all([
     fetchOptionalApiObject<SiteConfigContract>(GHS_API.SITE.CONFIG, 'fetchShowroomV2Data'),
     getShowroomV2Content(),
+    fetchOptionalApiArray<CatalogCategoryApi>(GHS_API.CATALOG.PUBLIC_CATEGORIES, 'fetchShowroomCategories'),
   ]);
 
   const data = createFallbackShowroomV2Data();
   const buildJournalCards = buildJournalNewsCards();
   const journalCards = siteConfig ? buildJournalCards(readShowroomJournal(siteConfig.journal)) : [];
+  const defaultCategoryImages = [...FALLBACK_PRODUCT_CATEGORIES];
 
   applySiteConfigBrandContent(data, siteConfig);
   applyBrandContent(data, v2Content?.brand);
 
   if (journalCards.length > 0) {
     applyNewsSelection(data, journalCards);
+  }
+
+  if (catalogCategories.length > 0) {
+    data.productCategories = mapCatalogCategoriesToStrip(
+      catalogCategories,
+      defaultCategoryImages,
+      resolveApiOrigin(),
+    );
   }
 
   if (!v2Content) {
@@ -269,7 +311,10 @@ export async function fetchShowroomV2Data(): Promise<ShowroomV2Data> {
     assignDefined(data.collectionsLanding, 'tileCtaLabel', v2Content.collections.tileCtaLabel);
   }
 
-  if (v2Content.productsLanding?.categories !== undefined) data.productCategories = [...v2Content.productsLanding.categories];
+  // Catalog categories from API win over CMS content defaults for the product strip.
+  if (catalogCategories.length === 0 && v2Content.productsLanding?.categories !== undefined) {
+    data.productCategories = [...v2Content.productsLanding.categories];
+  }
   if (v2Content.productsLanding?.productFeatures !== undefined) data.productFeatures = [...v2Content.productsLanding.productFeatures];
   if (v2Content.productsLanding?.trustBadges !== undefined) data.trustBadges = [...v2Content.productsLanding.trustBadges];
   if (v2Content.productsLanding) {

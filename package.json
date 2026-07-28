@@ -26,7 +26,9 @@
     "seed:e2e:reset": "node submodules/vt-platform/scripts/run-with-env.mjs SEED_PROFILE=e2e SEED_RESET=1 -- npm run seed",
     "admin:reset": "node scripts/deploy/reset-admin-password.mjs",
     "file-assets:backfill": "node ./node_modules/ts-node/dist/bin.js -P apps/api/tsconfig.app.json -r tsconfig-paths/register apps/api/src/backfill-file-assets.ts",
-    "file-assets:backfill:dry-run": "node submodules/vt-platform/scripts/run-with-env.mjs DRY_RUN=1 -- npm run file-assets:backfill"
+    "file-assets:backfill:dry-run": "node submodules/vt-platform/scripts/run-with-env.mjs DRY_RUN=1 -- npm run file-assets:backfill",
+    "import:hinhanhdemo": "node scripts/import-hinhanhdemo.mjs",
+    "import:hinhanhdemo:dry-run": "node submodules/vt-platform/scripts/run-with-env.mjs DRY_RUN=1 -- node scripts/import-hinhanhdemo.mjs"
   },
   "dependencies": {
     "@google/model-viewer": "3.5.0",
@@ -63,6 +65,7 @@
     "recharts": "^2.15.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.1",
+    "sharp": "^0.34.5",
     "tar": "7.5.11"
   },
   "overrides": {
