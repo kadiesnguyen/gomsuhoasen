@@ -112,7 +112,7 @@ export function QuoteDetailPage() {
               Xem PDF
             </Button>
           )}
-          <Button variant="primary" onClick={requestSendQuote} isLoading={busy}>Gửi email</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={requestSendQuote} isLoading={busy}>Gửi email</Button>
         </div>
       </div>
       {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}

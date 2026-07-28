@@ -104,7 +104,7 @@ export function QuoteListPage() {
     <div>
       <div className="ghs-page-header">
         <div><h1>Báo giá</h1></div>
-        <Button variant="primary" onClick={() => navigate('/admin/quotes/new')}>Tạo báo giá</Button>
+        <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={() => navigate('/admin/quotes/new')}>Tạo báo giá</Button>
       </div>
 
       {/* Status tabs with count badges + search */}
@@ -168,7 +168,7 @@ export function QuoteListPage() {
                 Xem tất cả báo giá
               </Button>
             ) : (
-              <Button variant="primary" onClick={() => navigate('/admin/quotes/new')} style={{ marginTop: 12 }}>
+              <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={() => navigate('/admin/quotes/new')} style={{ marginTop: 12 }}>
                 Tạo báo giá
               </Button>
             )}

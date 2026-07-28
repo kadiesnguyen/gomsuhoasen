@@ -229,6 +229,7 @@ export function FileLibraryPage() {
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <Button
+            className="ghs-btn ghs-btn-primary"
             variant="primary"
             isLoading={uploading}
             onClick={() => inputRef.current?.click()}
@@ -308,6 +309,7 @@ export function FileLibraryPage() {
               {showEmptyLibraryState ? (
                 <div style={{ marginTop: 14 }}>
                   <Button
+                    className="ghs-btn ghs-btn-primary"
                     variant="primary"
                     isLoading={uploading}
                     onClick={() => inputRef.current?.click()}

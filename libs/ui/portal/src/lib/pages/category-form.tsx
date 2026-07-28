@@ -156,7 +156,7 @@ export function CategoryFormPage() {
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
           <Button variant="secondary" type="button" onClick={() => navigate('/admin/categories')}>Hủy</Button>
-          <Button variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo danh mục'}</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Tạo danh mục'}</Button>
         </div>
       </form>
     </div>

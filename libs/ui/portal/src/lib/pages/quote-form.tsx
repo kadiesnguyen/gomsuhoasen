@@ -190,6 +190,15 @@ export function QuoteFormPage() {
 
   return (
     <div>
+      <style>{`
+        @media (max-width: 600px) {
+          .ghs-quote-form-grid,
+          .ghs-quote-line-grid,
+          .ghs-quote-summary-grid {
+            grid-template-columns: minmax(0, 1fr) !important;
+          }
+        }
+      `}</style>
       <div className="ghs-page-header">
         <div><h1>{isEdit ? 'Chỉnh sửa báo giá' : 'Tạo báo giá'}</h1></div>
         <Button variant="secondary" onClick={() => navigate('/admin/quotes')}>Quay lại</Button>
@@ -215,7 +224,7 @@ export function QuoteFormPage() {
               </div>
             </div>
           )}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+          <div className="ghs-quote-form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div><label style={label}>RFQ</label><select value={selectedRfqId} onChange={(e) => setSelectedRfqId(e.target.value)} required disabled={isEdit} style={field}><option value="">Chọn RFQ</option>{rfqs.map(r => {
               const id = entityId(r);
               return <option key={id} value={id}>{r.customerName} - {r.customerPhone}</option>;
@@ -250,7 +259,7 @@ export function QuoteFormPage() {
               </div>
             ) : lines.map((line, index) => (
               <div key={index} style={{ border: '1px solid #eee', borderRadius: 10, padding: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.8fr 0.8fr 0.7fr 1fr auto', gap: 10, alignItems: 'end' }}>
+                <div className="ghs-quote-line-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 0.8fr 0.8fr 0.7fr 1fr auto', gap: 10, alignItems: 'end' }}>
                   <div><label htmlFor={`quote-line-${index}-product`} style={label}>Sản phẩm</label><select id={`quote-line-${index}-product`} value={line.productId} onChange={(e) => chooseProduct(index, e.target.value)} style={field}><option value="">Chọn sản phẩm</option>{products.map(p => {
                     const id = entityId(p);
                     return <option key={id} value={id}>{p.name}</option>;
@@ -269,7 +278,7 @@ export function QuoteFormPage() {
 
         <div className="ghs-card" style={section}>
           <h3 style={{ marginTop: 0, color: '#9A7520' }}>Tổng tiền</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div className="ghs-quote-summary-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             <div><label style={label}>Tạm tính</label><div style={{ fontWeight: 800, fontSize: '1.2rem' }}>{money(subtotal)}</div></div>
             <div><label style={label}>Chiết khấu</label><input type="number" min={0} value={discount} onChange={(e) => setDiscount(Number(e.target.value))} style={field} /></div>
             <div><label style={label}>Tổng cộng</label><div style={{ fontWeight: 800, fontSize: '1.35rem', color: '#9A7520' }}>{money(total)}</div></div>
@@ -279,7 +288,7 @@ export function QuoteFormPage() {
         {error && <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: 12, padding: '10px 14px', color: '#b91c1c', marginBottom: 16 }}>{error}</div>}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
           <Button type="button" variant="secondary" onClick={() => navigate('/admin/quotes')}>Hủy</Button>
-          <Button type="submit" variant="primary" isLoading={saving}>Lưu báo giá</Button>
+          <Button className="ghs-btn ghs-btn-primary" type="submit" variant="primary" isLoading={saving}>Lưu báo giá</Button>
         </div>
       </form>
     </div>

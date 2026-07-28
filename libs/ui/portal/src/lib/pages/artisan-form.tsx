@@ -177,7 +177,7 @@ export function ArtisanFormPage() {
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
           <Button variant="secondary" type="button" onClick={() => navigate('/admin/artisans')}>Hủy</Button>
-          <Button variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Thêm nghệ nhân'}</Button>
+          <Button className="ghs-btn ghs-btn-primary" variant="primary" type="submit" isLoading={saving}>{isEdit ? 'Cập nhật' : 'Thêm nghệ nhân'}</Button>
         </div>
       </form>
     </div>
