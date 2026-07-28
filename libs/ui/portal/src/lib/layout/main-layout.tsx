@@ -1,4 +1,4 @@
-import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, LogOut, FolderOpen, Tags, Menu } from 'lucide-react';
+import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, LogOut, FolderOpen, Tags, Menu, Newspaper } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth-context';
@@ -29,6 +29,8 @@ const NAV_GROUPS: Array<{ title: string; items: NavItem[] }> = [
   {
     title: 'Content',
     items: [
+      { to: '/admin/news', label: 'Tin tức', icon: Newspaper },
+      { to: '/admin/news-categories', label: 'Danh mục tin tức', icon: Tags },
       { to: '/admin/showroom-v2-content', label: 'Nội dung website', icon: LayoutDashboard },
     ],
   },

@@ -57,6 +57,15 @@ const FileLibraryPage = lazy(async () => ({
 const ShowroomV2ContentPage = lazy(async () => ({
   default: (await import('./pages/showroom-v2-content')).ShowroomV2ContentPage,
 }));
+const NewsListPage = lazy(async () => ({
+  default: (await import('./pages/news-list')).NewsListPage,
+}));
+const NewsFormPage = lazy(async () => ({
+  default: (await import('./pages/news-form')).NewsFormPage,
+}));
+const NewsCategoryListPage = lazy(async () => ({
+  default: (await import('./pages/news-category-list')).NewsCategoryListPage,
+}));
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const { state } = useAuth();
@@ -98,6 +107,10 @@ function PortalRoutes() {
         <Route path="artisans/:id/edit" element={<ArtisanFormPage />} />
         <Route path="audit" element={<AuditLogPage />} />
         <Route path="files" element={<FileLibraryPage />} />
+        <Route path="news" element={<NewsListPage />} />
+        <Route path="news/new" element={<NewsFormPage />} />
+        <Route path="news/:id" element={<NewsFormPage />} />
+        <Route path="news-categories" element={<NewsCategoryListPage />} />
         <Route path="showroom-v2-content" element={<ShowroomV2ContentPage />} />
         <Route path="settings" element={<SiteConfigPage />} />
       </Route>

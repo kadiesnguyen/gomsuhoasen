@@ -236,6 +236,7 @@ function normalizeContent(value: unknown): ShowroomV2ContentContract {
     newsLanding: {
       ...defaults.newsLanding,
       ...newsLanding,
+      categories: ensureArray(newsLanding.categories ?? defaults.newsLanding.categories),
       newsCards: ensureArray(newsLanding.newsCards ?? defaults.newsLanding.newsCards),
     },
     artisans: {
@@ -267,7 +268,7 @@ export function ShowroomV2ContentPage() {
   const [saving, setSaving] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [dirty, setDirty] = useState(false);
-  const [activeTab, setActiveTab] = useState<'brand' | 'home' | 'about' | 'collections' | 'products' | 'news' | 'artisans' | 'contact' | 'catalog'>('brand');
+  const [activeTab, setActiveTab] = useState<'brand' | 'home' | 'about' | 'collections' | 'products' | 'artisans' | 'contact' | 'catalog'>('brand');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -636,16 +637,12 @@ export function ShowroomV2ContentPage() {
     );
   };
 
-  const newsCardOptions = ensureArray(content?.newsLanding?.newsCards)
-    .filter((item) => item?.id && item?.title)
-    .map((item) => ({ value: item.id ?? '', label: `${item.title} (${item.id})` }));
-
   return (
     <div className="page-container" style={{ maxWidth: 800 }}>
       <div className="ghs-page-header">
         <div>
           <h1>Nội dung website</h1>
-          <p>Quản lý nội dung cho các trang Showroom V2</p>
+          <p>Quản lý nội dung Showroom V2. Tin tức chuyển sang menu Tin tức / Danh mục tin tức.</p>
         </div>
         <button
           type="button"
@@ -664,7 +661,6 @@ export function ShowroomV2ContentPage() {
         <button className={`ghs-tab-item ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>Giới thiệu</button>
         <button className={`ghs-tab-item ${activeTab === 'collections' ? 'active' : ''}`} onClick={() => setActiveTab('collections')}>Bộ sưu tập</button>
         <button className={`ghs-tab-item ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>Sản phẩm</button>
-        <button className={`ghs-tab-item ${activeTab === 'news' ? 'active' : ''}`} onClick={() => setActiveTab('news')}>Tin tức</button>
         <button className={`ghs-tab-item ${activeTab === 'artisans' ? 'active' : ''}`} onClick={() => setActiveTab('artisans')}>Nghệ nhân</button>
         <button className={`ghs-tab-item ${activeTab === 'contact' ? 'active' : ''}`} onClick={() => setActiveTab('contact')}>Liên hệ</button>
         <button className={`ghs-tab-item ${activeTab === 'catalog' ? 'active' : ''}`} onClick={() => setActiveTab('catalog')}>Danh mục & chi tiết</button>
@@ -835,47 +831,6 @@ export function ShowroomV2ContentPage() {
               { key: 'title', label: 'Tiêu đề' },
               { key: 'desc', label: 'Mô tả' }
             ], { iconType: '', title: '', desc: '' })}
-          </div>
-        )}
-
-        {activeTab === 'news' && (
-          <div>
-            {renderInput('Nhãn phụ Hero', ['newsLanding', 'heroEyebrow'])}
-            {renderInput('Tiêu đề Hero', ['newsLanding', 'heroTitle'])}
-            {renderInput('Mô tả Hero', ['newsLanding', 'heroDesc'], true)}
-            {renderInput('Nhãn bài nổi bật', ['newsLanding', 'featuredLabel'])}
-            {renderInput('Nhãn tab tất cả', ['newsLanding', 'allCategoryLabel'])}
-            {renderInput('Thông điệp khi trống', ['newsLanding', 'emptyStateLabel'])}
-            {renderInput('Nhãn đọc bài', ['newsLanding', 'readArticleLabel'])}
-            {renderInput('Nhãn quay lại Tin tức', ['newsLanding', 'backToNewsLabel'])}
-            {renderInput('Tiêu đề bài liên quan', ['newsLanding', 'relatedTitle'])}
-            {renderInput('Tiêu đề khi không tìm thấy bài', ['newsLanding', 'notFoundTitle'])}
-            {renderInput('Mô tả khi không tìm thấy bài', ['newsLanding', 'notFoundBody'], true)}
-            {renderSelectInput('ID bài viết nổi bật ở Hero', ['newsLanding', 'featuredId'], newsCardOptions)}
-
-            {renderArrayEditor('Danh sách bài viết', ['newsLanding', 'newsCards'], [
-              { key: 'id', label: 'ID bài viết' },
-              { key: 'slug', label: 'Slug URL (không dấu)' },
-              { key: 'category', label: 'Danh mục' },
-              { key: 'date', label: 'Ngày tháng (VD: 10 THG 11, 2026)' },
-              { key: 'title', label: 'Tiêu đề' },
-              { key: 'excerpt', label: 'Tóm tắt' },
-              { key: 'image', label: 'Hình ảnh', type: 'image' },
-              { key: 'author', label: 'Tác giả' },
-              { key: 'readingTime', label: 'Thời lượng đọc' },
-              { key: 'content', label: 'Nội dung chi tiết (cách đoạn bằng một dòng trống)', type: 'textarea' }
-            ], {
-              id: '',
-              slug: '',
-              category: '',
-              date: '',
-              title: '',
-              excerpt: '',
-              image: '',
-              author: '',
-              readingTime: '',
-              content: '',
-            })}
           </div>
         )}
 

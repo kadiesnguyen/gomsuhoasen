@@ -369,6 +369,12 @@ export class ProductsLandingContentDto {
   categories!: ProductCategoryDto[];
 }
 
+export class NewsCategoryDto {
+  @IsString() id!: string;
+  @IsString() name!: string;
+  @IsString() slug!: string;
+}
+
 export class NewsLandingContentDto {
   @IsOptional() @IsString() heroEyebrow?: string;
   @IsOptional() @IsString() heroTitle?: string;
@@ -382,6 +388,9 @@ export class NewsLandingContentDto {
   @IsOptional() @IsString() relatedTitle?: string;
   @IsOptional() @IsString() notFoundTitle?: string;
   @IsOptional() @IsString() notFoundBody?: string;
+
+  @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => NewsCategoryDto)
+  categories?: NewsCategoryDto[];
 
   @IsArray() @ValidateNested({ each: true }) @Type(() => NewsCardDto)
   newsCards!: NewsCardDto[];
