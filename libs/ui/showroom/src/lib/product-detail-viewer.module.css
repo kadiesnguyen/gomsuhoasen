@@ -650,8 +650,9 @@
 @media (max-width: 760px) {
   .page {
     --bottom-nav: calc(var(--mobile-bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px));
-    --bottom-actions-h: 156px;
-    --stage-h: clamp(300px, 48dvh, 440px);
+    /* price + gap + 2 CTAs + back — title sits just above this band */
+    --bottom-actions-h: 178px;
+    --stage-h: clamp(280px, 44dvh, 400px);
     height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     max-height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     overflow: hidden;
@@ -687,8 +688,14 @@
     left: 50%;
     right: auto;
     width: calc(100% - 24px);
-    bottom: calc(10px + var(--bottom-nav));
+    bottom: calc(4px + var(--bottom-nav));
     transform: translateX(-50%);
+    gap: 18px;
+  }
+
+  .bottomActions {
+    gap: 10px;
+    margin-top: 4px;
   }
 
   .backLink {
@@ -708,21 +715,46 @@
     line-height: 1.25;
   }
 
+  .priceTag {
+    font-size: clamp(22px, 5.6vw, 28px);
+    gap: 8px;
+    line-height: 1.1;
+  }
+
+  .priceLotus {
+    width: 28px;
+    height: 26px;
+  }
+
+  /* Anchor title just above price/CTAs — no collision, tight stack */
   .heroCopy {
     left: 16px;
-    right: 64px;
+    right: 56px;
     max-width: none;
-    top: calc(var(--stage-h) + 10px);
-    bottom: auto;
+    top: auto;
+    bottom: calc(var(--bottom-actions-h) + var(--bottom-nav) + 6px);
+  }
+
+  .titleRow {
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 4px;
   }
 
   .heroCopy h1 {
-    font-size: clamp(22px, 5.6vw, 30px);
-    margin-bottom: 4px;
+    font-size: clamp(20px, 5.2vw, 28px);
+    line-height: 1.12;
+    margin-bottom: 0;
+  }
+
+  .qrTrigger {
+    margin-top: 0;
   }
 
   .heroCopy p {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.45;
+    max-width: none;
   }
 
   .controls {
@@ -732,7 +764,7 @@
   }
 
   .guide {
-    top: calc(var(--stage-h) + 2px);
+    top: calc(var(--stage-h) - 6px);
     bottom: auto;
     font-size: 9px;
   }
@@ -803,21 +835,30 @@
     width: 40px;
     height: 40px;
   }
+
+  .heroCopy h1 {
+    font-size: clamp(19px, 5.4vw, 24px);
+  }
 }
 
 @media (max-height: 700px) and (max-width: 760px) {
   .page {
-    --stage-h: clamp(240px, 42dvh, 320px);
+    --stage-h: clamp(240px, 40dvh, 300px);
+    --bottom-actions-h: 164px;
   }
 
   .heroCopy {
-    top: calc(var(--stage-h) + 8px);
-    bottom: auto;
+    top: auto;
+    bottom: calc(var(--bottom-actions-h) + var(--bottom-nav) + 4px);
   }
 
   .controls {
     top: calc(var(--stage-h) * 0.18);
     bottom: auto;
+  }
+
+  .priceTag {
+    font-size: clamp(20px, 5.2vw, 26px);
   }
 }
 
