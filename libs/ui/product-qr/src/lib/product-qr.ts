@@ -1,4 +1,8 @@
-import { toDataURL as qrToDataUrl } from 'qrcode';
+import { toCanvas as qrToCanvas, toDataURL as qrToDataUrl } from 'qrcode';
+import bundledLotusQrLogo from '../assets/lotus-qr.png';
+
+const PUBLIC_LOTUS_QR_LOGO = '/assets/brand/lotus-qr.png';
+const PUBLIC_LOTUS_MARK = '/assets/brand/lotus-mark.png';
 
 export function normalizeProductSlug(slug: string | undefined | null): string {
   return String(slug ?? '')
@@ -38,18 +42,106 @@ export function productPublicUrl(slug: string, siteOrigin?: string): string {
   return `${origin}${path}`;
 }
 
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Failed to load QR logo'));
+    img.src = src;
+  });
+}
+
+function fillRoundRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  radius: number,
+): void {
+  const r = Math.min(radius, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+  ctx.fill();
+}
+
+async function compositeQrWithLogo(
+  qrDataUrl: string,
+  logoSrc: string,
+  width: number,
+): Promise<string> {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = width;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return qrDataUrl;
+
+  const [qrImage, logo] = await Promise.all([loadImage(qrDataUrl), loadImage(logoSrc)]);
+  ctx.drawImage(qrImage, 0, 0, width, width);
+
+  // ~22% logo + white pad keeps scanners happy at errorCorrectionLevel H
+  const logoSize = Math.round(width * 0.22);
+  const pad = Math.max(4, Math.round(logoSize * 0.14));
+  const box = logoSize + pad * 2;
+  const x = (width - box) / 2;
+  const y = (width - box) / 2;
+
+  ctx.fillStyle = '#ffffff';
+  fillRoundRect(ctx, x, y, box, box, Math.round(pad * 1.2));
+  ctx.drawImage(logo, x + pad, y + pad, logoSize, logoSize);
+
+  return canvas.toDataURL('image/png');
+}
+
 export async function generateProductQrDataUrl(
   slug: string,
-  options?: { siteOrigin?: string; width?: number },
+  options?: {
+    siteOrigin?: string;
+    width?: number;
+    /** Override logo URL; pass `false` to skip lotus mark. */
+    logoUrl?: string | false;
+  },
 ): Promise<string> {
   const url = productPublicUrl(slug, options?.siteOrigin);
   if (!url) return '';
-  return qrToDataUrl(url, {
-    width: options?.width ?? 280,
+  const width = options?.width ?? 280;
+  const qrOptions = {
+    width,
     margin: 2,
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: 'H' as const,
     color: { dark: '#1a1510', light: '#ffffff' },
-  });
+  };
+
+  // Browser: canvas + lotus center. Node/tests: plain data URL.
+  if (typeof document !== 'undefined' && options?.logoUrl !== false) {
+    try {
+      const canvas = document.createElement('canvas');
+      await qrToCanvas(canvas, url, qrOptions);
+      const base = canvas.toDataURL('image/png');
+      const logoCandidates =
+        typeof options?.logoUrl === 'string' && options.logoUrl
+          ? [options.logoUrl]
+          : [bundledLotusQrLogo, PUBLIC_LOTUS_QR_LOGO, PUBLIC_LOTUS_MARK];
+      for (const logoSrc of logoCandidates) {
+        try {
+          return await compositeQrWithLogo(base, logoSrc, width);
+        } catch {
+          /* try next logo source */
+        }
+      }
+      return base;
+    } catch {
+      /* fall through to plain QR */
+    }
+  }
+
+  return qrToDataUrl(url, qrOptions);
 }
 
 export function downloadDataUrl(dataUrl: string, filename: string): void {
