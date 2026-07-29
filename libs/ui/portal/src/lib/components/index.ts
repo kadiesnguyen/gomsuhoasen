@@ -8,6 +8,8 @@ export { StateRenderer } from '@vt/ui-components';
 export { Spinner, PageLoader } from '@vt/ui-components';
 export { ToastProvider, useToast } from './toast';
 export type { ToastType } from './toast';
+export { FilterTabs } from './filter-tabs';
+export type { FilterTabItem, FilterTabsProps } from './filter-tabs';
 export { UploadField } from './upload-field';
 export { RichTextEditor } from './rich-text-editor';
 export type { RichTextEditorProps } from './rich-text-editor';

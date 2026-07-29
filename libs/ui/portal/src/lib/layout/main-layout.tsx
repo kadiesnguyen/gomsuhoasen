@@ -1,4 +1,5 @@
-import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, LogOut, FolderOpen, Tags, Menu, Newspaper } from 'lucide-react';
+import { type LucideIcon, LayoutDashboard, Settings, Package, ScrollText, Users, ClipboardList, ShoppingBag, LogOut, FolderOpen, Tags, Menu, Newspaper } from 'lucide-react';
+
 import { Fragment, useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth-context';
@@ -22,6 +23,7 @@ const NAV_GROUPS: Array<{ title: string; items: NavItem[] }> = [
   {
     title: 'Sales',
     items: [
+      { to: '/admin/orders', label: 'Đơn hàng', icon: ShoppingBag },
       { to: '/admin/rfq', label: 'Yêu cầu báo giá', icon: ClipboardList },
       { to: '/admin/quotes', label: 'Báo giá', icon: ScrollText },
     ],

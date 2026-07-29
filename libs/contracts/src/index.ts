@@ -8,6 +8,7 @@ export * from './lib/category';
 export * from './lib/product';
 export * from './lib/quote';
 export * from './lib/rfq';
+export * from './lib/order';
 export * from './lib/user';
 export * from './lib/site';
 export * from './lib/showroom-v2-default-content';

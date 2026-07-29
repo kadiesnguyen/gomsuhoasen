@@ -20,6 +20,7 @@ import {
   type QuoteStatus,
   type RfqSource,
   type RfqStatus,
+  type OrderStatus,
   type FileAssetContract,
   type FileAssetStatusContract,
   type FileCommitRefsInput,
@@ -202,6 +203,33 @@ export interface RfqApi extends ApiObject {
   source: RfqSource;
   createdAt: string;
   lineItems: Array<{ productId: string; productName: string; quantity: number; variant?: string }>;
+}
+
+export interface OrderApi extends ApiObject {
+  id: string;
+  _id?: string;
+  customerName: string;
+  customerPhone: string;
+  shippingAddress: {
+    street: string;
+    provinceCode: string;
+    provinceName: string;
+    wardCode: string;
+    wardName: string;
+  };
+  lineItems: Array<{
+    productId: string;
+    productName: string;
+    productSlug?: string;
+    quantity: number;
+    unitPrice: number;
+    lineTotal: number;
+  }>;
+  subtotal: number;
+  total: number;
+  status: OrderStatus;
+  internalNote?: string;
+  createdAt: string;
 }
 
 export interface QuoteItemApi extends ApiObject {
@@ -475,6 +503,17 @@ export const api = {
       http.get(GHS_API.RFQ.BY_ID(id)).then(objectPayloadWithId<RfqApi>('rfq.get')),
     updateStatus: (id: string, status: RfqStatus, note?: string) =>
       http.patch(GHS_API.RFQ.STATUS(id), { status, internalNote: note }).then(objectPayloadWithId<RfqApi>('rfq.updateStatus')),
+  },
+
+  order: {
+    list: (params?: QueryParams) =>
+      http.get(GHS_API.ORDER.LIST, { params }).then(listPayloadWithId<OrderApi>('order.list')),
+    get: (id: string) =>
+      http.get(GHS_API.ORDER.BY_ID(id)).then(objectPayloadWithId<OrderApi>('order.get')),
+    updateStatus: (id: string, status: OrderStatus, note?: string) =>
+      http
+        .patch(GHS_API.ORDER.STATUS(id), { status, internalNote: note })
+        .then(objectPayloadWithId<OrderApi>('order.updateStatus')),
   },
 
   quote: {

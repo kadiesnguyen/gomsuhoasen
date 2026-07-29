@@ -221,7 +221,7 @@ export function NewsListPage() {
                   <td>{article.category}</td>
                   <td>{article.date || '—'}</td>
                   <td>
-                    <div style={{ display: 'flex', gap: 8 }}>
+                    <div className="ghs-table-actions">
                       <button
                         type="button"
                         className="ghs-btn ghs-btn-ghost ghs-btn-sm"

@@ -9,6 +9,7 @@ import { mergeApiErrorMessage } from '../services/api-error';
 import { useConfirm } from '../components/confirm-dialog';
 import { LoadErrorState } from '../components/load-error-state';
 import { MediaLightboxModal } from '../components/media-lightbox-modal';
+import { FilterTabs } from '../components/filter-tabs';
 import { MediaPreviewSurface } from '../components/media-preview';
 import { useToast } from '../components/toast';
 import { readDisplayText, readFirstDisplayText, readOptionalDisplayText } from '../utils/display-normalization';
@@ -123,19 +124,12 @@ export function ProductListPage() {
           onChange={e => setSearch(e.target.value)}
           style={{ maxWidth: 360 }}
         />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }} role="group" aria-label="Lọc theo trạng thái">
-          {statusFilters.map(([key, label]) => (
-            <button
-              key={key || 'ALL'}
-              type="button"
-              className={statusFilter === key ? 'ghs-btn ghs-btn-primary' : 'ghs-btn ghs-btn-ghost'}
-              aria-pressed={statusFilter === key}
-              onClick={() => setStatusFilter(key)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <FilterTabs
+          tabs={statusFilters.map(([key, label]) => ({ id: key, label }))}
+          activeTabId={statusFilter}
+          onTabChange={setStatusFilter}
+          ariaLabel="Lọc theo trạng thái sản phẩm"
+        />
       </div>
 
       {/* Table */}
@@ -227,7 +221,7 @@ export function ProductListPage() {
                       </span>
                     </td>
                     <td style={{ textAlign: 'right' }}>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6 }}>
+                      <div className="ghs-table-actions">
                         <button
                           type="button"
                           className="ghs-btn ghs-btn-ghost ghs-btn-sm"

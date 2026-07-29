@@ -1,0 +1,7 @@
+{
+  "name": "ui-product-qr",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/product-qr/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:shared", "layer:ui"]
+}

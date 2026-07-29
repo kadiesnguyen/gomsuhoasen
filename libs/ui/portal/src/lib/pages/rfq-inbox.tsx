@@ -14,7 +14,7 @@ import { api, type RfqApi } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { LoadErrorState } from '../components/load-error-state';
 import { useToast } from '../components/toast';
-import { Tabs, type TabItem } from '@vt/ui-components';
+import { FilterTabs } from '../components/filter-tabs';
 
 type Rfq = RfqApi & { internalNote?: string };
 
@@ -115,11 +115,11 @@ export function RfqInboxPage() {
     ...RFQ_STATUS_VALUES.map((v) => ({ v, l: STATUS_MAP[v].label, count: counts[v] ?? 0 })),
   ], [rfqs.length, counts]);
 
-  const tabItems = useMemo<TabItem[]>(() => {
+  const tabItems = useMemo(() => {
     return tabs.map(t => ({
       id: t.v,
       label: t.l,
-      badge: t.count > 0 ? t.count : undefined,
+      badge: t.count,
     }));
   }, [tabs]);
 
@@ -127,13 +127,11 @@ export function RfqInboxPage() {
     <div>
       <div className="ghs-page-header"><div><h1>Yêu cầu báo giá</h1></div></div>
 
-      {/* Status filter tabs with counts */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-        <Tabs
+      <div className="ghs-filter-bar">
+        <FilterTabs
           tabs={tabItems}
           activeTabId={filter}
           onTabChange={(id) => setFilter(id as RfqStatus | '')}
-          size="sm"
         />
       </div>
 
@@ -155,6 +153,7 @@ export function RfqInboxPage() {
               </p>
             </div>
           ) : (
+            <div className="ghs-inbox-table-wrap">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #f0ede6', textAlign: 'left' }}>
@@ -193,8 +192,8 @@ export function RfqInboxPage() {
                       <td style={{ padding: '12px 16px', color: '#888', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {productSummary}
                       </td>
-                      <td style={{ padding: '12px 16px' }}>
-                        <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: '0.75rem', fontWeight: 600, background: st.bg, color: st.color }}>{st.label}</span>
+                      <td className="ghs-status-cell" style={{ padding: '12px 16px' }}>
+                        <span className="ghs-status-badge" style={{ background: st.bg, color: st.color }}>{st.label}</span>
                       </td>
                       <td style={{ padding: '12px 16px', color: '#999', fontSize: '0.8rem' }}>{new Date(r.createdAt).toLocaleDateString('vi')}</td>
                     </tr>
@@ -202,6 +201,7 @@ export function RfqInboxPage() {
                 })}
               </tbody>
             </table>
+            </div>
           )}
         </div>
 

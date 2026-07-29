@@ -30,9 +30,13 @@ const CategoryFormPage = lazy(async () => ({
 const RfqInboxPage = lazy(async () => ({
   default: (await import('./pages/rfq-inbox')).RfqInboxPage,
 }));
+const OrderInboxPage = lazy(async () => ({
+  default: (await import('./pages/order-inbox')).OrderInboxPage,
+}));
 const ArtisanListPage = lazy(async () => ({
   default: (await import('./pages/artisan-list')).ArtisanListPage,
 }));
+
 const ArtisanFormPage = lazy(async () => ({
   default: (await import('./pages/artisan-form')).ArtisanFormPage,
 }));
@@ -98,7 +102,9 @@ function PortalRoutes() {
         <Route path="categories/new" element={<CategoryFormPage />} />
         <Route path="categories/:id/edit" element={<CategoryFormPage />} />
         <Route path="rfq" element={<RfqInboxPage />} />
+        <Route path="orders" element={<OrderInboxPage />} />
         <Route path="quotes" element={<QuoteListPage />} />
+
         <Route path="quotes/new" element={<QuoteFormPage />} />
         <Route path="quotes/:id" element={<QuoteDetailPage />} />
         <Route path="quotes/:id/edit" element={<QuoteFormPage />} />

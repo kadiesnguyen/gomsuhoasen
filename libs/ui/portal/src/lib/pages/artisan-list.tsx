@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ARTISAN_STATUSES, type ArtisanStatus } from '@gomhoasen/contracts';
-import { Button } from '@vt/ui-components';
 import { api, apiAssetUrl, type ArtisanApi } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { useConfirm } from '../components/confirm-dialog';
@@ -204,29 +203,27 @@ export function ArtisanListPage() {
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                  <Button
+                <div className="ghs-table-actions">
+                  <button
                     type="button"
-                    variant="secondary"
-                    size="sm"
+                    className="ghs-btn ghs-btn-ghost ghs-btn-sm"
                     onClick={(event) => {
                       event.stopPropagation();
                       navigate(`/admin/artisans/${artisan.id}/edit`);
                     }}
                   >
                     Sửa
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="button"
-                    variant="destructive"
-                    size="sm"
+                    className="ghs-btn ghs-btn-danger ghs-btn-sm"
                     onClick={(event) => {
                       event.stopPropagation();
                       requestDelete(artisan);
                     }}
                   >
                     Xóa
-                  </Button>
+                  </button>
                 </div>
               </div>
             );

@@ -18,6 +18,7 @@ export default defineConfig({
       '@gomhoasen/ui-showroom': resolve(__dirname, '../../libs/ui/showroom/src/index.ts'),
       '@gomhoasen/ui-showroom-server': resolve(__dirname, '../../libs/ui/showroom/src/server.ts'),
       '@gomhoasen/ui-rich-html': resolve(__dirname, '../../libs/ui/rich-html/src/index.ts'),
+      '@gomhoasen/ui-product-qr': resolve(__dirname, '../../libs/ui/product-qr/src/index.ts'),
       '@vt/common-utils': resolve(__dirname, '../../submodules/vt-common-utils/src/index.ts'),
       '@vt/platform-api-client': resolve(__dirname, '../../submodules/vt-platform/packages/platform-api-client/src/index.ts'),
       '@vt/platform-api-contract/browser': resolve(__dirname, '../../submodules/vt-platform/packages/platform-api-contract/src/browser.ts'),

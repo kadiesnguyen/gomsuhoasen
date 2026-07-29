@@ -106,20 +106,22 @@ export function CategoryListPage() {
                     {readOptionalDisplayText(category.description) ?? '—'}
                   </td>
                   <td style={{ padding: '14px 16px', textAlign: 'right' }}>
-                    <button
-                      type="button"
-                      onClick={() => navigate(`/admin/categories/${category.id}/edit`)}
-                      style={{ border: '1px solid #ddd', background: '#fff', borderRadius: 8, padding: '6px 12px', marginRight: 8, cursor: 'pointer', fontSize: '0.82rem' }}
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => requestDelete(category)}
-                      style={{ border: '1px solid #fecaca', background: '#fff5f5', color: '#b91c1c', borderRadius: 8, padding: '6px 12px', cursor: 'pointer', fontSize: '0.82rem' }}
-                    >
-                      Xóa
-                    </button>
+                    <div className="ghs-table-actions">
+                      <button
+                        type="button"
+                        className="ghs-btn ghs-btn-ghost ghs-btn-sm"
+                        onClick={() => navigate(`/admin/categories/${category.id}/edit`)}
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        type="button"
+                        className="ghs-btn ghs-btn-danger ghs-btn-sm"
+                        onClick={() => requestDelete(category)}
+                      >
+                        Xóa
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -94,11 +94,14 @@
       "@gomhoasen/iam": ["libs/modules/iam/src/index.ts"],
       "@gomhoasen/catalog": ["libs/modules/catalog/src/index.ts"],
       "@gomhoasen/rfq": ["libs/modules/rfq/src/index.ts"],
+      "@gomhoasen/order": ["libs/modules/order/src/index.ts"],
       "@gomhoasen/quote": ["libs/modules/quote/src/index.ts"],
+
       "@gomhoasen/artisan": ["libs/modules/artisan/src/index.ts"],
       "@gomhoasen/file": ["libs/modules/file/src/index.ts"],
       "@gomhoasen/site": ["libs/modules/site/src/index.ts"],
       "@gomhoasen/ui-portal": ["libs/ui/portal/src/index.ts"],
+      "@gomhoasen/ui-product-qr": ["libs/ui/product-qr/src/index.ts"],
       "@gomhoasen/ui-rich-html": ["libs/ui/rich-html/src/index.ts"],
       "@gomhoasen/ui-showroom": ["libs/ui/showroom/src/index.ts"],
       "@gomhoasen/ui-showroom-server": ["libs/ui/showroom/src/server.ts"]

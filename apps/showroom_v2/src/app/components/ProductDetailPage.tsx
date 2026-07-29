@@ -145,6 +145,7 @@ export function ProductDetailPage({ slug }: ProductDetailPageProps) {
   return (
     <ProductDetailViewer
       productId={data.id}
+      productSlug={slug}
       productName={data.name}
       brandName={data.brandName}
       productSubtitle={data.tagline}

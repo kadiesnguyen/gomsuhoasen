@@ -292,6 +292,94 @@ body {
   background: transparent;
 }
 
+.ghs-btn-ghost.active {
+  background: var(--ghs-primary-soft);
+  border-color: var(--ghs-primary);
+  color: var(--ghs-primary-hover);
+}
+
+.ghs-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ghs-filter-bar__search {
+  margin-left: auto;
+  min-width: 200px;
+  max-width: 100%;
+  flex: 1 1 200px;
+}
+
+.ghs-filter-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+}
+
+.ghs-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--ghs-border);
+  border-radius: 999px;
+  background: var(--ghs-surface);
+  color: var(--ghs-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.ghs-filter-chip:hover {
+  border-color: var(--ghs-primary);
+  color: var(--ghs-primary-hover);
+}
+
+.ghs-filter-chip.is-active {
+  background: var(--ghs-primary-soft);
+  border-color: var(--ghs-primary);
+  color: var(--ghs-primary-hover);
+}
+
+.ghs-filter-chip__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ghs-filter-chip.is-active .ghs-filter-chip__count {
+  background: rgba(154, 117, 32, 0.18);
+  color: var(--ghs-primary-hover);
+}
+
+.ghs-table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
 .ghs-btn-danger {
   background: #fff;
   border-color: #fecaca;
@@ -486,6 +574,43 @@ body {
   position: sticky;
   top: 24px;
   min-width: 0;
+}
+
+.ghs-status-cell {
+  width: 1%;
+  min-width: 96px;
+  white-space: nowrap;
+}
+
+.ghs-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ghs-inbox-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ghs-inbox-table-wrap table {
+  min-width: 640px;
+}
+
+.ghs-inbox-status-btn {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 @media (max-width: 992px) {

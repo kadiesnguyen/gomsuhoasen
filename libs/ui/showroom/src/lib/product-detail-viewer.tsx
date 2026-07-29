@@ -10,9 +10,12 @@ import type {
   HotspotContract,
 } from '@gomhoasen/contracts';
 import { resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
+import { ProductQrPanel } from '@gomhoasen/ui-product-qr';
+import { CheckoutOrderModal } from './checkout-order-modal';
 import css from './product-detail-viewer.module.css';
 import { toRenderableRichHtml } from './rich-html';
 import { readShowroomText } from './showroom-display-normalization';
+
 
 const LAST_CATALOG_URL_KEY = 'ghs:lastCatalogUrl';
 
@@ -30,6 +33,8 @@ const API_ORIGIN = resolveApiOrigin();
 
 export interface ProductDetailViewerProps {
   productId: string;
+  /** Public slug used for `/san-pham/{slug}` QR link. */
+  productSlug?: string;
   productName: string;
   brandName: string;
   productSubtitle?: string;
@@ -124,6 +129,8 @@ function formatPriceLabel(referencePrice?: number, priceLabel?: string): string 
 }
 
 export function ProductDetailViewer({
+  productId,
+  productSlug,
   productName,
   brandName,
   productSubtitle = '',
@@ -168,6 +175,7 @@ export function ProductDetailViewer({
   const [autoRotate, setAutoRotate] = useState(false);
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [guideVisible, setGuideVisible] = useState(true);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const activeImage = mediaList[Math.min(modeIndex, Math.max(mediaList.length - 1, 0))] ?? '';
   const displayName =
@@ -343,14 +351,13 @@ export function ProductDetailViewer({
     await root.requestFullscreen?.();
   };
 
-  const ctaHref =
-    readShowroomText(cta.zalo) ||
-    phoneHref(cta.hotline) ||
-    (readShowroomText(cta.email) ? `mailto:${readShowroomText(cta.email)}` : undefined) ||
-    '/lien-he';
   const hotline = phoneHref(cta.hotline);
   const displayPrice = formatPriceLabel(referencePrice, priceLabel);
-  const actionLabel = readShowroomText(cta.label) || copy.submitLabel || 'Tư vấn đặt hàng';
+  const actionLabel = readShowroomText(cta.label) || 'Đặt mua';
+  const unitPrice =
+    typeof referencePrice === 'number' && Number.isFinite(referencePrice) && referencePrice > 0
+      ? referencePrice
+      : 0;
   const backHref = useMemo(() => readLastCatalogHref(), []);
 
   const specEntries = Object.entries(specs).filter(([, value]) => Boolean(value));
@@ -436,7 +443,17 @@ export function ProductDetailViewer({
 
         <section className={css.heroCopy}>
           <div className={css.eyebrow}>{brandName}</div>
-          <h1>{displayName}</h1>
+          <div className={css.titleRow}>
+            <h1>{displayName}</h1>
+            {productSlug ? (
+              <ProductQrPanel
+                slug={productSlug}
+                productName={displayName}
+                variant="popover"
+                className={css.qrTrigger}
+              />
+            ) : null}
+          </div>
           {productSubtitle && productSubtitle !== displayName ? <p>{productSubtitle}</p> : null}
         </section>
 
@@ -505,9 +522,13 @@ export function ProductDetailViewer({
             <button type="button" className={css.infoTrigger} onClick={openOverview}>
               {copy.productInfoLabel || 'Xem thông tin tác phẩm'}
             </button>
-            <a className={css.orderTrigger} href={ctaHref}>
+            <button
+              type="button"
+              className={css.orderTrigger}
+              onClick={() => setCheckoutOpen(true)}
+            >
               {actionLabel}
-            </a>
+            </button>
           </div>
           <Link href={backHref} className={css.backLink}>
             <span aria-hidden="true">←</span>
@@ -596,9 +617,13 @@ export function ProductDetailViewer({
         </div>
 
         <div className={css.sidebarCta}>
-          <a className={`${css.btn} ${css.btnPrimary}`} href={ctaHref}>
+          <button
+            type="button"
+            className={`${css.btn} ${css.btnPrimary}`}
+            onClick={() => setCheckoutOpen(true)}
+          >
             {actionLabel}
-          </a>
+          </button>
           {hotline ? (
             <a className={css.phoneBtn} href={hotline} aria-label={copy.hotlineLabel || 'Gọi điện'}>
               ☎
@@ -610,6 +635,16 @@ export function ProductDetailViewer({
           )}
         </div>
       </aside>
+
+      <CheckoutOrderModal
+        open={checkoutOpen}
+        onClose={() => setCheckoutOpen(false)}
+        productId={productId}
+        productName={displayName}
+        productSlug={productSlug}
+        unitPrice={unitPrice}
+        priceLabel={displayPrice}
+      />
     </div>
   );
 }

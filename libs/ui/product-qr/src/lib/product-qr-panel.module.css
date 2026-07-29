@@ -1,0 +1,230 @@
+.triggerRoot {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0 10px;
+  border: 1px solid rgba(184, 145, 93, 0.55);
+  border-radius: 4px;
+  background: rgba(8, 7, 4, 0.55);
+  color: #d5c3ad;
+  cursor: pointer;
+}
+
+.iconLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.iconBtn:hover,
+.iconBtn[aria-expanded='true'] {
+  border-color: #b8915d;
+  color: #e6d8c4;
+  background: rgba(20, 16, 10, 0.85);
+}
+
+@media (max-width: 375px) {
+  .iconBtn {
+    height: 32px;
+    padding: 0 8px;
+    gap: 5px;
+  }
+
+  .iconLabel {
+    font-size: 10px;
+  }
+}
+
+/* Full-viewport modal — portal to body so stage overflow cannot clip it. */
+.modalRoot {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(8, 7, 4, 0.72);
+  box-sizing: border-box;
+}
+
+.modalDialog {
+  position: relative;
+  width: min(360px, 100%);
+  max-height: min(90dvh, 640px);
+  overflow: auto;
+  border: 1px solid rgba(184, 145, 93, 0.45);
+  border-radius: 12px;
+  background: #12100c;
+  color: #e6d8c4;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(184, 145, 93, 0.4);
+  border-radius: 4px;
+  background: rgba(8, 7, 4, 0.65);
+  color: #e6d8c4;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  border-color: #b8915d;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(184, 145, 93, 0.35);
+  background: #12100c;
+  color: #e6d8c4;
+}
+
+.modalDialog .body {
+  padding: 20px 20px 18px;
+}
+
+.cardHeader {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding-right: 36px;
+}
+
+.cardHeader strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.hint {
+  font-size: 12px;
+  color: #a89882;
+  line-height: 1.4;
+}
+
+.previewWrap {
+  display: grid;
+  place-items: center;
+  min-height: 196px;
+  margin-bottom: 12px;
+  padding: 14px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.preview {
+  display: block;
+  width: 180px;
+  height: 180px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.placeholder {
+  color: #7a6f63;
+  font-size: 13px;
+}
+
+.link {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #b8a890;
+  word-break: break-all;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.primaryBtn {
+  border: 1px solid #b8915d;
+  background: #b8915d;
+  color: #1a1510;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondaryBtn {
+  border: 1px solid rgba(184, 145, 93, 0.55);
+  background: transparent;
+  color: #d5c3ad;
+}
+
+.secondaryBtn:hover {
+  border-color: #b8915d;
+}
+
+.status {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #c4b49a;
+}
+
+@media (max-width: 375px) {
+  .modalDialog {
+    width: 100%;
+  }
+
+  .modalDialog .body {
+    padding: 16px;
+  }
+
+  .previewWrap {
+    min-height: 168px;
+    padding: 10px;
+  }
+
+  .preview {
+    width: 150px;
+    height: 150px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}

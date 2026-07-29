@@ -203,9 +203,23 @@
   background: var(--gold);
 }
 
-.heroCopy h1 {
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   margin: 0 0 8px;
+}
+
+.heroCopy h1 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
   font: 400 clamp(28px, 4vw, 48px) / 1.05 var(--serif);
+}
+
+.qrTrigger {
+  flex: 0 0 auto;
+  margin-top: 6px;
 }
 
 .heroCopy p {
@@ -318,6 +332,8 @@
   border-color: transparent;
   color: #1a120a;
   font-weight: 600;
+  cursor: pointer;
+  font: inherit;
 }
 
 .controls {
@@ -586,6 +602,8 @@
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
+  cursor: pointer;
+  font: inherit;
   text-decoration: none;
   color: inherit;
 }

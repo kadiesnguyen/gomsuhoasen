@@ -34,6 +34,10 @@ export const GHS_CONTROLLERS = {
     ADMIN: 'rfq',
     PUBLIC: 'public/rfq',
   },
+  ORDER: {
+    ADMIN: 'orders',
+    PUBLIC: 'public/orders',
+  },
   QUOTE: {
     ADMIN: 'quotes',
     PUBLIC: 'public/quotes',
@@ -93,6 +97,9 @@ export const GHS_METHODS = {
     AVATAR: ':id/avatar',
   },
   RFQ: {
+    STATUS: ':id/status',
+  },
+  ORDER: {
     STATUS: ':id/status',
   },
   QUOTE: {
@@ -215,6 +222,16 @@ export const GHS_API = {
         applyApiRouteParams(GHS_METHODS.RFQ.STATUS, { id }),
       ),
     PUBLIC_SUBMIT: resolveGhsApiRoute(GHS_CONTROLLERS.RFQ.PUBLIC),
+  },
+  ORDER: {
+    LIST: resolveGhsApiRoute(GHS_CONTROLLERS.ORDER.ADMIN),
+    BY_ID: (id: string) => resolveGhsApiRoute(GHS_CONTROLLERS.ORDER.ADMIN, id),
+    STATUS: (id: string) =>
+      resolveGhsApiRoute(
+        GHS_CONTROLLERS.ORDER.ADMIN,
+        applyApiRouteParams(GHS_METHODS.ORDER.STATUS, { id }),
+      ),
+    PUBLIC_SUBMIT: resolveGhsApiRoute(GHS_CONTROLLERS.ORDER.PUBLIC),
   },
   QUOTE: {
     LIST: resolveGhsApiRoute(GHS_CONTROLLERS.QUOTE.ADMIN),

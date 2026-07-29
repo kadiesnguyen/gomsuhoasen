@@ -6,7 +6,9 @@ import { createPlatformImports, OutboxBootstrapMixin } from '@vt/app-bootstrap';
 import { IamModule } from '@gomhoasen/iam';
 import { CatalogModule } from '@gomhoasen/catalog';
 import { RfqModule } from '@gomhoasen/rfq';
+import { OrderModule } from '@gomhoasen/order';
 import { QuoteModule } from '@gomhoasen/quote';
+
 import { ArtisanModule } from '@gomhoasen/artisan';
 import { FileModule } from '@gomhoasen/file';
 import { SiteModule } from '@gomhoasen/site';
@@ -37,6 +39,7 @@ import { ShowroomV2SitemapController } from './showroom-v2-sitemap.controller';
     IamModule,
     CatalogModule,
     RfqModule,
+    OrderModule,
     QuoteModule,
     ArtisanModule,
     FileModule,

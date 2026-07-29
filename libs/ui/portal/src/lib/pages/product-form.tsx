@@ -19,6 +19,7 @@ import { LoadErrorState } from '../components/load-error-state';
 import { useToast } from '../components/toast';
 import { useConfirm } from '../components/confirm-dialog';
 import { sanitizeRichHtml } from '../utils/rich-html';
+import { ProductQrPanel } from '@gomhoasen/ui-product-qr';
 import {
   PRODUCT_STATUSES,
   PRODUCT_STATUS_VALUES,
@@ -696,6 +697,20 @@ export function ProductFormPage() {
                 <div style={grid2}>
                   <div><label style={labelStyle}>Tên sản phẩm *</label><input name="name" value={form.name} onChange={handleChange} required style={fieldStyle} /></div>
                   <div><label style={labelStyle}>Slug</label><input name="slug" value={form.slug} onChange={handleChange} style={fieldStyle} /></div>
+                  {form.slug.trim() ? (
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <ProductQrPanel
+                        slug={form.slug}
+                        productName={form.name}
+                        siteOrigin={
+                          typeof import.meta.env.VITE_SITE_URL === 'string'
+                            ? import.meta.env.VITE_SITE_URL
+                            : undefined
+                        }
+                        variant="card"
+                      />
+                    </div>
+                  ) : null}
                   <div><label style={labelStyle}>SKU</label><input name="sku" value={form.sku} onChange={handleChange} style={fieldStyle} /></div>
                   <div><label style={labelStyle}>Trạng thái</label>
                     <select name="status" value={form.status} onChange={handleChange} style={fieldStyle}>

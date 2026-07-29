@@ -1,0 +1,28 @@
+{
+  "name": "order",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/modules/order/src",
+  "projectType": "library",
+  "tags": [
+    "type:lib",
+    "scope:order",
+    "layer:backend"
+  ],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/run-tsc.cjs -p libs/modules/order/tsconfig.lib.json --noEmit"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "vitest run --config vite.config.mts libs/modules/order/src"
+      }
+    }
+  }
+}

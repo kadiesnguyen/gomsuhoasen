@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { api, type QuoteApi } from '../services/api';
 import { mergeApiErrorMessage } from '../services/api-error';
 import { LoadErrorState } from '../components/load-error-state';
-import { Button, Tabs, type TabItem } from '@vt/ui-components';
+import { FilterTabs } from '../components/filter-tabs';
 import {
   QUOTE_STATUSES,
   QUOTE_STATUS_VALUES,
@@ -92,11 +92,11 @@ export function QuoteListPage() {
     })),
   ], [allQuotes.length, counts]);
 
-  const tabItems = useMemo<TabItem[]>(() => {
+  const tabItems = useMemo(() => {
     return tabs.map(t => ({
       id: t.value,
       label: t.label,
-      badge: t.count > 0 ? t.count : undefined,
+      badge: t.count,
     }));
   }, [tabs]);
 
@@ -104,30 +104,28 @@ export function QuoteListPage() {
     <div>
       <div className="ghs-page-header">
         <div><h1>Báo giá</h1></div>
-        <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={() => navigate('/admin/quotes/new')}>Tạo báo giá</Button>
+        <button type="button" className="ghs-btn ghs-btn-primary" onClick={() => navigate('/admin/quotes/new')}>
+          Tạo báo giá
+        </button>
       </div>
 
-      {/* Status tabs with count badges + search */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-        <Tabs
+      <div className="ghs-filter-bar">
+        <FilterTabs
           tabs={tabItems}
           activeTabId={status}
           onTabChange={(id) => setStatus(id as QuoteStatus | '')}
-          size="sm"
         />
         <input
+          className="ghs-input ghs-filter-input ghs-filter-bar__search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Tìm mã, khách hàng, SĐT..."
           aria-label="Tìm báo giá"
-          style={{
-            marginLeft: 'auto', minWidth: 240, padding: '8px 14px',
-            borderRadius: 10, border: '1px solid #ddd', fontSize: '0.85rem',
-          }}
         />
-        {(status || search) && (
-          <Button
-            variant="secondary"
+        {(status || search) ? (
+          <button
+            type="button"
+            className="ghs-btn ghs-btn-ghost ghs-btn-sm"
             onClick={() => {
               setStatus('');
               setSearch('');
@@ -135,8 +133,8 @@ export function QuoteListPage() {
             }}
           >
             Xóa lọc
-          </Button>
-        )}
+          </button>
+        ) : null}
       </div>
 
       <div className="ghs-card" style={{ padding: 0, overflow: 'hidden' }}>
@@ -156,8 +154,9 @@ export function QuoteListPage() {
                 : 'Tạo báo giá đầu tiên từ yêu cầu của khách hàng.'}
             </p>
             {status || search ? (
-              <Button
-                variant="secondary"
+              <button
+                type="button"
+                className="ghs-btn ghs-btn-ghost"
                 onClick={() => {
                   setStatus('');
                   setSearch('');
@@ -166,11 +165,11 @@ export function QuoteListPage() {
                 style={{ marginTop: 12 }}
               >
                 Xem tất cả báo giá
-              </Button>
+              </button>
             ) : (
-              <Button className="ghs-btn ghs-btn-primary" variant="primary" onClick={() => navigate('/admin/quotes/new')} style={{ marginTop: 12 }}>
+              <button type="button" className="ghs-btn ghs-btn-primary" onClick={() => navigate('/admin/quotes/new')} style={{ marginTop: 12 }}>
                 Tạo báo giá
-              </Button>
+              </button>
             )}
           </div>
         ) : (
