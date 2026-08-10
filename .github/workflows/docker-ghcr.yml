@@ -1,6 +1,6 @@
-# gomsuhoasen — build & push images to GHCR for Dokploy
+# gomsuhoasen — push main → build GHCR → Dokploy redeploy
 # Images: ghcr.io/kadiesnguyen/gomsuhoasen/{api,web}
-# Dokploy: REGISTRY_IMAGE=ghcr.io/kadiesnguyen/gomsuhoasen  IMAGE_TAG=latest|<sha>
+# Flow: build-api + build-web → Dokploy compose.redeploy → SSH force-pull api/web
 
 name: Docker GHCR
 
@@ -9,6 +9,10 @@ on:
     branches: [main]
     tags: ['v*.*.*']
   workflow_dispatch:
+
+concurrency:
+  group: docker-ghcr-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   REGISTRY: ghcr.io
@@ -50,24 +54,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Make api package public
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          for attempt in 1 2 3 4 5; do
-            code=$(curl -sS -o /tmp/vis.json -w '%{http_code}' -X PUT \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/user/packages/container/gomsuhoasen%2Fapi/visibility" \
-              -d '{"visibility":"public"}')
-            echo "visibility api HTTP ${code}"
-            cat /tmp/vis.json || true
-            if [ "$code" = "204" ] || [ "$code" = "200" ]; then exit 0; fi
-            sleep 5
-          done
-          echo "::warning::Could not set api package public — add GHCR registry creds on Dokploy"
-
   build-web:
     runs-on: ubuntu-latest
     permissions:
@@ -103,31 +89,13 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Make web package public
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          for attempt in 1 2 3 4 5; do
-            code=$(curl -sS -o /tmp/vis.json -w '%{http_code}' -X PUT \
-              -H "Authorization: Bearer ${GH_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/user/packages/container/gomsuhoasen%2Fweb/visibility" \
-              -d '{"visibility":"public"}')
-            echo "visibility web HTTP ${code}"
-            cat /tmp/vis.json || true
-            if [ "$code" = "204" ] || [ "$code" = "200" ]; then exit 0; fi
-            sleep 5
-          done
-          echo "::warning::Could not set web package public — add GHCR registry creds on Dokploy"
-
   deploy:
     name: Deploy Dokploy
     needs: [build-api, build-web]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Dokploy compose.deploy
+      - name: Trigger Dokploy compose.redeploy
         env:
           DOKPLOY_URL: ${{ secrets.DOKPLOY_URL }}
           DOKPLOY_API_KEY: ${{ secrets.DOKPLOY_API_KEY }}
@@ -135,40 +103,73 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${DOKPLOY_URL:-}" ] || [ -z "${DOKPLOY_API_KEY:-}" ] || [ -z "${DOKPLOY_COMPOSE_ID:-}" ]; then
-            echo "::warning::Missing DOKPLOY_URL / DOKPLOY_API_KEY / DOKPLOY_COMPOSE_ID — skip auto-deploy"
-            exit 0
+            echo "::error::Missing secrets DOKPLOY_URL / DOKPLOY_API_KEY / DOKPLOY_COMPOSE_ID"
+            exit 1
           fi
           python3 <<'PY'
-          import json, os, sys, urllib.error, urllib.request
+          import json, os, sys, time, urllib.error, urllib.request
+
           base = os.environ["DOKPLOY_URL"].rstrip("/")
-          url = f"{base}/api/compose.deploy"
-          body = json.dumps({"composeId": os.environ["DOKPLOY_COMPOSE_ID"]}).encode()
-          req = urllib.request.Request(
-              url,
-              data=body,
-              headers={
-                  "x-api-key": os.environ["DOKPLOY_API_KEY"],
-                  "Content-Type": "application/json",
-              },
-              method="POST",
-          )
-          try:
-              with urllib.request.urlopen(req, timeout=60) as resp:
-                  raw = resp.read().decode()
-                  code = resp.status
-          except urllib.error.HTTPError as e:
-              raw = e.read().decode() if e.fp else str(e)
-              code = e.code
-              print(f"HTTP {code}\n{raw}", file=sys.stderr)
-              sys.exit(1)
-          print(f"HTTP {code}\n{raw}")
-          try:
-              data = json.loads(raw)
-          except json.JSONDecodeError:
-              print("::error::Dokploy response is not JSON", file=sys.stderr)
-              sys.exit(1)
-          if not data.get("success"):
-              print("::error::Dokploy deploy not successful", file=sys.stderr)
-              sys.exit(1)
-          print("Dokploy deployment queued OK")
+          compose_id = os.environ["DOKPLOY_COMPOSE_ID"]
+          headers = {
+              "x-api-key": os.environ["DOKPLOY_API_KEY"],
+              "Content-Type": "application/json",
+          }
+          body = json.dumps({"composeId": compose_id}).encode()
+
+          def post(path: str) -> dict:
+              req = urllib.request.Request(
+                  f"{base}{path}",
+                  data=body,
+                  headers=headers,
+                  method="POST",
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=90) as resp:
+                      raw = resp.read().decode()
+                      code = resp.status
+              except urllib.error.HTTPError as e:
+                  raw = e.read().decode() if e.fp else str(e)
+                  print(f"HTTP {e.code} {path}\n{raw}", file=sys.stderr)
+                  sys.exit(1)
+              print(f"HTTP {code} {path}\n{raw}")
+              try:
+                  data = json.loads(raw)
+              except json.JSONDecodeError:
+                  print("::error::Dokploy response is not JSON", file=sys.stderr)
+                  sys.exit(1)
+              if not data.get("success"):
+                  print("::error::Dokploy call not successful", file=sys.stderr)
+                  sys.exit(1)
+              return data
+
+          # redeploy pulls registry images; deploy alone can leave stale :latest
+          post("/api/compose.redeploy")
+          time.sleep(2)
+          post("/api/compose.deploy")
+          print("Dokploy redeploy + deploy queued OK")
           PY
+
+      - name: Force pull api/web on VPS (no mongo recreate)
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+          COMPOSE_DIR: ${{ secrets.DEPLOY_COMPOSE_DIR }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DEPLOY_HOST:-}" ] || [ -z "${DEPLOY_PASSWORD:-}" ]; then
+            echo "::error::Missing secrets DEPLOY_HOST / DEPLOY_PASSWORD (SSH force-pull)"
+            exit 1
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass
+          USER_NAME="${DEPLOY_USER:-root}"
+          DIR="${COMPOSE_DIR:-/etc/dokploy/compose/compose-parse-1080p-firewall-16f54l/code}"
+          # Dokploy queue can leave :latest stale; SSH pull+recreate is the reliable path.
+          sleep 15
+          export SSHPASS="$DEPLOY_PASSWORD"
+          sshpass -e ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 \
+            "${USER_NAME}@${DEPLOY_HOST}" \
+            "set -euo pipefail; cd '$DIR'; docker compose pull api web; docker compose up -d --no-deps --force-recreate api web; docker compose ps"
+          echo "VPS api/web force-recreate OK"
