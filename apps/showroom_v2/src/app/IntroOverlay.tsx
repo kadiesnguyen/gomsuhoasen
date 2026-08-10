@@ -96,11 +96,11 @@ export function IntroOverlay({ onComplete }: { onComplete?: () => void }) {
         <div className={`${css.logoWrap} ${isActive('logo') ? css.show : ''}`}>
           <div className={`${css.logoAura} ${isActive('glow') ? css.logoAuraPulse : ''}`} aria-hidden="true" />
           <img
-            src="/assets/brand/logo-intro.png?v=20260810"
+            src="/assets/brand/logo-intro.png?v=20260810b"
             alt={brand.name}
             className={css.logoImg}
             width={340}
-            height={268}
+            height={219}
           />
           <span className={`${css.shimmer} ${isActive('glow') ? css.shimmerRun : ''}`} aria-hidden="true" />
         </div>

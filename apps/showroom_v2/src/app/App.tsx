@@ -365,7 +365,7 @@ function Header() {
       <div className="header-inner">
         <Link href="/" className="site-logo" aria-label="Gốm Hoa Sen - trang chủ" onClick={() => setOpen(false)}>
           <img
-            src="/assets/brand/logo.png?v=20260810"
+            src="/assets/brand/logo.png?v=20260810b"
             alt="Gốm Hoa Sen - Tinh hoa gốm Việt"
             className="site-logo-img"
             width={290}
@@ -755,10 +755,10 @@ function Footer() {
     <footer className="site-footer">
       <span className="footer-brand">
         <img
-          src="/assets/brand/logo.png?v=20260810"
+          src="/assets/brand/logo.png?v=20260810b"
           alt={brand.name}
           className="footer-logo-img"
-          width={316}
+          width={396}
           height={72}
         />
       </span>
@@ -843,11 +843,11 @@ const CSS = `
     display: block;
     height: 64px;
     width: auto;
-    max-width: min(340px, 52vw);
+    max-width: min(380px, 58vw);
     object-fit: contain;
     transition: height 400ms var(--ease), max-width 400ms var(--ease);
   }
-  .site-header.is-scrolled .site-logo-img { height: 52px; max-width: min(300px, 50vw); }
+  .site-header.is-scrolled .site-logo-img { height: 52px; max-width: min(340px, 54vw); }
   .logo-text-group { display: flex; flex-direction: column; gap: 4px; }
   .logo-text  { font-family: var(--font-display); font-size: 17px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ivory); line-height: 1.15; }
   .logo-subtext { font-family: var(--font-ui); font-size: 9px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-muted); line-height: 1; margin-left: 2px; }
@@ -1537,7 +1537,7 @@ const CSS = `
   /* ── Footer ────────────────────────────────────────────────────── */
   .site-footer  { border-top: 1px solid rgba(201,177,144,0.08); padding: 32px clamp(20px,4vw,56px); background: #080704; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
   .footer-brand { display: flex; align-items: center; gap: 9px; font-family: var(--serif); font-size: 13px; letter-spacing: 0.14em; color: rgba(164,139,108,0.5); }
-  .footer-logo-img { display: block; height: 72px; width: auto; max-width: min(400px, 88vw); object-fit: contain; opacity: 0.95; }
+  .footer-logo-img { display: block; height: 72px; width: auto; max-width: min(440px, 90vw); object-fit: contain; opacity: 0.95; }
   .footer-copy  { font-family: var(--sans); font-size: 10px; letter-spacing: 0.10em; color: rgba(164,139,108,0.4); }
 
   /* ── Responsive ────────────────────────────────────────────────── */
@@ -1710,8 +1710,8 @@ const CSS = `
     :root { --cx: calc(100vw - 32px); --header-height: 76px; }
     .site-header  { height: 76px; padding-inline: 14px; }
     .site-header.is-scrolled { height: 66px; }
-    .site-logo-img { height: 56px; max-width: min(290px, 76vw); }
-    .site-header.is-scrolled .site-logo-img { height: 48px; max-width: min(260px, 72vw); }
+    .site-logo-img { height: 56px; max-width: min(320px, 80vw); }
+    .site-header.is-scrolled .site-logo-img { height: 48px; max-width: min(280px, 76vw); }
     .header-inner { grid-template-columns: 1fr auto; gap: 12px; }
     .util-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
     .mobile-drawer-backdrop { display: block; }
@@ -1942,7 +1942,7 @@ const CSS = `
     .promise-title { font-size: 10px; letter-spacing: 0.1em; line-height: 1.35; }
     .promise-desc { font-size: 10px; line-height: 1.45; color: rgba(201, 177, 144, 0.72); }
     .site-footer { padding: 28px 16px; flex-direction: column; align-items: flex-start; gap: 12px; }
-    .footer-logo-img { height: 56px; max-width: min(340px, 90vw); }
+    .footer-logo-img { height: 56px; max-width: min(380px, 92vw); }
   }
 
   @media (max-width: 400px) {

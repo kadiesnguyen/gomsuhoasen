@@ -156,7 +156,7 @@ export function ProductsPage() {
           <Reveal className="poster-content-left">
             <div className="poster-logo-block">
               <img
-                src="/assets/brand/logo.png?v=20260810"
+                src="/assets/brand/logo.png?v=20260810b"
                 alt={`${brand.name} - ${homeLanding.logoSubtext}`}
                 className="poster-logo-img"
                 width={320}
@@ -209,7 +209,7 @@ export function ProductsPage() {
           <div className="strip-contact">
             <div className="contact-logo">
               <img
-                src="/assets/brand/logo.png?v=20260810"
+                src="/assets/brand/logo.png?v=20260810b"
                 alt={brand.name}
                 className="contact-logo-img"
                 width={210}
