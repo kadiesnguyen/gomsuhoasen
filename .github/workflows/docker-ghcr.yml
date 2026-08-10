@@ -107,7 +107,7 @@ jobs:
             exit 1
           fi
           python3 <<'PY'
-          import json, os, sys, time, urllib.error, urllib.request
+          import json, os, sys, urllib.error, urllib.request
 
           base = os.environ["DOKPLOY_URL"].rstrip("/")
           compose_id = os.environ["DOKPLOY_COMPOSE_ID"]
@@ -143,11 +143,9 @@ jobs:
                   sys.exit(1)
               return data
 
-          # redeploy pulls registry images; deploy alone can leave stale :latest
+          # redeploy tells Dokploy to pull; SSH step below ensures api/web actually refresh
           post("/api/compose.redeploy")
-          time.sleep(2)
-          post("/api/compose.deploy")
-          print("Dokploy redeploy + deploy queued OK")
+          print("Dokploy redeploy queued OK")
           PY
 
       - name: Force pull api/web on VPS (no mongo recreate)
@@ -166,10 +164,28 @@ jobs:
           sudo apt-get install -y -qq sshpass
           USER_NAME="${DEPLOY_USER:-root}"
           DIR="${COMPOSE_DIR:-/etc/dokploy/compose/compose-parse-1080p-firewall-16f54l/code}"
-          # Dokploy queue can leave :latest stale; SSH pull+recreate is the reliable path.
-          sleep 15
+          # Let Dokploy finish its recreate first to avoid container-name races.
+          sleep 45
           export SSHPASS="$DEPLOY_PASSWORD"
           sshpass -e ssh -o StrictHostKeyChecking=no -o ConnectTimeout=20 \
-            "${USER_NAME}@${DEPLOY_HOST}" \
-            "set -euo pipefail; cd '$DIR'; docker compose pull api web; docker compose up -d --no-deps --force-recreate api web; docker compose ps"
+            "${USER_NAME}@${DEPLOY_HOST}" bash -s -- "$DIR" <<'EOS'
+          set -euo pipefail
+          DIR="$1"
+          cd "$DIR"
+          docker compose pull api web
+          ok=0
+          for i in 1 2 3 4 5 6; do
+            if docker compose up -d --no-deps --force-recreate api web; then
+              ok=1
+              break
+            fi
+            echo "compose up conflict/busy, retry $i/6 in 20s..."
+            sleep 20
+          done
+          if [ "$ok" != 1 ]; then
+            echo "force-recreate failed after retries" >&2
+            exit 1
+          fi
+          docker compose ps
+          EOS
           echo "VPS api/web force-recreate OK"
