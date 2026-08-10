@@ -55,7 +55,7 @@
   min-height: 600px;
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid rgba(201,177,144,0.15);
+  border: 1px solid rgba(143,115,80,0.14);
   color: inherit;
   text-decoration: none;
 }
@@ -126,7 +126,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(201,177,144,0.3);
+  background: rgba(143,115,80,0.24);
 }
 
 .hero-article-excerpt {
@@ -164,7 +164,7 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 32px;
-  border-bottom: 1px solid rgba(201,177,144,0.1);
+  border-bottom: 1px solid rgba(143,115,80,0.1);
 }
 
 .filter-tab {
@@ -227,7 +227,7 @@
   width: 100%;
   aspect-ratio: 4/3;
   overflow: hidden;
-  border: 1px solid rgba(201,177,144,0.2);
+  border: 1px solid rgba(143,115,80,0.16);
   margin-bottom: 24px;
 }
 

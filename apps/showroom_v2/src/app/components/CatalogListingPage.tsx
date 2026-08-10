@@ -23,7 +23,7 @@ const STATUS_ACTION_STYLE: React.CSSProperties = {
   justifySelf: 'center',
   marginTop: '8px',
   padding: '10px 18px',
-  border: '1px solid #b8915d',
+  border: '1px solid rgba(143,115,80,0.48)',
   color: '#d5c3ad',
   background: 'transparent',
   cursor: 'pointer',

@@ -150,8 +150,14 @@ function readCollectionFilter(
 }
 
 function splitTitle(title: string): { lead: string; accent: string } {
-  const parts = title.trim().split(/\s+/);
-  if (parts.length <= 1) return { lead: title, accent: '' };
+  const trimmed = title.trim();
+  // Keep "Bộ sưu tập" as one line when present (avoid "Bộ sưu" / "tập" wrap).
+  const collectionPrefix = trimmed.match(/^(Bộ sưu tập)\s+(.+)$/i);
+  if (collectionPrefix) {
+    return { lead: collectionPrefix[1], accent: collectionPrefix[2] };
+  }
+  const parts = trimmed.split(/\s+/);
+  if (parts.length <= 1) return { lead: trimmed, accent: '' };
   // Long category names: accent the last two words (e.g. "Men Hoàng Thổ").
   if (parts.length >= 4) {
     return {
@@ -489,12 +495,9 @@ export function ListingScreen({ siteData }: ListingScreenProps) {
           <div>
             <div className={css.eyebrow}>{copy.eyebrow || 'Danh mục sản phẩm'}</div>
             <h1>
-              {titleParts.lead}
+              <span className={css.titleLead}>{titleParts.lead}</span>
               {titleParts.accent ? (
-                <>
-                  {' '}
-                  <span>{titleParts.accent}</span>
-                </>
+                <span className={css.titleAccent}>{titleParts.accent}</span>
               ) : null}
             </h1>
             <p>{activeIntro.subtitle}</p>

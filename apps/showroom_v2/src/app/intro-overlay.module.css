@@ -47,9 +47,9 @@
 
 .corner {
   position: absolute;
-  width: 84px;
-  height: 84px;
-  border-color: rgba(196, 165, 80, 0.2);
+  width: 68px;
+  height: 68px;
+  border-color: rgba(143,115,80,0.16);
   border-style: solid;
   border-width: 0;
   opacity: 0;
@@ -132,7 +132,7 @@
   position: absolute;
   inset: 12%;
   border-radius: 50%;
-  border: 1px solid rgba(196, 165, 80, 0.35);
+  border: 1px solid rgba(143,115,80,0.26);
   opacity: 0;
 }
 
@@ -339,7 +339,7 @@
 /* Emblem breathes with the same gold as ambient — shared light field */
 @keyframes logoGlowPulse {
   0%, 100% {
-    filter: drop-shadow(0 0 28px rgba(196, 165, 80, 0.2));
+    filter: drop-shadow(0 0 28px rgba(143,115,80,0.16));
   }
   50% {
     filter: drop-shadow(0 0 42px rgba(196, 165, 80, 0.38));

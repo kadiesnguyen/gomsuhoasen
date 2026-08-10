@@ -580,7 +580,7 @@ export const SHOWROOM_V2_DEFAULT_CONTENT: ShowroomV2ContentContract = {
       detailLabel: 'Xem chi tiết',
       emptyTitle: 'Không tìm thấy sản phẩm',
       emptyBody: 'Thử thay đổi bộ lọc hoặc',
-      emptyResetLabel: 'đặt lại tất cả',
+      emptyResetLabel: 'Đặt lại tất cả',
       advisorCtaLabel: 'Nhận tư vấn miễn phí →',
       applyFilterLabel: 'Áp dụng',
       consultationLabel: 'Tư vấn ngay',

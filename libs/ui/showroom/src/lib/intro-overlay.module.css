@@ -175,7 +175,7 @@
 
 /* --- Brand Name --- */
 .brand {
-  font-family: var(--font-display, "Noto Serif Display", "Times New Roman", serif);
+  font-family: var(--font-display, "Cormorant Garamond", Georgia, serif);
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 300;
   letter-spacing: 0.2em;
@@ -194,7 +194,7 @@
 
 /* --- Tagline --- */
 .tagline {
-  font-family: var(--font-display, "Noto Serif Display", "Times New Roman", serif);
+  font-family: var(--font-display, "Cormorant Garamond", Georgia, serif);
   font-size: clamp(0.8rem, 2vw, 1rem);
   letter-spacing: 0.35em;
   color: rgba(196, 165, 80, 0.45);

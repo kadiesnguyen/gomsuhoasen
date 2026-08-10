@@ -16,7 +16,7 @@
   border-radius: var(--art-radius);
   background: rgba(8, 7, 4, 0.45);
   color: var(--ivory, #D5C3AD);
-  font-family: var(--font-ui, var(--font-body), sans-serif);
+  font-family: var(--font-ui, var(--font-body), "Cormorant Garamond", Georgia, serif);
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.12em;

@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 1400px;
   background: #080704;
-  border: 1px solid var(--gold-muted);
+  border: 1px solid rgba(143,115,80,0.32);
   box-shadow: 0 40px 100px rgba(0,0,0,0.9);
   display: flex;
   flex-direction: column;
@@ -24,20 +24,20 @@
 .poster-canvas::before, .poster-canvas::after {
   content: "";
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   pointer-events: none;
   z-index: 10;
 }
 .poster-canvas::before {
   top: 16px; left: 16px;
-  border-top: 2px solid var(--gold);
-  border-left: 2px solid var(--gold);
+  border-top: 1px solid rgba(143,115,80,0.42);
+  border-left: 1px solid rgba(143,115,80,0.42);
 }
 .poster-canvas::after {
   top: 16px; right: 16px;
-  border-top: 2px solid var(--gold);
-  border-right: 2px solid var(--gold);
+  border-top: 1px solid rgba(143,115,80,0.42);
+  border-right: 1px solid rgba(143,115,80,0.42);
 }
 
 .poster-canvas-bottom-corners {
@@ -49,19 +49,19 @@
 .poster-canvas-bottom-corners::before, .poster-canvas-bottom-corners::after {
   content: "";
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   bottom: 16px;
 }
 .poster-canvas-bottom-corners::before {
   left: 16px;
-  border-bottom: 2px solid var(--gold);
-  border-left: 2px solid var(--gold);
+  border-bottom: 1px solid rgba(143,115,80,0.42);
+  border-left: 1px solid rgba(143,115,80,0.42);
 }
 .poster-canvas-bottom-corners::after {
   right: 16px;
-  border-bottom: 2px solid var(--gold);
-  border-right: 2px solid var(--gold);
+  border-bottom: 1px solid rgba(143,115,80,0.42);
+  border-right: 1px solid rgba(143,115,80,0.42);
 }
 
 /* Top Section (Hero part) */
@@ -170,7 +170,7 @@
 }
 
 .poster-features {
-  border: 1px solid rgba(201,177,144,0.3);
+  border: 1px solid rgba(143,115,80,0.24);
   border-radius: 8px;
   padding: 20px 16px;
   display: grid;
@@ -228,7 +228,7 @@
   transform: translateY(-50%);
   right: 60px;
   z-index: 3;
-  border: 1px solid rgba(201,177,144,0.5);
+  border: 1px solid rgba(143,115,80,0.36);
   padding: 40px 32px;
   background: rgba(8,7,4,0.85);
   text-align: center;
@@ -244,7 +244,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  border: 1px solid var(--gold);
+  border: 1px solid rgba(143,115,80,0.42);
 }
 .poster-badge-right::before { top: 4px; left: 4px; border-right: none; border-bottom: none; }
 .poster-badge-right::after { bottom: 4px; right: 4px; border-left: none; border-top: none; }
@@ -280,7 +280,7 @@
   content: "";
   height: 1px;
   flex-grow: 1;
-  background: rgba(201,177,144,0.2);
+  background: rgba(143,115,80,0.16);
 }
 .poster-divider span {
   font-family: var(--serif);
@@ -341,7 +341,7 @@
   width: 36px;
   height: 36px;
   border-radius: 999px;
-  border: 1px solid rgba(201, 177, 144, 0.45);
+  border: 1px solid rgba(143,115,80,0.32);
   background: rgba(20, 17, 14, 0.85);
   color: var(--ivory);
   display: inline-flex;
@@ -357,7 +357,7 @@
 }
 
 .strip-card {
-  border: 1px solid rgba(201,177,144,0.3);
+  border: 1px solid rgba(143,115,80,0.24);
   display: flex;
   flex-direction: column;
   background: rgba(20, 17, 14, 0.6);
@@ -381,7 +381,7 @@
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border: 1px solid rgba(201,177,144,0.1);
+  border: 1px solid rgba(143,115,80,0.1);
 }
 
 .strip-card h4 {
@@ -400,8 +400,8 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   padding: 24px 0;
-  border-top: 1px solid rgba(201,177,144,0.1);
-  border-bottom: 1px solid rgba(201,177,144,0.1);
+  border-top: 1px solid rgba(143,115,80,0.1);
+  border-bottom: 1px solid rgba(143,115,80,0.1);
 }
 
 .trust-cell {
@@ -632,7 +632,7 @@ a.contact-item:focus-visible {
     text-align: center;
     gap: 8px;
     padding: 14px 10px;
-    border: 1px solid rgba(197, 160, 117, 0.4);
+    border: 1px solid rgba(143,115,80,0.3);
     border-radius: 5px;
     background: linear-gradient(180deg, rgba(28, 22, 16, 0.95) 0%, rgba(12, 10, 7, 0.98) 100%);
     box-shadow: 0 10px 22px rgba(0, 0, 0, 0.45);
@@ -647,7 +647,7 @@ a.contact-item:focus-visible {
     align-items: start;
     text-align: center;
     padding-top: 12px;
-    border-top: 1px solid rgba(201, 177, 144, 0.12);
+    border-top: 1px solid rgba(143,115,80,0.1);
   }
   .contact-logo { display: none; } /* header already has logo */
   .contact-item {

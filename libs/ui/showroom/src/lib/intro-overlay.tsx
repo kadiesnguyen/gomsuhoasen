@@ -52,55 +52,17 @@ export function IntroOverlay({ onComplete }: { onComplete?: () => void }) {
       <div className={css.ambientGlow} />
 
       <div className={css.content}>
-        {/* Lotus Motif — detailed, multi-layered */}
+        {/* Brand mark */}
         <div className={`${css.motif} ${isActive('motif') ? css.show : ''}`}>
-          <svg
-            width="80"
-            height="80"
-            viewBox="0 0 100 100"
-            fill="none"
+          <img
+            src="/assets/brand/lotus-mark.png"
+            alt=""
+            width={80}
+            height={80}
             className={css.lotusSvg}
-          >
-            {/* Outer petals */}
-            <path
-              d="M50 8 C50 8, 25 35, 25 55 C25 75, 38 90, 50 95 C62 90, 75 75, 75 55 C75 35, 50 8, 50 8Z"
-              stroke="var(--heritage-gold, #c4a550)"
-              strokeWidth="0.8"
-              className={css.petalOuter}
-            />
-            {/* Left petal */}
-            <path
-              d="M50 18 C50 18, 12 48, 15 68 C17 80, 30 90, 50 95"
-              stroke="var(--heritage-gold, #c4a550)"
-              strokeWidth="0.6"
-              className={css.petalLeft}
-              opacity="0.7"
-            />
-            {/* Right petal */}
-            <path
-              d="M50 18 C50 18, 88 48, 85 68 C83 80, 70 90, 50 95"
-              stroke="var(--heritage-gold, #c4a550)"
-              strokeWidth="0.6"
-              className={css.petalRight}
-              opacity="0.7"
-            />
-            {/* Inner detail */}
-            <path
-              d="M50 30 C50 30, 38 48, 38 58 C38 70, 44 80, 50 85 C56 80, 62 70, 62 58 C62 48, 50 30, 50 30Z"
-              stroke="var(--heritage-gold, #c4a550)"
-              strokeWidth="0.5"
-              className={css.petalInner}
-              opacity="0.4"
-            />
-            {/* Center dot */}
-            <circle
-              cx="50"
-              cy="60"
-              r="2"
-              fill="var(--heritage-gold, #c4a550)"
-              className={css.centerDot}
-            />
-          </svg>
+            draggable={false}
+            aria-hidden="true"
+          />
         </div>
 
         {/* Decorative divider line */}

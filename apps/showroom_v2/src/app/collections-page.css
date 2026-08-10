@@ -11,7 +11,7 @@
   height: clamp(560px, 80vh, 680px);
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(201,177,144,0.1);
+  border-bottom: 1px solid rgba(143,115,80,0.1);
   overflow: hidden;
 }
 
@@ -117,7 +117,7 @@
 
 .bento-item {
   position: relative;
-  border: 1px solid rgba(201,177,144,0.15);
+  border: 1px solid rgba(143,115,80,0.14);
   background: #0d0a08;
   overflow: hidden;
   transition: border-color 400ms var(--ease);
@@ -130,7 +130,7 @@
 }
 
 .bento-item:hover {
-  border-color: rgba(201,177,144,0.4);
+  border-color: rgba(143,115,80,0.3);
 }
 
 .bento-item-bg {

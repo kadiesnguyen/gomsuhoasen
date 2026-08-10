@@ -7,8 +7,8 @@
   --cream: #d8c5a3;
   --muted: #968367;
   --line: rgba(202, 158, 91, 0.27);
-  --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --sans: "Be Vietnam Pro", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: var(--font-display, "Cormorant Garamond", Georgia, "Times New Roman", serif);
+  --sans: var(--font-body, "Cormorant Garamond", Georgia, "Times New Roman", serif);
   --drawer-w: 440px;
   --bottom-nav: 0px;
   --bottom-actions-h: 148px;
@@ -177,6 +177,87 @@
   background: rgba(177, 132, 66, 0.16);
 }
 
+.variantRail {
+  position: absolute;
+  z-index: 20;
+  left: 24px;
+  top: 76px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: min(46vh, 380px);
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+}
+
+.variantItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 12px 4px 4px;
+  border: 1px solid var(--line);
+  background: rgba(12, 8, 5, 0.58);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.variantItem:hover,
+.variantItem:focus-visible {
+  border-color: var(--gold-2);
+  color: var(--ivory);
+  outline: none;
+}
+
+.variantItem.variantActive {
+  border-color: var(--gold-2);
+  color: var(--ivory);
+  background: rgba(177, 132, 66, 0.18);
+}
+
+.variantItem.variantSoldOut {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.variantSwatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(241, 231, 211, 0.35);
+  flex: 0 0 auto;
+  overflow: hidden;
+  display: block;
+  background: rgba(12, 8, 5, 0.4);
+}
+
+.variantSwatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.variantName {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.variantSoldOutTag {
+  flex: 0 0 auto;
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-2);
+}
+
 .heroCopy {
   position: absolute;
   z-index: 20;
@@ -275,15 +356,24 @@
 
 .priceTag {
   margin: 0;
-  width: 100%;
+  width: auto;
+  max-width: calc(100% - 8px);
   color: var(--gold-3);
-  font: 600 clamp(32px, 4.2vw, 44px) / 1.15 var(--serif);
+  font: 600 clamp(28px, 3.6vw, 40px) / 1.15 var(--serif);
   letter-spacing: 0.03em;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
   text-align: center;
+  padding: 12px 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(202, 158, 91, 0.38);
+  background: linear-gradient(180deg, rgba(16, 11, 6, 0.82), rgba(8, 5, 3, 0.7));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 226, 178, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
 }
 
 .priceLotus {
@@ -292,12 +382,14 @@
   object-fit: contain;
   flex: 0 0 auto;
   pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
 }
 
 @media (max-width: 720px) {
   .priceTag {
-    font-size: clamp(26px, 7vw, 34px);
+    font-size: clamp(23px, 6vw, 30px);
     gap: 10px;
+    padding: 10px 22px;
   }
 
   .priceLotus {
@@ -632,6 +724,8 @@
 .glaze {}
 .pattern {}
 .base {}
+.variantActive {}
+.variantSoldOut {}
 
 @media (max-width: 980px) {
   .page {
@@ -684,6 +778,22 @@
     top: 12px;
   }
 
+  .variantRail {
+    left: 14px;
+    right: 70px;
+    top: 56px;
+    flex-direction: row;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-right: 0;
+    padding-bottom: 2px;
+  }
+
+  .variantName {
+    max-width: 96px;
+  }
+
   .bottomBar {
     left: 50%;
     right: auto;
@@ -716,9 +826,10 @@
   }
 
   .priceTag {
-    font-size: clamp(22px, 5.6vw, 28px);
+    font-size: clamp(20px, 5vw, 25px);
     gap: 8px;
     line-height: 1.1;
+    padding: 9px 18px;
   }
 
   .priceLotus {
@@ -824,6 +935,10 @@
     display: none;
   }
 
+  .variantName {
+    max-width: 64px;
+  }
+
   .heroCopy p {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -858,7 +973,8 @@
   }
 
   .priceTag {
-    font-size: clamp(20px, 5.2vw, 26px);
+    font-size: clamp(18px, 4.8vw, 23px);
+    padding: 8px 16px;
   }
 }
 

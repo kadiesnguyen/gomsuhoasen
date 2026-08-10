@@ -12,14 +12,15 @@ const CATEGORY_VISIBLE = 3;
 
 function LotusIcon({ size = 20 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <path d="M32 54C24 45 18 37 18 29C18 20 25 14 32 8C39 14 46 20 46 29C46 37 40 45 32 54Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
-      <path d="M32 54C27 44 25 36 27 28C28.5 21 32 15 32 15C32 15 35.5 21 37 28C39 36 37 44 32 54Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M31 52C19 48 10 41 8 31C18 31 27 37 31 52Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M33 52C45 48 54 41 56 31C46 31 37 37 33 52Z" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M23 44C13 43 7 38 4 29C13 27 22 32 27 43" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-      <path d="M41 44C51 43 57 38 60 29C51 27 42 32 37 43" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" />
-    </svg>
+    <img
+      src="/assets/brand/lotus-mark.png"
+      alt=""
+      width={size}
+      height={size}
+      draggable={false}
+      aria-hidden="true"
+      style={{ display: 'block', objectFit: 'contain' }}
+    />
   );
 }
 
@@ -156,10 +157,10 @@ export function ProductsPage() {
             <div className="poster-logo-block">
               <img
                 src="/assets/brand/logo.png"
-                alt={`${brand.name} — ${homeLanding.logoSubtext}`}
+                alt={`${brand.name} - ${homeLanding.logoSubtext}`}
                 className="poster-logo-img"
                 width={320}
-                height={76}
+                height={73}
               />
             </div>
 
@@ -212,7 +213,7 @@ export function ProductsPage() {
                 alt={brand.name}
                 className="contact-logo-img"
                 width={210}
-                height={50}
+                height={48}
               />
             </div>
 

@@ -9,7 +9,7 @@ import type {
   ProductCtaContract,
   HotspotContract,
 } from '@gomhoasen/contracts';
-import { resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
+import { PRODUCT_VARIANT_STATUSES, resolveApiOrigin, toAssetUrl } from '@gomhoasen/contracts';
 import { ProductQrPanel } from '@gomhoasen/ui-product-qr';
 import { CheckoutOrderModal } from './checkout-order-modal';
 import css from './product-detail-viewer.module.css';
@@ -115,6 +115,15 @@ function isContactOnlyPriceLabel(value: string): boolean {
   return /^(liên\s*hệ|contact|call|tư\s*vấn)(\s|&|\/|-|$)/i.test(value.trim());
 }
 
+function variantDisplayName(variant: ProductVariantContract): string {
+  const name = readShowroomText(variant.name);
+  if (name) return name;
+  const parts = [readShowroomText(variant.glaze), readShowroomText(variant.size)].filter(
+    (part): part is string => Boolean(part),
+  );
+  return parts.join(' · ');
+}
+
 function formatPriceLabel(referencePrice?: number, priceLabel?: string): string | undefined {
   const labeled = readShowroomText(priceLabel);
   if (labeled && !isContactOnlyPriceLabel(labeled)) return labeled;
@@ -137,6 +146,7 @@ export function ProductDetailViewer({
   posterUrl,
   images = [],
   viewSections = [],
+  variants = [],
   specs = {},
   story,
   referencePrice,
@@ -168,6 +178,11 @@ export function ProductDetailViewer({
     [viewSections],
   );
 
+  const visibleVariants = useMemo(
+    () => variants.filter((variant) => variant.active !== false),
+    [variants],
+  );
+
   const [modeIndex, setModeIndex] = useState(0);
   const [ry, setRy] = useState(0);
   const [rx, setRx] = useState(0);
@@ -176,8 +191,18 @@ export function ProductDetailViewer({
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [guideVisible, setGuideVisible] = useState(true);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
 
-  const activeImage = mediaList[Math.min(modeIndex, Math.max(mediaList.length - 1, 0))] ?? '';
+  const activeVariant = useMemo(
+    () => visibleVariants.find((variant) => variant.id === activeVariantId) ?? null,
+    [visibleVariants, activeVariantId],
+  );
+  const activeVariantImage = useMemo(() => asset(activeVariant?.image), [activeVariant]);
+
+  const activeImage =
+    activeVariantImage ||
+    mediaList[Math.min(modeIndex, Math.max(mediaList.length - 1, 0))] ||
+    '';
   const displayName =
     productName.trim().length > 2
       ? productName
@@ -229,15 +254,21 @@ export function ProductDetailViewer({
   }, []);
 
   const openOverview = useCallback(() => {
+    const variantLabel = activeVariant ? variantDisplayName(activeVariant) : '';
     setPanel({
       kind: 'overview',
       kicker: brandName || copy.productInfoLabel,
-      title: displayName,
+      title: variantLabel ? `${displayName} - ${variantLabel}` : displayName,
       image: activeImage || asset(posterUrl) || '/assets/brand/lotus-mark.png',
-      lead: productSubtitle || story?.subtitle || story?.content,
+      lead:
+        readShowroomText(activeVariant?.description) ||
+        productSubtitle ||
+        story?.subtitle ||
+        story?.content,
     });
   }, [
     activeImage,
+    activeVariant,
     brandName,
     copy.productInfoLabel,
     displayName,
@@ -245,6 +276,15 @@ export function ProductDetailViewer({
     productSubtitle,
     story,
   ]);
+
+  const selectVariant = useCallback(
+    (variant: ProductVariantContract) => {
+      if (variant.status === PRODUCT_VARIANT_STATUSES.SOLD_OUT) return;
+      setActiveVariantId(variant.id);
+      resetView();
+    },
+    [resetView],
+  );
 
   const openHotspot = useCallback(
     (hotspot: HotspotContract) => {
@@ -352,12 +392,19 @@ export function ProductDetailViewer({
   };
 
   const hotline = phoneHref(cta.hotline);
-  const displayPrice = formatPriceLabel(referencePrice, priceLabel);
+  const effectiveReferencePrice = activeVariant?.referencePrice ?? referencePrice;
+  const effectivePriceLabel = activeVariant?.referencePrice ? undefined : priceLabel;
+  const displayPrice = formatPriceLabel(effectiveReferencePrice, effectivePriceLabel);
   const actionLabel = readShowroomText(cta.label) || 'Đặt mua';
   const unitPrice =
-    typeof referencePrice === 'number' && Number.isFinite(referencePrice) && referencePrice > 0
-      ? referencePrice
+    typeof effectiveReferencePrice === 'number' &&
+    Number.isFinite(effectiveReferencePrice) &&
+    effectiveReferencePrice > 0
+      ? effectiveReferencePrice
       : 0;
+  const orderProductName = activeVariant
+    ? `${displayName} - ${variantDisplayName(activeVariant)}`
+    : displayName;
   const backHref = useMemo(() => readLastCatalogHref(), []);
 
   const specEntries = Object.entries(specs).filter(([, value]) => Boolean(value));
@@ -431,6 +478,7 @@ export function ProductDetailViewer({
                 className={modeIndex === index ? css.active : undefined}
                 data-mode={MODE_LABELS[index]}
                 onClick={() => {
+                  setActiveVariantId(null);
                   setModeIndex(index);
                   resetView();
                 }}
@@ -438,6 +486,48 @@ export function ProductDetailViewer({
                 {MODE_LABELS[index]}
               </button>
             ))}
+          </div>
+        ) : null}
+
+        {visibleVariants.length > 1 ? (
+          <div
+            className={css.variantRail}
+            role="listbox"
+            aria-label={copy.variantsTitle || 'Biến thể tác phẩm'}
+          >
+            {visibleVariants.map((variant) => {
+              const isSoldOut = variant.status === PRODUCT_VARIANT_STATUSES.SOLD_OUT;
+              const isActive = variant.id === activeVariantId;
+              const label = variantDisplayName(variant);
+              const swatchImage = asset(variant.swatchImage);
+              return (
+                <button
+                  key={variant.id}
+                  type="button"
+                  role="option"
+                  aria-selected={isActive}
+                  title={label}
+                  disabled={isSoldOut}
+                  className={`${css.variantItem}${isActive ? ` ${css.variantActive}` : ''}${
+                    isSoldOut ? ` ${css.variantSoldOut}` : ''
+                  }`}
+                  onClick={() => selectVariant(variant)}
+                >
+                  <span
+                    className={css.variantSwatch}
+                    style={!swatchImage && variant.swatch ? { background: variant.swatch } : undefined}
+                    aria-hidden="true"
+                  >
+                    {swatchImage ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={swatchImage} alt="" draggable={false} />
+                    ) : null}
+                  </span>
+                  <span className={css.variantName}>{label}</span>
+                  {isSoldOut ? <span className={css.variantSoldOutTag}>Hết hàng</span> : null}
+                </button>
+              );
+            })}
           </div>
         ) : null}
 
@@ -640,7 +730,7 @@ export function ProductDetailViewer({
         open={checkoutOpen}
         onClose={() => setCheckoutOpen(false)}
         productId={productId}
-        productName={displayName}
+        productName={orderProductName}
         productSlug={productSlug}
         unitPrice={unitPrice}
         priceLabel={displayPrice}

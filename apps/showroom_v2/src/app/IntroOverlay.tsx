@@ -100,7 +100,7 @@ export function IntroOverlay({ onComplete }: { onComplete?: () => void }) {
             alt={brand.name}
             className={css.logoImg}
             width={340}
-            height={238}
+            height={268}
           />
           <span className={`${css.shimmer} ${isActive('glow') ? css.shimmerRun : ''}`} aria-hidden="true" />
         </div>

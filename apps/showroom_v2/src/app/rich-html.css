@@ -24,7 +24,7 @@
 }
 
 .rich-html :is(th, td) {
-  border: 1px solid rgba(201, 177, 144, 0.22);
+  border: 1px solid rgba(143,115,80,0.18);
   padding: 8px 10px;
   vertical-align: top;
 }
