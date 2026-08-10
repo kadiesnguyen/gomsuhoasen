@@ -365,7 +365,7 @@ function Header() {
       <div className="header-inner">
         <Link href="/" className="site-logo" aria-label="Gốm Hoa Sen - trang chủ" onClick={() => setOpen(false)}>
           <img
-            src="/assets/brand/logo.png"
+            src="/assets/brand/logo.png?v=20260810"
             alt="Gốm Hoa Sen - Tinh hoa gốm Việt"
             className="site-logo-img"
             width={290}
@@ -755,7 +755,7 @@ function Footer() {
     <footer className="site-footer">
       <span className="footer-brand">
         <img
-          src="/assets/brand/logo.png"
+          src="/assets/brand/logo.png?v=20260810"
           alt={brand.name}
           className="footer-logo-img"
           width={316}
