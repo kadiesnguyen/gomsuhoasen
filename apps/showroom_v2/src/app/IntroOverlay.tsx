@@ -96,7 +96,7 @@ export function IntroOverlay({ onComplete }: { onComplete?: () => void }) {
         <div className={`${css.logoWrap} ${isActive('logo') ? css.show : ''}`}>
           <div className={`${css.logoAura} ${isActive('glow') ? css.logoAuraPulse : ''}`} aria-hidden="true" />
           <img
-            src="/assets/brand/logo-intro.png?v=20260810b"
+            src="/assets/brand/logo-intro.png?v=20260810c"
             alt={brand.name}
             className={css.logoImg}
             width={340}
