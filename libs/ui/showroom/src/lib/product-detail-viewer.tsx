@@ -416,7 +416,7 @@ export function ProductDetailViewer({
   const specEntries = Object.entries(specs).filter(([, value]) => Boolean(value));
 
   return (
-    <div className={css.page}>
+    <div className={`${css.page}${displayPrice ? '' : ` ${css.noPrice}`}`}>
       <div className={css.stageArea} id="viewer">
         <div className={css.lightCone} aria-hidden="true" />
         <div className={css.halo} aria-hidden="true" />

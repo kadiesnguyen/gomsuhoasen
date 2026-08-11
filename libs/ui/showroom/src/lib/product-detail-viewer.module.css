@@ -768,6 +768,7 @@
 }
 
 .active {}
+.noPrice {}
 .show {}
 .open {}
 .macro {}
@@ -795,12 +796,26 @@
   .page {
     --bottom-nav: calc(var(--mobile-bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px));
     /* Price + CTAs + back link occupy the lower band below the full-bleed image. */
-    --bottom-actions-h: 178px;
-    --stage-h: clamp(260px, 42dvh, 400px);
+    --bottom-actions-h: 176px;
+    /* Title/subtitle band glued right above the actions. */
+    --title-band-h: 96px;
+    /* Image takes every pixel left between header and the title band — no dead gap. */
+    --stage-h: max(
+      220px,
+      calc(
+        100dvh - var(--header-height, 72px) - var(--bottom-nav) -
+        var(--bottom-actions-h) - var(--title-band-h) - 12px
+      )
+    );
     height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     max-height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     overflow: hidden;
     max-width: 100%;
+  }
+
+  /* Products without a price row reserve less space, so the image grows. */
+  .page.noPrice {
+    --bottom-actions-h: 122px;
   }
 
   .stageArea {
@@ -889,13 +904,13 @@
     height: 26px;
   }
 
-  /* Keep title in its own readable band below the image. */
+  /* Title band sits glued right above the action buttons — no dead gap. */
   .heroCopy {
     left: 16px;
     right: 56px;
     max-width: none;
-    top: calc(var(--stage-h) + 16px);
-    bottom: auto;
+    top: auto;
+    bottom: calc(var(--bottom-actions-h) + 10px);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.84);
   }
 
@@ -943,11 +958,15 @@
 
   .product {
     width: 100%;
-    height: 100%;
+    /* Definite height: 100% is cyclic inside the auto grid row and overflows. */
+    height: var(--stage-h);
     max-width: 100%;
     max-height: 100%;
-    object-fit: cover;
-    object-position: center center;
+    /* contain: show the whole photo — no cropped corners.
+       Bias toward the bottom so leftover space merges with the top glow,
+       keeping the photo close to the title instead of floating mid-black. */
+    object-fit: contain;
+    object-position: center 82%;
   }
 
   .pedestal {
@@ -1018,13 +1037,17 @@
 
 @media (max-height: 700px) and (max-width: 760px) {
   .page {
-    --stage-h: clamp(240px, 38dvh, 300px);
     --bottom-actions-h: 164px;
+    --title-band-h: 84px;
+  }
+
+  .page.noPrice {
+    --bottom-actions-h: 116px;
   }
 
   .heroCopy {
-    top: calc(var(--stage-h) + 12px);
-    bottom: auto;
+    top: auto;
+    bottom: calc(var(--bottom-actions-h) + 8px);
   }
 
   .controls {
