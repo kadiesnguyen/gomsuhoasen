@@ -155,7 +155,6 @@ export function ProductDetailViewer({
   copy,
 }: ProductDetailViewerProps) {
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const pageRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{
     active: boolean;
     x: number;
@@ -191,6 +190,7 @@ export function ProductDetailViewer({
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [guideVisible, setGuideVisible] = useState(true);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
 
   const activeVariant = useMemo(
@@ -381,15 +381,21 @@ export function ProductDetailViewer({
 
   const onDoubleClick = () => resetView();
 
-  const toggleFullscreen = async () => {
-    const root = pageRef.current;
-    if (!root) return;
-    if (document.fullscreenElement) {
-      await document.exitFullscreen();
-      return;
-    }
-    await root.requestFullscreen?.();
-  };
+  const closeImagePreview = useCallback(() => setImagePreviewOpen(false), []);
+
+  useEffect(() => {
+    if (!imagePreviewOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeImagePreview();
+    };
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previous;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [closeImagePreview, imagePreviewOpen]);
 
   const hotline = phoneHref(cta.hotline);
   const effectiveReferencePrice = activeVariant?.referencePrice ?? referencePrice;
@@ -410,7 +416,7 @@ export function ProductDetailViewer({
   const specEntries = Object.entries(specs).filter(([, value]) => Boolean(value));
 
   return (
-    <div className={css.page} ref={pageRef}>
+    <div className={css.page}>
       <div className={css.stageArea} id="viewer">
         <div className={css.lightCone} aria-hidden="true" />
         <div className={css.halo} aria-hidden="true" />
@@ -560,7 +566,7 @@ export function ProductDetailViewer({
             aria-label="Thu nhỏ"
             onClick={() => setZoom((value) => Math.max(0.84, value - 0.1))}
           >
-            −
+            -
           </button>
           <button
             type="button"
@@ -585,9 +591,7 @@ export function ProductDetailViewer({
             type="button"
             className={css.control}
             aria-label={copy.fullscreen3dLabel || 'Toàn màn hình'}
-            onClick={() => {
-              void toggleFullscreen();
-            }}
+            onClick={() => setImagePreviewOpen(true)}
           >
             ⛶
           </button>
@@ -626,6 +630,32 @@ export function ProductDetailViewer({
           </Link>
         </div>
       </div>
+
+      {imagePreviewOpen && activeImage ? (
+        <div
+          className={css.imagePreview}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Xem ảnh toàn màn hình ${displayName}`}
+          onClick={closeImagePreview}
+        >
+          <button
+            type="button"
+            className={css.imagePreviewClose}
+            aria-label="Đóng ảnh toàn màn hình"
+            onClick={closeImagePreview}
+          >
+            ×
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={activeImage}
+            alt={displayName}
+            className={css.imagePreviewImage}
+            onClick={(event) => event.stopPropagation()}
+          />
+        </div>
+      ) : null}
 
       <div
         className={`${css.overlay}${panel ? ` ${css.show}` : ''}`}

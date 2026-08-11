@@ -469,6 +469,56 @@
   white-space: nowrap;
 }
 
+.imagePreview {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding:
+    calc(20px + env(safe-area-inset-top))
+    calc(16px + env(safe-area-inset-right))
+    calc(20px + env(safe-area-inset-bottom))
+    calc(16px + env(safe-area-inset-left));
+  background: rgba(5, 3, 2, 0.98);
+  overscroll-behavior: contain;
+}
+
+.imagePreviewImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.imagePreviewClose {
+  position: absolute;
+  z-index: 2;
+  top: calc(12px + env(safe-area-inset-top));
+  right: calc(12px + env(safe-area-inset-right));
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(202, 158, 91, 0.56);
+  border-radius: 50%;
+  background: rgba(12, 8, 5, 0.82);
+  color: var(--ivory);
+  font: 300 30px / 1 var(--serif);
+  cursor: pointer;
+}
+
+.imagePreviewClose:hover,
+.imagePreviewClose:focus-visible {
+  border-color: var(--gold-3);
+  color: var(--gold-3);
+  outline: none;
+}
+
 .overlay {
   position: fixed;
   z-index: 180;
@@ -744,9 +794,9 @@
 @media (max-width: 760px) {
   .page {
     --bottom-nav: calc(var(--mobile-bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px));
-    /* price + gap + 2 CTAs + back — title sits just above this band */
+    /* Price + CTAs + back link occupy the lower band below the full-bleed image. */
     --bottom-actions-h: 178px;
-    --stage-h: clamp(280px, 44dvh, 400px);
+    --stage-h: clamp(260px, 42dvh, 400px);
     height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     max-height: calc(100dvh - var(--header-height, 72px) - var(--bottom-nav));
     overflow: hidden;
@@ -756,7 +806,7 @@
   .stageArea {
     place-items: start center;
     align-content: start;
-    padding: 6px 0 calc(var(--bottom-actions-h) + var(--bottom-nav) + 8px);
+    padding: 0 0 calc(var(--bottom-actions-h) + 8px);
   }
 
   .lightCone {
@@ -798,9 +848,9 @@
     left: 50%;
     right: auto;
     width: calc(100% - 24px);
-    bottom: calc(4px + var(--bottom-nav));
+    bottom: 4px;
     transform: translateX(-50%);
-    gap: 18px;
+    gap: 12px;
   }
 
   .bottomActions {
@@ -821,7 +871,9 @@
     padding: 0 8px;
     font-size: 9px;
     letter-spacing: 0.06em;
-    white-space: normal;
+    white-space: nowrap;
+    word-break: normal;
+    overflow-wrap: normal;
     line-height: 1.25;
   }
 
@@ -837,13 +889,14 @@
     height: 26px;
   }
 
-  /* Anchor title just above price/CTAs — no collision, tight stack */
+  /* Keep title in its own readable band below the image. */
   .heroCopy {
     left: 16px;
     right: 56px;
     max-width: none;
-    top: auto;
-    bottom: calc(var(--bottom-actions-h) + var(--bottom-nav) + 6px);
+    top: calc(var(--stage-h) + 16px);
+    bottom: auto;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.84);
   }
 
   .titleRow {
@@ -881,19 +934,19 @@
   }
 
   .stage {
-    width: min(94vw, 420px);
+    width: 100%;
     height: var(--stage-h);
     max-width: 100%;
     margin-top: 0;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .product {
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center center;
   }
 
@@ -954,17 +1007,24 @@
   .heroCopy h1 {
     font-size: clamp(19px, 5.4vw, 24px);
   }
+
+  .infoTrigger,
+  .orderTrigger {
+    padding-inline: 4px;
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
 }
 
 @media (max-height: 700px) and (max-width: 760px) {
   .page {
-    --stage-h: clamp(240px, 40dvh, 300px);
+    --stage-h: clamp(240px, 38dvh, 300px);
     --bottom-actions-h: 164px;
   }
 
   .heroCopy {
-    top: auto;
-    bottom: calc(var(--bottom-actions-h) + var(--bottom-nav) + 4px);
+    top: calc(var(--stage-h) + 12px);
+    bottom: auto;
   }
 
   .controls {
