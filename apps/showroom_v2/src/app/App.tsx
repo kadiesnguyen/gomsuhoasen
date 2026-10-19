@@ -48,6 +48,7 @@ declare global {
           "rotation-per-second"?: string;
           "interaction-prompt"?: "auto" | "none";
           exposure?: string;
+          "tone-mapping"?: string;
           "shadow-intensity"?: string;
           "environment-image"?: string;
           "camera-orbit"?: string;
@@ -412,7 +413,6 @@ function Header() {
 
 function Hero() {
   const { homeLanding } = useShowroomData();
-  const modelRef = useRef<any>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
@@ -432,22 +432,6 @@ function Hero() {
 
   useEffect(() => {
     import("@google/model-viewer").catch(console.error);
-  }, []);
-
-  useEffect(() => {
-    const modelViewer = modelRef.current;
-    if (!modelViewer) return;
-    const updateMaterial = () => {
-      const material = modelViewer.model?.materials?.[0];
-      if (material) {
-        // Ceramic warm / antique clay look
-        material.pbrMetallicRoughness.setMetallicFactor(0.02);
-        material.pbrMetallicRoughness.setRoughnessFactor(0.85);
-        material.pbrMetallicRoughness.setBaseColorFactor([0.72, 0.56, 0.45, 1]);
-      }
-    };
-    modelViewer.addEventListener('load', updateMaterial);
-    return () => modelViewer.removeEventListener('load', updateMaterial);
   }, []);
 
   const description = homeLanding.body || homeLanding.tagline;
@@ -539,12 +523,13 @@ function Hero() {
               <div className="stage-arch" aria-hidden="true" />
               <div className="stage-glow-outer" aria-hidden="true" />
               <div className="stage-glow-inner" aria-hidden="true" />
-              <div className="hero-reference-shadow" aria-hidden="true">
-                <img src={homeLanding.heroReferenceImage} alt="" className="hero-reference-shadow-img" />
-              </div>
+              {homeLanding.heroReferenceImage ? (
+                <div className="hero-reference-shadow" aria-hidden="true">
+                  <img src={homeLanding.heroReferenceImage} alt="" className="hero-reference-shadow-img" />
+                </div>
+              ) : null}
               <div className="hero-model-shell">
                 <model-viewer
-                  ref={modelRef}
                   src={homeLanding.heroModelUrl}
                   poster={homeLanding.heroModelPoster}
                   alt={homeLanding.heroModelAlt}
@@ -554,11 +539,9 @@ function Hero() {
                   auto-rotate-delay="0"
                   rotation-per-second="18deg"
                   interaction-prompt="none"
-                  exposure="0.96"
                   shadow-intensity="0"
-                  environment-image="neutral"
                   camera-orbit="0deg 78deg auto"
-                  camera-target="0m 0.11m 0m"
+                  camera-target="auto auto auto"
                   field-of-view="auto"
                   min-camera-orbit="auto 68deg auto"
                   max-camera-orbit="auto 92deg auto"
@@ -1201,8 +1184,7 @@ const CSS = `
     transform: translateY(-110px) scale(0.74);
     filter:
       drop-shadow(0 56px 108px rgba(0,0,0,0.88))
-      drop-shadow(0 18px 28px rgba(0,0,0,0.3))
-      drop-shadow(0 0 44px rgba(172,120,64,0.16));
+      drop-shadow(0 18px 28px rgba(0,0,0,0.3));
   }
   .hero-model-shell model-viewer:active {
     cursor: grabbing;
@@ -1688,7 +1670,7 @@ const CSS = `
     }
     .hero-model-shell { width: clamp(348px, 50vw, 520px); height: clamp(436px, 66vw, 590px); }
     .hero-reference-shadow { left: 55%; bottom: 72px; width: clamp(202px, 24vw, 282px); }
-    .hero-model-shell model-viewer { transform: translateY(-88px) scale(0.70); }
+    .hero-model-shell model-viewer { transform: translateY(-120px) scale(0.55); }
     .model-contact-shadow { width: clamp(148px, 17vw, 196px); }
     .pedestal { bottom: 4px; width: clamp(280px, 36vw, 380px); }
     .heritage     { grid-template-columns: 1fr 1fr; }
