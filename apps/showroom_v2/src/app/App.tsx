@@ -1180,7 +1180,7 @@ const CSS = `
     cursor: grab;
     /* Larger than the old vase framing, and lower so the base sits near the round plinth.
        Re-measure if stage/shell height or camera-target changes. */
-    transform: translateY(-48px) scale(0.96);
+    transform: translateY(-86px) scale(0.96);
     filter:
       drop-shadow(0 56px 108px rgba(0,0,0,0.88))
       drop-shadow(0 18px 28px rgba(0,0,0,0.3));
@@ -1669,7 +1669,7 @@ const CSS = `
     }
     .hero-model-shell { width: clamp(348px, 50vw, 520px); height: clamp(436px, 66vw, 590px); }
     .hero-reference-shadow { left: 55%; bottom: 72px; width: clamp(202px, 24vw, 282px); }
-    .hero-model-shell model-viewer { transform: translateY(-56px) scale(0.78); }
+    .hero-model-shell model-viewer { transform: translateY(-90px) scale(0.78); }
     .model-contact-shadow { width: clamp(148px, 17vw, 196px); }
     .pedestal { bottom: 4px; width: clamp(280px, 36vw, 380px); }
     .heritage     { grid-template-columns: 1fr 1fr; }
@@ -1709,7 +1709,7 @@ const CSS = `
     .stage-arch { display: none; }
     .hero-model-shell { width: min(86vw, 300px); height: min(46vh, 280px); }
     .hero-reference-shadow { left: 54%; bottom: 48px; width: min(42vw, 140px); }
-    .hero-model-shell model-viewer { width: 100% !important; height: 100% !important; transform: translateY(6px) scale(0.92); }
+    .hero-model-shell model-viewer { width: 100% !important; height: 100% !important; transform: translateY(-18px) scale(0.92); }
     .model-contact-shadow { width: min(42vw, 132px); height: 26px; }
     .pedestal { width: min(72vw, 260px); height: 96px; bottom: 0; }
     .hero-features {
