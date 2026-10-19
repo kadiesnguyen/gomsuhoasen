@@ -35,7 +35,7 @@ export const SHOWROOM_V2_DEFAULT_CONTENT: ShowroomV2ContentContract = {
     heroCtaLabel: 'Khám phá',
     heroCtaHref: '/san-pham',
     heroBg: '',
-    heroModelUrl: '/assets/product/thaythe.glb',
+    heroModelUrl: '/assets/product/thaythe.glb?v=2',
     heroModelPoster: '',
     heroReferenceImage: '',
     introSkipLabel: 'Bỏ qua',
