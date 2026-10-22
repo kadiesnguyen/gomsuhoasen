@@ -41,11 +41,13 @@ export class CategoryService {
   }
 
   async update(id: string, dto: UpdateCategoryDto) {
-    if (Object.prototype.hasOwnProperty.call(dto, 'slug')) {
+    const current = await this.findById(id);
+    if (dto.slug !== undefined && dto.slug !== current.slug) {
       throw new DomainBadRequestException(CATALOG_ERRORS.CATEGORY_SLUG_IMMUTABLE, 'Slug danh mục không thể thay đổi sau khi tạo.');
     }
 
     const updateData: UpdateQuery<CategoryDocument> = { ...dto };
+    delete updateData.slug;
     const doc = await this.categoryModel.findOneAndUpdate(
       { _id: id, isDeleted: false },
       { $set: updateData },

@@ -77,10 +77,10 @@ export function CategoryFormPage() {
     setError(null);
     const payload = {
       name: form.name,
-      slug: readTrimmedString(form.slug),
       description: readTrimmedString(form.description),
       image: readTrimmedString(form.image),
       sortOrder: typeof form.sortOrder === 'number' ? form.sortOrder : undefined,
+      ...(isEdit ? {} : { slug: readTrimmedString(form.slug) }),
     };
     try {
       await (isEdit && id ? api.category.update(id, payload) : api.category.create(payload));
@@ -120,7 +120,18 @@ export function CategoryFormPage() {
             </div>
             <div>
               <label className="ghs-label">Slug</label>
-              <input name="slug" value={form.slug} onChange={handleChange} className="ghs-input" />
+              <input
+                name="slug"
+                value={form.slug}
+                onChange={handleChange}
+                className="ghs-input"
+                readOnly={isEdit}
+              />
+              {isEdit ? (
+                <p style={{ margin: '6px 0 0', color: '#777', fontSize: '0.8rem' }}>
+                  Slug giữ nguyên sau khi tạo, để đường dẫn danh mục không đổi.
+                </p>
+              ) : null}
             </div>
             <div>
               <label className="ghs-label">Thứ tự hiển thị</label>
